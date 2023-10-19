@@ -1,4 +1,5 @@
-package com.sophie.store.backend.security;
+package com.sophie.store.backend.security.models;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-    String username;
-    String password;
+public class AuthResponse {
+    String token;
 }

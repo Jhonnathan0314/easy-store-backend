@@ -1,7 +1,6 @@
 package com.sophie.store.backend.security.config;
 
 import com.sophie.store.backend.context.user.application.usecase.FindByUsernameUserUseCase;
-import com.sophie.store.backend.context.user.domain.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

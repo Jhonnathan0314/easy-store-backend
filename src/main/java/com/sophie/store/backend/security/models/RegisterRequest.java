@@ -1,4 +1,4 @@
-package com.sophie.store.backend.security;
+package com.sophie.store.backend.security.models;
 
 import com.sophie.store.backend.context.roles.domain.model.Role;
 import lombok.AllArgsConstructor;

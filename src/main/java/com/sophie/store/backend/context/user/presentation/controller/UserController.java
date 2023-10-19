@@ -1,6 +1,6 @@
 package com.sophie.store.backend.context.user.presentation.controller;
 
-
+import com.sophie.store.backend.context.roles.application.dto.RoleDTO;
 import com.sophie.store.backend.context.user.application.dto.UserDTO;
 import com.sophie.store.backend.context.user.application.usecase.*;
 import com.sophie.store.backend.context.user.domain.model.User;
@@ -60,6 +60,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO>> create(@RequestBody UserDTO user) {
         ApiResponse<UserDTO> response = new ApiResponse<>();
         try {
+            user.setRole(defaultRole());
             response.setData(userMapper.modelToDto(createUserUseCase.create(userMapper.dtoToModel(user))));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException e) {
@@ -105,4 +106,10 @@ public class UserController {
         }
     }
 
+    private RoleDTO defaultRole() {
+        return RoleDTO.builder()
+                .id(1L)
+                .name("client")
+                .build();
+    }
 }

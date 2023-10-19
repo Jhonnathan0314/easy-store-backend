@@ -1,4 +1,4 @@
-package com.sophie.store.backend.temporal;
+package com.sophie.store.backend.security.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ public class TestController {
 
     @PostMapping(value = "test")
     public String welcome() {
-        return "Welcome from secure endpoint";
+        return "Welcome to a secure endpoint";
     }
 
 }

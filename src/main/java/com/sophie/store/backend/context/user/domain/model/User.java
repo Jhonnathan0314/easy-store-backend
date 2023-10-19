@@ -30,8 +30,7 @@ public class User implements UserDetails {
     public boolean isValid(User user) {
         if(user.getUsername() == null ||
             user.getName() == null ||
-            user.getLastName() == null ||
-            user.getRole() == null) return false;
+            user.getLastName() == null) return false;
 
         return !user.getUsername().isEmpty() &&
                 !user.getName().isEmpty() &&
