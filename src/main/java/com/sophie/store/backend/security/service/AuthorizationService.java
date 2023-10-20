@@ -1,13 +1,11 @@
 package com.sophie.store.backend.security.service;
 
-import com.sophie.store.backend.context.roles.domain.model.Role;
 import com.sophie.store.backend.context.user.application.usecase.CreateUserUseCase;
 import com.sophie.store.backend.context.user.application.usecase.FindByUsernameUserUseCase;
 import com.sophie.store.backend.security.jwt.JwtService;
 import com.sophie.store.backend.context.user.domain.model.User;
 import com.sophie.store.backend.security.models.AuthResponse;
 import com.sophie.store.backend.security.models.LoginRequest;
-import com.sophie.store.backend.security.models.RegisterRequest;
 import com.sophie.store.backend.utils.constants.ErrorMessages;
 import com.sophie.store.backend.utils.exceptions.DuplicatedException;
 import com.sophie.store.backend.utils.exceptions.InvalidBodyException;
@@ -15,7 +13,6 @@ import com.sophie.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -30,7 +27,6 @@ public class AuthorizationService {
     private final FindByUsernameUserUseCase findByUsernameUserUseCase;
     private final CreateUserUseCase createUserUseCase;
     private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request) throws NoResultsException, InvalidBodyException {
@@ -50,13 +46,12 @@ public class AuthorizationService {
                 .build();
     }
 
-    public AuthResponse register(RegisterRequest request) throws InvalidBodyException, DuplicatedException {
+    public AuthResponse register(User request) throws InvalidBodyException, DuplicatedException {
         User user = User.builder()
                 .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .name(request.getName())
                 .lastName(request.getLastName())
-                .role(defaultRole())
                 .build();
 
         user = createUserUseCase.create(user);
@@ -66,13 +61,6 @@ public class AuthorizationService {
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user, extraClaims))
-                .build();
-    }
-
-    private Role defaultRole() {
-        return Role.builder()
-                .id(1L)
-                .name("client")
                 .build();
     }
 

@@ -3,6 +3,7 @@ package com.sophie.store.backend.context.user.infrastructure.adapter;
 import com.sophie.store.backend.context.user.domain.model.User;
 import com.sophie.store.backend.context.user.domain.port.UserRepository;
 
+import com.sophie.store.backend.context.user.infrastructure.mappers.UserCreateMapper;
 import com.sophie.store.backend.context.user.infrastructure.mappers.UserMapper;
 import com.sophie.store.backend.context.user.infrastructure.persistence.UserEntity;
 import com.sophie.store.backend.context.user.infrastructure.persistence.UserJpaRepository;
@@ -18,6 +19,7 @@ public class UserRepositoryAdapter implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;
     private final UserMapper mapper = new UserMapper();
+    private final UserCreateMapper userCreateMapper = new UserCreateMapper();
 
     @Override
     public List<User> findAll() {
@@ -39,7 +41,7 @@ public class UserRepositoryAdapter implements UserRepository {
 
     @Override
     public User create(User user) {
-        UserEntity userEntity = userJpaRepository.save(mapper.modelToEntity(user));
+        UserEntity userEntity = userJpaRepository.save(userCreateMapper.modelToEntity(user));
         return mapper.entityToModel(userEntity);
     }
 

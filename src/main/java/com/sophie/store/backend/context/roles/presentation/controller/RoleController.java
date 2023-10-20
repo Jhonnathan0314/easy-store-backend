@@ -1,21 +1,22 @@
 package com.sophie.store.backend.context.roles.presentation.controller;
 
-import com.sophie.store.backend.context.roles.application.dto.RoleDTO;
+import com.sophie.store.backend.context.roles.application.dto.RoleCreateDTO;
+import com.sophie.store.backend.context.roles.application.dto.RoleResponseDTO;
+import com.sophie.store.backend.context.roles.application.dto.RoleUpdateDTO;
 import com.sophie.store.backend.context.roles.application.usecase.*;
 import com.sophie.store.backend.context.roles.domain.model.Role;
-import com.sophie.store.backend.context.roles.infrastructure.mappers.RoleMapper;
+import com.sophie.store.backend.context.roles.infrastructure.mappers.RoleCreateMapper;
+import com.sophie.store.backend.context.roles.infrastructure.mappers.RoleResponseMapper;
+import com.sophie.store.backend.context.roles.infrastructure.mappers.RoleUpdateMapper;
 import com.sophie.store.backend.utils.http.HttpUtils;
 import com.sophie.store.backend.utils.messages.ApiResponse;
-import com.sophie.store.backend.utils.messages.ErrorMessage;
 import com.sophie.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/role")
@@ -29,14 +30,16 @@ public class RoleController {
     private final DeleteByIdRoleUseCase deleteByIdRoleUseCase;
     private final ChangeStateByIdRoleUseCase changeStateByIdRoleUseCase;
 
-    private final RoleMapper roleMapper = new RoleMapper();
+    private final RoleCreateMapper roleCreateMapper = new RoleCreateMapper();
+    private final RoleUpdateMapper roleUpdateMapper = new RoleUpdateMapper();
+    private final RoleResponseMapper roleResponseMapper = new RoleResponseMapper();
     private final HttpUtils httpUtils = new HttpUtils();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<RoleDTO>>> findAll() {
-        ApiResponse<List<RoleDTO>> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<List<RoleResponseDTO>>> findAll() {
+        ApiResponse<List<RoleResponseDTO>> response = new ApiResponse<>();
         try {
-            List<RoleDTO> roles = roleMapper.modelsToDtos(findAllRoleUseCase.findAll());
+            List<RoleResponseDTO> roles = roleResponseMapper.modelsToDtos(findAllRoleUseCase.findAll());
             response.setData(roles);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
@@ -46,11 +49,11 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<RoleDTO>> findById(@PathVariable Long id) {
-        ApiResponse<RoleDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> findById(@PathVariable Long id) {
+        ApiResponse<RoleResponseDTO> response = new ApiResponse<>();
         try {
             Role role = findByIdRoleUseCase.findById(id);
-            response.setData(roleMapper.modelToDto(role));
+            response.setData(roleResponseMapper.modelToDto(role));
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -59,10 +62,10 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<RoleDTO>> create(@RequestBody RoleDTO role) {
-        ApiResponse<RoleDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> create(@RequestBody RoleCreateDTO role) {
+        ApiResponse<RoleResponseDTO> response = new ApiResponse<>();
         try {
-            response.setData(roleMapper.modelToDto(createRoleUseCase.create(roleMapper.dtoToModel(role))));
+            response.setData(roleResponseMapper.modelToDto(createRoleUseCase.create(roleCreateMapper.dtoToModel(role))));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -71,10 +74,10 @@ public class RoleController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<RoleDTO>> update(@RequestBody RoleDTO role) {
-        ApiResponse<RoleDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> update(@RequestBody RoleUpdateDTO role) {
+        ApiResponse<RoleResponseDTO> response = new ApiResponse<>();
         try {
-            response.setData(roleMapper.modelToDto(updateRoleUseCase.update(roleMapper.dtoToModel(role))));
+            response.setData(roleResponseMapper.modelToDto(updateRoleUseCase.update(roleUpdateMapper.dtoToModel(role))));
             return ResponseEntity.ok(response);
         } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -95,11 +98,11 @@ public class RoleController {
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<RoleDTO>> changeStateById(@PathVariable Long id) {
-        ApiResponse<RoleDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<RoleUpdateDTO>> changeStateById(@PathVariable Long id) {
+        ApiResponse<RoleUpdateDTO> response = new ApiResponse<>();
         try {
             Role role = changeStateByIdRoleUseCase.changeStateById(id);
-            response.setData(roleMapper.modelToDto(role));
+            response.setData(roleUpdateMapper.modelToDto(role));
             return ResponseEntity.ok(response);
         } catch (NonExisteceException e) {
             response.setError(httpUtils.determineErrorMessage(e));

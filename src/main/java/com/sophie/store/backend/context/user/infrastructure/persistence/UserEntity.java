@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
@@ -33,14 +35,28 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "creation_date", insertable = false)
+    @CreationTimestamp
+    @Column(name = "creation_date", updatable = false)
     private Timestamp creationDate;
 
-    @Column(name = "state", insertable = false)
+    @UpdateTimestamp
+    @Column(name = "update_date")
+    private Timestamp updateDate;
+
+    @Column(name = "state")
     private String state;
 
-    @OneToOne
-    @JoinColumn(name = "role_id")
+    @ManyToOne
+    @JoinColumn(name = "role_id", updatable = false)
     private RoleEntity role;
+
+    @PrePersist
+    protected void onCreate() {
+        this.state = "active";
+        this.role = RoleEntity.builder()
+                .id(1L)
+                .name("client")
+                .build();
+    }
 
 }

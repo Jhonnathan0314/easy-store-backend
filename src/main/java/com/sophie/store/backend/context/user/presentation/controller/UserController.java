@@ -1,10 +1,13 @@
 package com.sophie.store.backend.context.user.presentation.controller;
 
-import com.sophie.store.backend.context.roles.application.dto.RoleDTO;
-import com.sophie.store.backend.context.user.application.dto.UserDTO;
+import com.sophie.store.backend.context.user.application.dto.UserCreateDTO;
+import com.sophie.store.backend.context.user.application.dto.UserResponseDTO;
+import com.sophie.store.backend.context.user.application.dto.UserUpdateDTO;
 import com.sophie.store.backend.context.user.application.usecase.*;
 import com.sophie.store.backend.context.user.domain.model.User;
-import com.sophie.store.backend.context.user.infrastructure.mappers.UserMapper;
+import com.sophie.store.backend.context.user.infrastructure.mappers.UserCreateMapper;
+import com.sophie.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
+import com.sophie.store.backend.context.user.infrastructure.mappers.UserUpdateMapper;
 import com.sophie.store.backend.utils.exceptions.*;
 import com.sophie.store.backend.utils.http.HttpUtils;
 import com.sophie.store.backend.utils.messages.ApiResponse;
@@ -27,14 +30,16 @@ public class UserController {
     private final DeleteByIdUserUseCase deleteByIdUserUseCase;
     private final ChangeStateByIdUserUseCase changeStateByIdUserUseCase;
 
-    private final UserMapper userMapper = new UserMapper();
+    private final UserCreateMapper userCreateMapper = new UserCreateMapper();
+    private final UserUpdateMapper userUpdateMapper = new UserUpdateMapper();
+    private final UserResponseMapper userResponseMapper = new UserResponseMapper();
     private final HttpUtils httpUtils = new HttpUtils();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserDTO>>> findAll() {
-        ApiResponse<List<UserDTO>> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> findAll() {
+        ApiResponse<List<UserResponseDTO>> response = new ApiResponse<>();
         try {
-            List<UserDTO> users = userMapper.modelsToDtos(findAllUserUseCase.findAll());
+            List<UserResponseDTO> users = userResponseMapper.modelsToDtos(findAllUserUseCase.findAll());
             response.setData(users);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
@@ -44,11 +49,11 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> findById(@PathVariable Long id) {
-        ApiResponse<UserDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<UserResponseDTO>> findById(@PathVariable Long id) {
+        ApiResponse<UserResponseDTO> response = new ApiResponse<>();
         try {
             User user = findByIdUserUseCase.findById(id);
-            response.setData(userMapper.modelToDto(user));
+            response.setData(userResponseMapper.modelToDto(user));
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -57,11 +62,10 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserDTO>> create(@RequestBody UserDTO user) {
-        ApiResponse<UserDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<UserResponseDTO>> create(@RequestBody UserCreateDTO user) {
+        ApiResponse<UserResponseDTO> response = new ApiResponse<>();
         try {
-            user.setRole(defaultRole());
-            response.setData(userMapper.modelToDto(createUserUseCase.create(userMapper.dtoToModel(user))));
+            response.setData(userResponseMapper.modelToDto(createUserUseCase.create(userCreateMapper.dtoToModel(user))));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -70,10 +74,10 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<UserDTO>> update(@RequestBody UserDTO user) {
-        ApiResponse<UserDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<UserResponseDTO>> update(@RequestBody UserUpdateDTO user) {
+        ApiResponse<UserResponseDTO> response = new ApiResponse<>();
         try {
-            response.setData(userMapper.modelToDto(updateUserUseCase.update(userMapper.dtoToModel(user))));
+            response.setData(userResponseMapper.modelToDto(updateUserUseCase.update(userUpdateMapper.dtoToModel(user))));
             return ResponseEntity.ok(response);
         } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -94,22 +98,15 @@ public class UserController {
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<UserDTO>> changeStateById(@PathVariable Long id) {
-        ApiResponse<UserDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<UserResponseDTO>> changeStateById(@PathVariable Long id) {
+        ApiResponse<UserResponseDTO> response = new ApiResponse<>();
         try {
             User user = changeStateByIdUserUseCase.changeStateById(id);
-            response.setData(userMapper.modelToDto(user));
+            response.setData(userResponseMapper.modelToDto(user));
             return ResponseEntity.ok(response);
         } catch (NonExisteceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
-    }
-
-    private RoleDTO defaultRole() {
-        return RoleDTO.builder()
-                .id(1L)
-                .name("client")
-                .build();
     }
 }

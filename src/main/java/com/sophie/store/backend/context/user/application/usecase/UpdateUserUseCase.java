@@ -8,6 +8,7 @@ import com.sophie.store.backend.utils.exceptions.NoChangesException;
 import com.sophie.store.backend.utils.exceptions.NoIdReceivedException;
 import com.sophie.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,8 +19,12 @@ public class UpdateUserUseCase {
 
     private final ErrorMessages errorMessages = new ErrorMessages();
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User update(User user) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         if(user.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
 
         if(!user.isValid(user)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
@@ -30,8 +35,9 @@ public class UpdateUserUseCase {
         User userDb = optUser.get();
         if(userDb.getName().equals(user.getName())) throw new NoChangesException(errorMessages.NO_CHANGES);
 
+        user.setRole(userDb.getRole());
         user.setState(userDb.getState());
-        user.setCreationDate(userDb.getCreationDate());
+
         return userRepository.update(user);
     }
 

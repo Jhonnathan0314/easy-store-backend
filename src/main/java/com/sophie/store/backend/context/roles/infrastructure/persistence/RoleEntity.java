@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
@@ -23,10 +25,18 @@ public class RoleEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "creation_date", insertable = false)
+    @CreationTimestamp
+    @Column(name = "creation_date", updatable = false)
     private Timestamp creationDate;
 
-    @Column(name = "state", insertable = false)
+    @UpdateTimestamp
+    @Column(name = "update_date")
+    private Timestamp updateDate;
+
+    @Column(name = "state")
     private String state;
+
+    @PrePersist
+    protected void onCreate() { this.state = "active"; }
 
 }
