@@ -8,4 +8,6 @@ public class ErrorMessages {
     public final String NO_RESULTS = "No se encontraron resultados.";
     public final String NO_CHANGES = "No se encontraron cambios que guardar.";
     public final String NO_ID_RECEIVED = "No se encontró el id para realizar su petición.";
+
+    public final String NO_CATEGORY_RESULTS = "No se encontró la categoría a actualizar..";
 }
