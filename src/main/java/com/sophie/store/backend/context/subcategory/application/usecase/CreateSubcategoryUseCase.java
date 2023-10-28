@@ -26,7 +26,7 @@ public class CreateSubcategoryUseCase {
         Optional<Category> optCategory = categoryRepository.findById(idCategory);
         if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
 
-        subcategory.setCategory(Category.builder().id(idCategory).build());
+        subcategory.setCategory(optCategory.get());
 
         if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
 

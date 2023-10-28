@@ -28,7 +28,7 @@ public class UpdateSubcategoryUseCase {
         Optional<Category> optCategory = categoryRepository.findById(idCategory);
         if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
 
-        subcategory.setCategory(Category.builder().id(idCategory).build());
+        subcategory.setCategory(optCategory.get());
 
         if(subcategory.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
 
