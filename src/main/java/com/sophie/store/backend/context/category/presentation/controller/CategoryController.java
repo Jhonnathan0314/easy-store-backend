@@ -62,9 +62,10 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO role) {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO role, @RequestHeader("Create-By") Long createBy) {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
         try {
+            role.setCreateBy(createBy);
             response.setData(categoryResponseMapper.modelToDto(createCategoryUseCase.create(categoryCreateMapper.dtoToModel(role))));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException e) {
@@ -74,9 +75,10 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(@RequestBody CategoryUpdateDTO role) {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(@RequestBody CategoryUpdateDTO role, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
         try {
+            role.setUpdateBy(updateBy);
             response.setData(categoryResponseMapper.modelToDto(updateCategoryUseCase.update(categoryUpdateMapper.dtoToModel(role))));
             return ResponseEntity.ok(response);
         } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
