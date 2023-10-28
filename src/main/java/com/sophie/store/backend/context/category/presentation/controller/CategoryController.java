@@ -62,11 +62,11 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO role, @RequestHeader("Create-By") Long createBy) {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO category, @RequestHeader("Create-By") Long createBy) {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
         try {
-            role.setCreateBy(createBy);
-            response.setData(categoryResponseMapper.modelToDto(createCategoryUseCase.create(categoryCreateMapper.dtoToModel(role))));
+            category.setCreateBy(createBy);
+            response.setData(categoryResponseMapper.modelToDto(createCategoryUseCase.create(categoryCreateMapper.dtoToModel(category))));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -75,11 +75,11 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(@RequestBody CategoryUpdateDTO role, @RequestHeader("Update-By") Long updateBy) {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(@RequestBody CategoryUpdateDTO category, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
         try {
-            role.setUpdateBy(updateBy);
-            response.setData(categoryResponseMapper.modelToDto(updateCategoryUseCase.update(categoryUpdateMapper.dtoToModel(role))));
+            category.setUpdateBy(updateBy);
+            response.setData(categoryResponseMapper.modelToDto(updateCategoryUseCase.update(categoryUpdateMapper.dtoToModel(category))));
             return ResponseEntity.ok(response);
         } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));
