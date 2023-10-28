@@ -19,6 +19,8 @@ public class CreateUserUseCase {
 
     public User create(User user) throws DuplicatedException, InvalidBodyException {
 
+        if(user.getPassword() == null) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         if(!user.isValid(user)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
