@@ -1,6 +1,5 @@
-package com.sophie.store.backend.context.user.application.dto;
+package com.sophie.store.backend.context.category.domain.model;
 
-import com.sophie.store.backend.context.roles.application.dto.RoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +11,18 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class Category {
     private Long id;
-    private String username;
     private String name;
-    private String lastName;
-    private String password;
+    private Long createBy;
+    private Long updateBy;
     private Timestamp creationDate;
     private Timestamp updateDate;
     private String state;
-    private RoleDTO role;
+
+    public boolean isValid(Category category) {
+        if(category.getName() == null) return false;
+
+        return !category.getName().isEmpty();
+    }
 }

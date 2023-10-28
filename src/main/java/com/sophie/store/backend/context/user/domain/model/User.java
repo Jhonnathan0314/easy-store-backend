@@ -24,6 +24,7 @@ public class User implements UserDetails {
     private String lastName;
     private String password;
     private Timestamp creationDate;
+    private Timestamp updateDate;
     private String state;
     private Role role;
 

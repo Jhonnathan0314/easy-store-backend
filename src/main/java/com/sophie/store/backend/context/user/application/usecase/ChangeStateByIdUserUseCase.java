@@ -17,9 +17,9 @@ public class ChangeStateByIdUserUseCase {
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public User changeStateById(Long id) throws NonExisteceException {
-        Optional<User> optRole = userRepository.findById(id);
-        if(optRole.isEmpty()) throw new NonExisteceException(errorMessages.NON_EXISTENT_DATA);
-        User user = optRole.get();
+        Optional<User> optUser = userRepository.findById(id);
+        if(optUser.isEmpty()) throw new NonExisteceException(errorMessages.NON_EXISTENT_DATA);
+        User user = optUser.get();
         user.setState(user.getState().equals("active") ? "inactive" : "active");
         user = userRepository.update(user);
         return user;

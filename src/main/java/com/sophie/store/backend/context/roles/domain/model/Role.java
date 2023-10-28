@@ -16,6 +16,7 @@ public class Role {
     private Long id;
     private String name;
     private Timestamp creationDate;
+    private Timestamp updateDate;
     private String state;
 
     public boolean isValid(Role role) {
