@@ -9,5 +9,7 @@ public class ErrorMessages {
     public final String NO_CHANGES = "No se encontraron cambios que guardar.";
     public final String NO_ID_RECEIVED = "No se encontró el id para realizar su petición.";
 
-    public final String NO_CATEGORY_RESULTS = "No se encontró la categoría a actualizar.";
+    public final String NO_CATEGORY_RESULTS = "No se encontró la categoría que será asignada.";
+    public final String NO_USER_RESULTS = "No se encontró el usuario que será asignado.";
+    public final String NO_PAYMENT_TYPE_RESULTS = "No se encontró el tipo de pago que será asignado.";
 }

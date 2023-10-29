@@ -37,14 +37,14 @@ public class ProductRepositoryAdapter implements ProductRepository {
     }
 
     @Override
-    public Product create(Product subcategory) {
-        ProductEntity productEntity = productJpaRepository.save(mapper.modelToEntity(subcategory));
+    public Product create(Product product) {
+        ProductEntity productEntity = productJpaRepository.save(mapper.modelToEntity(product));
         return mapper.entityToModel(productEntity);
     }
 
     @Override
-    public Product update(Product subcategory) {
-        ProductEntity productEntity = productJpaRepository.save(mapper.modelToEntity(subcategory));
+    public Product update(Product product) {
+        ProductEntity productEntity = productJpaRepository.save(mapper.modelToEntity(product));
         return mapper.entityToModel(productEntity);
     }
 
