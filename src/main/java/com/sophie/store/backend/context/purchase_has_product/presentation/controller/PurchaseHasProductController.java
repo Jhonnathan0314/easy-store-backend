@@ -47,7 +47,7 @@ public class PurchaseHasProductController {
     }
 
     @GetMapping("/purchase/{purchaseId}")
-    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> findAllByPurhaseId(@PathVariable Long purchaseId) {
+    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> findAllByPurchaseId(@PathVariable Long purchaseId) {
         ApiResponse<List<PurchaseHasProductResponseDTO>> response = new ApiResponse<>();
         try {
             List<PurchaseHasProductResponseDTO> purchaseHasProducts = purchaseHasProductResponseMapper.modelsToDtos(findAllByPurchaseIdPurchaseHasProductUseCase.findAllByPurchaseId(purchaseId));

@@ -72,8 +72,8 @@ public class PurchaseController {
     public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByUserId(@PathVariable Long userId) {
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         try {
-            List<PurchaseResponseDTO> paymentTypes = purchaseResponseMapper.modelsToDtos(findByUserIdPurchaseUseCase.findByUserId(userId));
-            response.setData(paymentTypes);
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByUserIdPurchaseUseCase.findByUserId(userId));
+            response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -85,8 +85,8 @@ public class PurchaseController {
     public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByPaymentTypeId(@PathVariable Long paymentTypeId) {
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         try {
-            List<PurchaseResponseDTO> paymentTypes = purchaseResponseMapper.modelsToDtos(findByPaymentTypeIdPurchaseUseCase.findByPaymentTypeId(paymentTypeId));
-            response.setData(paymentTypes);
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByPaymentTypeIdPurchaseUseCase.findByPaymentTypeId(paymentTypeId));
+            response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -101,8 +101,8 @@ public class PurchaseController {
             LocalDate date = LocalDate.parse(dateStr);
             LocalDateTime dateTime = date.atStartOfDay();
             Timestamp findDate = Timestamp.valueOf(dateTime);
-            List<PurchaseResponseDTO> paymentTypes = purchaseResponseMapper.modelsToDtos(findByDatePurchaseUseCase.findByDate(findDate));
-            response.setData(paymentTypes);
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDatePurchaseUseCase.findByDate(findDate));
+            response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -122,8 +122,8 @@ public class PurchaseController {
             LocalDateTime dateTimeTwo = dateTwo.atStartOfDay();
             Timestamp toDate = Timestamp.valueOf(dateTimeTwo);
 
-            List<PurchaseResponseDTO> paymentTypes = purchaseResponseMapper.modelsToDtos(findByDateBetweenPurchaseUseCase.findByDateBetween(fromDate, toDate));
-            response.setData(paymentTypes);
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDateBetweenPurchaseUseCase.findByDateBetween(fromDate, toDate));
+            response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -135,8 +135,8 @@ public class PurchaseController {
     public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findBetweenRangeDates(@RequestHeader("From-Total") BigDecimal fromTotal, @RequestHeader("To-Total") BigDecimal toTotal) {
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         try {
-            List<PurchaseResponseDTO> paymentTypes = purchaseResponseMapper.modelsToDtos(findByTotalBetweenPurchaseUseCase.findByTotalBetween(fromTotal, toTotal));
-            response.setData(paymentTypes);
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByTotalBetweenPurchaseUseCase.findByTotalBetween(fromTotal, toTotal));
+            response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));

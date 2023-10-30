@@ -37,14 +37,14 @@ public class PaymentTypeRepositoryAdapter implements PaymentTypeRepository {
     }
 
     @Override
-    public PaymentType create(PaymentType category) {
-        PaymentTypeEntity paymentTypeEntity = paymentTypeJpaRepository.save(mapper.modelToEntity(category));
+    public PaymentType create(PaymentType paymentType) {
+        PaymentTypeEntity paymentTypeEntity = paymentTypeJpaRepository.save(mapper.modelToEntity(paymentType));
         return mapper.entityToModel(paymentTypeEntity);
     }
 
     @Override
-    public PaymentType update(PaymentType category) {
-        PaymentTypeEntity paymentTypeEntity = paymentTypeJpaRepository.save(mapper.modelToEntity(category));
+    public PaymentType update(PaymentType paymentType) {
+        PaymentTypeEntity paymentTypeEntity = paymentTypeJpaRepository.save(mapper.modelToEntity(paymentType));
         return mapper.entityToModel(paymentTypeEntity);
     }
 

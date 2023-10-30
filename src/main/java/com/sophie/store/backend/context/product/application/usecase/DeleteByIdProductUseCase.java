@@ -17,8 +17,8 @@ public class DeleteByIdProductUseCase {
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void deleteById(Long id) throws NonExisteceException {
-        Optional<Product> subcategory = productRepository.findById(id);
-        if(subcategory.isEmpty()) throw new NonExisteceException(errorMessages.NON_EXISTENT_DATA);
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty()) throw new NonExisteceException(errorMessages.NON_EXISTENT_DATA);
         productRepository.deleteById(id);
     }
 

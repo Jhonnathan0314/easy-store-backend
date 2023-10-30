@@ -30,16 +30,16 @@ public class ProductController {
     private final DeleteByIdProductUseCase deleteByIdProductUseCase;
     private final ChangeStateByIdProductUseCase changeStateByIdProductUseCase;
 
-    private final ProductCreateMapper subcategoryCreateMapper = new ProductCreateMapper();
-    private final ProductUpdateMapper subcategoryUpdateMapper = new ProductUpdateMapper();
-    private final ProductResponseMapper subcategoryResponseMapper = new ProductResponseMapper();
+    private final ProductCreateMapper productCreateMapper = new ProductCreateMapper();
+    private final ProductUpdateMapper productUpdateMapper = new ProductUpdateMapper();
+    private final ProductResponseMapper productResponseMapper = new ProductResponseMapper();
     private final HttpUtils httpUtils = new HttpUtils();
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> findAll() {
         ApiResponse<List<ProductResponseDTO>> response = new ApiResponse<>();
         try {
-            List<ProductResponseDTO> products = subcategoryResponseMapper.modelsToDtos(findAllProductUseCase.findAll());
+            List<ProductResponseDTO> products = productResponseMapper.modelsToDtos(findAllProductUseCase.findAll());
             response.setData(products);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
@@ -53,7 +53,7 @@ public class ProductController {
         ApiResponse<ProductResponseDTO> response = new ApiResponse<>();
         try {
             Product product = findByIdProductUseCase.findById(id);
-            response.setData(subcategoryResponseMapper.modelToDto(product));
+            response.setData(productResponseMapper.modelToDto(product));
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -66,7 +66,7 @@ public class ProductController {
         ApiResponse<ProductResponseDTO> response = new ApiResponse<>();
         try {
             product.setCreateBy(createBy);
-            response.setData(subcategoryResponseMapper.modelToDto(createProductUseCase.create(subcategoryCreateMapper.dtoToModel(product), idSubcategory)));
+            response.setData(productResponseMapper.modelToDto(createProductUseCase.create(productCreateMapper.dtoToModel(product), idSubcategory)));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException | NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -79,7 +79,7 @@ public class ProductController {
         ApiResponse<ProductResponseDTO> response = new ApiResponse<>();
         try {
             product.setUpdateBy(updateBy);
-            response.setData(subcategoryResponseMapper.modelToDto(updateProductUseCase.update(subcategoryUpdateMapper.dtoToModel(product), idSubcategory)));
+            response.setData(productResponseMapper.modelToDto(updateProductUseCase.update(productUpdateMapper.dtoToModel(product), idSubcategory)));
             return ResponseEntity.ok(response);
         } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -104,7 +104,7 @@ public class ProductController {
         ApiResponse<ProductUpdateDTO> response = new ApiResponse<>();
         try {
             Product product = changeStateByIdProductUseCase.changeStateById(id);
-            response.setData(subcategoryUpdateMapper.modelToDto(product));
+            response.setData(productUpdateMapper.modelToDto(product));
             return ResponseEntity.ok(response);
         } catch (NonExisteceException e) {
             response.setError(httpUtils.determineErrorMessage(e));

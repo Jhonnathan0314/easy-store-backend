@@ -62,11 +62,11 @@ public class SubcategoryController {
     }
 
     @PostMapping("/category/{idCategory}")
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> create(@RequestBody SubcategoryCreateDTO role, @PathVariable Long idCategory, @RequestHeader("Create-By") Long createBy) {
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> create(@RequestBody SubcategoryCreateDTO subcategory, @PathVariable Long idCategory, @RequestHeader("Create-By") Long createBy) {
         ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
         try {
-            role.setCreateBy(createBy);
-            response.setData(subcategoryResponseMapper.modelToDto(createSubcategoryUseCase.create(subcategoryCreateMapper.dtoToModel(role), idCategory)));
+            subcategory.setCreateBy(createBy);
+            response.setData(subcategoryResponseMapper.modelToDto(createSubcategoryUseCase.create(subcategoryCreateMapper.dtoToModel(subcategory), idCategory)));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException | NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -75,11 +75,11 @@ public class SubcategoryController {
     }
 
     @PutMapping("/category/{idCategory}")
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> update(@RequestBody SubcategoryUpdateDTO role, @PathVariable Long idCategory, @RequestHeader("Update-By") Long updateBy) {
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> update(@RequestBody SubcategoryUpdateDTO subcategory, @PathVariable Long idCategory, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
         try {
-            role.setUpdateBy(updateBy);
-            response.setData(subcategoryResponseMapper.modelToDto(updateSubcategoryUseCase.update(subcategoryUpdateMapper.dtoToModel(role), idCategory)));
+            subcategory.setUpdateBy(updateBy);
+            response.setData(subcategoryResponseMapper.modelToDto(updateSubcategoryUseCase.update(subcategoryUpdateMapper.dtoToModel(subcategory), idCategory)));
             return ResponseEntity.ok(response);
         } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));
