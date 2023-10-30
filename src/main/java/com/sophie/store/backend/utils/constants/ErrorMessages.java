@@ -12,4 +12,6 @@ public class ErrorMessages {
     public final String NO_CATEGORY_RESULTS = "No se encontró la categoría que será asignada.";
     public final String NO_USER_RESULTS = "No se encontró el usuario que será asignado.";
     public final String NO_PAYMENT_TYPE_RESULTS = "No se encontró el tipo de pago que será asignado.";
+    public final String NO_PURCHASE_RESULTS = "No se encontró la fáctura recibida.";
+    public final String NO_PRODUCT_RESULTS = "No se encontró el producto que será asignado.";
 }
