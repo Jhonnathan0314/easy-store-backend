@@ -20,7 +20,7 @@ public class SecurityData {
     private LoginRequest loginRequest = LoginRequest.builder()
             .username("test@test.com")
             .password("12345")
-            .build();;
+            .build();
 
     private LoginRequest badLoginRequest = LoginRequest.builder().build();
 

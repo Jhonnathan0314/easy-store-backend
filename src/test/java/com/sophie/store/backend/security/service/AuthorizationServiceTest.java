@@ -72,6 +72,19 @@ class AuthorizationServiceTest {
     }
 
     @Test
+    @Order(0)
+    void testLoginFailedUsernameNotFoundException() throws NoResultsException, InvalidBodyException {
+        when(findByUsernameUserUseCase.findByUsername(any(String.class))).thenReturn(Optional.of(user));
+        when(jwtService.getToken(any(), any())).thenReturn(authResponse.getToken());
+
+        AuthResponse response = authorizationService.login(loginRequest);
+
+        assertNotNull(response);
+        assertEquals(authResponse.getToken(), response.getToken());
+        verify(authenticationManager).authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+    }
+
+    @Test
     void testRegister() throws InvalidBodyException, DuplicatedException {
         when(createUserUseCase.create(any(User.class))).thenReturn(user);
         when(jwtService.getToken(any(), any())).thenReturn(authResponse.getToken());

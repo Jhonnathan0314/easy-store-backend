@@ -1,15 +1,12 @@
 package com.sophie.store.backend.security.models;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class AuthResponse {
     String token;
 }
