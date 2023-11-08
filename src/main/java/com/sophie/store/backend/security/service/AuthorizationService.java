@@ -40,7 +40,7 @@ public class AuthorizationService {
         Map<String, String> extraClaims = new HashMap<>();
         extraClaims.put("user_role", userDb.get().getRole().getName());
 
-        String token = jwtService.getToken(userDb.get(), extraClaims);
+        String token = jwtService.generateToken(userDb.get(), extraClaims);
         return AuthResponse.builder()
                 .token(token)
                 .build();
@@ -60,7 +60,7 @@ public class AuthorizationService {
         extraClaims.put("user_role", user.getRole().getName());
 
         return AuthResponse.builder()
-                .token(jwtService.getToken(user, extraClaims))
+                .token(jwtService.generateToken(user, extraClaims))
                 .build();
     }
 

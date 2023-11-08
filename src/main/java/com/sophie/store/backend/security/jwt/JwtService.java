@@ -6,7 +6,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -17,11 +16,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    public String getToken(User user, Map<String, String> extraClaims) {
-        return getToken(extraClaims, user);
-    }
-
-    private String getToken(Map<String, String> extraClaims, User user) {
+    public String generateToken(User user, Map<String, String> extraClaims) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -38,10 +33,6 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String getUsernameFromToken(String token) {
-        return getClaim(token, Claims::getSubject);
-    }
-
     public boolean isTokenValid(String token, User userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
@@ -56,9 +47,13 @@ public class JwtService {
                 .getBody();
     }
 
-    public <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
+    private <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public String getUsernameFromToken(String token) {
+        return getClaim(token, Claims::getSubject);
     }
 
     private Date getExpiration(String token) {
