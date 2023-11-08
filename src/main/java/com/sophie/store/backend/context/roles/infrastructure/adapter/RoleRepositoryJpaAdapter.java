@@ -5,7 +5,6 @@ import com.sophie.store.backend.context.roles.domain.port.RoleRepository;
 import com.sophie.store.backend.context.roles.infrastructure.mappers.RoleMapper;
 import com.sophie.store.backend.context.roles.infrastructure.persistence.RoleEntity;
 import com.sophie.store.backend.context.roles.infrastructure.persistence.RoleJpaRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class RoleRepositoryAdapter implements RoleRepository {
+public class RoleRepositoryJpaAdapter implements RoleRepository {
 
     private final RoleJpaRepository roleJpaRepository;
     private final RoleMapper mapper = new RoleMapper();
