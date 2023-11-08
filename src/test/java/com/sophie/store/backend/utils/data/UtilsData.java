@@ -36,7 +36,7 @@ public class UtilsData {
             .detail(errorMessages.NO_CHANGES)
             .build();
 
-    private ErrorMessage errorMessageNonExisteceException = ErrorMessage.builder()
+    private ErrorMessage errorMessageNonExistenceException = ErrorMessage.builder()
             .code(HttpStatus.NOT_FOUND.value())
             .title(HttpStatus.NOT_FOUND.name())
             .detail(errorMessages.NON_EXISTENT_DATA)

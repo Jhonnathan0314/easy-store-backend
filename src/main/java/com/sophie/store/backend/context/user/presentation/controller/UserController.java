@@ -91,7 +91,7 @@ public class UserController {
         try {
             deleteByIdUserUseCase.deleteById(id);
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
@@ -104,7 +104,7 @@ public class UserController {
             User user = changeStateByIdUserUseCase.changeStateById(id);
             response.setData(userResponseMapper.modelToDto(user));
             return ResponseEntity.ok(response);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

@@ -93,7 +93,7 @@ public class ProductController {
         try {
             deleteByIdProductUseCase.deleteById(id);
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
@@ -106,7 +106,7 @@ public class ProductController {
             Product product = changeStateByIdProductUseCase.changeStateById(id);
             response.setData(productUpdateMapper.modelToDto(product));
             return ResponseEntity.ok(response);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

@@ -7,7 +7,7 @@ import com.sophie.store.backend.context.purchase_has_product.infrastructure.mapp
 import com.sophie.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductResponseMapper;
 import com.sophie.store.backend.utils.exceptions.InvalidBodyException;
 import com.sophie.store.backend.utils.exceptions.NoResultsException;
-import com.sophie.store.backend.utils.exceptions.NonExisteceException;
+import com.sophie.store.backend.utils.exceptions.NonExistenceException;
 import com.sophie.store.backend.utils.http.HttpUtils;
 import com.sophie.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -92,7 +92,7 @@ public class PurchaseHasProductController {
         try {
             removeByIdPurchaseHasProductUseCase.removeById(id);
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

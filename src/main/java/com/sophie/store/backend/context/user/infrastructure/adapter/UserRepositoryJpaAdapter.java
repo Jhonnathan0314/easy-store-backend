@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepositoryAdapter implements UserRepository {
+public class UserRepositoryJpaAdapter implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;
     private final UserMapper mapper = new UserMapper();

@@ -3,7 +3,7 @@ package com.sophie.store.backend.context.category.application.usecase;
 import com.sophie.store.backend.context.category.domain.model.Category;
 import com.sophie.store.backend.context.category.domain.port.CategoryRepository;
 import com.sophie.store.backend.utils.constants.ErrorMessages;
-import com.sophie.store.backend.utils.exceptions.NonExisteceException;
+import com.sophie.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +16,9 @@ public class ChangeStateByIdCategoryUseCase {
     private final CategoryRepository categoryRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Category changeStateById(Long id) throws NonExisteceException {
+    public Category changeStateById(Long id) throws NonExistenceException {
         Optional<Category> optCategory = categoryRepository.findById(id);
-        if(optCategory.isEmpty()) throw new NonExisteceException(errorMessages.NON_EXISTENT_DATA);
+        if(optCategory.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
         Category category = optCategory.get();
         category.setState(category.getState().equals("active") ? "inactive" : "active");
         category = categoryRepository.update(category);

@@ -24,17 +24,22 @@ public class SecurityData {
 
     private LoginRequest badLoginRequest = LoginRequest.builder().build();
 
+    private LoginRequest emptyLoginRequest = LoginRequest.builder()
+            .username("")
+            .password("")
+            .build();
+
     private User registerRequest = User.builder()
             .username("test@test.com")
-                .password("12345")
-                .role(Role.builder()
-                        .id(1L)
-                        .name("client")
-                        .build()
-                )
-                        .name("test")
-                .lastName("test")
-                .build();
+            .password("12345")
+            .role(Role.builder()
+                    .id(1L)
+                    .name("client")
+                    .build()
+            )
+            .name("test")
+            .lastName("test")
+            .build();
 
     private User badRegisterRequest = User.builder()
             .username("test@test.com")

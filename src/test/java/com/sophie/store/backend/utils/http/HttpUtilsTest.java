@@ -59,8 +59,8 @@ class HttpUtilsTest {
 
     @Test
     @Order(3)
-    void determineHttpStatusWithNonExisteceException() {
-        NonExisteceException exception = new NonExisteceException(errorMessages.INVALID_BODY);
+    void determineHttpStatusWithNonExistenceException() {
+        NonExistenceException exception = new NonExistenceException(errorMessages.INVALID_BODY);
         HttpStatus status = httpUtils.determineHttpStatus(exception);
         assertEquals(HttpStatus.NOT_FOUND, status);
     }
@@ -116,10 +116,10 @@ class HttpUtilsTest {
 
     @Test
     @Order(3)
-    void determineErrorMessageWithNonExisteceException() {
-        NonExisteceException exception = new NonExisteceException(errorMessages.NON_EXISTENT_DATA);
+    void determineErrorMessageWithNonExistenceException() {
+        NonExistenceException exception = new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
         ErrorMessage errorMessage = httpUtils.determineErrorMessage(exception);
-        assertEquals(utilsData.getErrorMessageNonExisteceException(), errorMessage);
+        assertEquals(utilsData.getErrorMessageNonExistenceException(), errorMessage);
     }
 
     @Test

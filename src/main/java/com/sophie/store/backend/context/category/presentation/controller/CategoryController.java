@@ -93,7 +93,7 @@ public class CategoryController {
         try {
             deleteByIdCategoryUseCase.deleteById(id);
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
@@ -106,7 +106,7 @@ public class CategoryController {
             Category category = changeStateByIdCategoryUseCase.changeStateById(id);
             response.setData(categoryUpdateMapper.modelToDto(category));
             return ResponseEntity.ok(response);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

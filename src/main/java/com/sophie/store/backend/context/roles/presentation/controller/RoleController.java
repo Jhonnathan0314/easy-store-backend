@@ -91,7 +91,7 @@ public class RoleController {
         try {
             deleteByIdRoleUseCase.deleteById(id);
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
@@ -104,7 +104,7 @@ public class RoleController {
             Role role = changeStateByIdRoleUseCase.changeStateById(id);
             response.setData(roleUpdateMapper.modelToDto(role));
             return ResponseEntity.ok(response);
-        } catch (NonExisteceException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

@@ -3,7 +3,7 @@ package com.sophie.store.backend.context.purchase.application.usecase;
 import com.sophie.store.backend.context.purchase.domain.model.Purchase;
 import com.sophie.store.backend.context.purchase.domain.port.PurchaseRepository;
 import com.sophie.store.backend.utils.constants.ErrorMessages;
-import com.sophie.store.backend.utils.exceptions.NonExisteceException;
+import com.sophie.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +16,9 @@ public class DeleteByIdPurchaseUseCase {
     private final PurchaseRepository purchaseRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public void deleteById(Long id) throws NonExisteceException {
+    public void deleteById(Long id) throws NonExistenceException {
         Optional<Purchase> purchase = purchaseRepository.findById(id);
-        if(purchase.isEmpty()) throw new NonExisteceException(errorMessages.NON_EXISTENT_DATA);
+        if(purchase.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
         purchaseRepository.deleteById(id);
     }
 

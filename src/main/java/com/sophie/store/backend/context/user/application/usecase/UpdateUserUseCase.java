@@ -23,8 +23,6 @@ public class UpdateUserUseCase {
 
     public User update(User user) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         if(user.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
 
         if(!user.isValid(user)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
@@ -37,6 +35,12 @@ public class UpdateUserUseCase {
 
         user.setRole(userDb.getRole());
         user.setState(userDb.getState());
+
+        if(user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        user.setPassword(userDb.getPassword());
 
         return userRepository.update(user);
     }
