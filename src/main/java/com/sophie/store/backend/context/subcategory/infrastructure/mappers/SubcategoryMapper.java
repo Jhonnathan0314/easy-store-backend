@@ -1,9 +1,6 @@
 package com.sophie.store.backend.context.subcategory.infrastructure.mappers;
 
-import com.sophie.store.backend.context.category.application.dto.CategoryDTO;
-import com.sophie.store.backend.context.category.domain.model.Category;
 import com.sophie.store.backend.context.category.infrastructure.mappers.CategoryMapper;
-import com.sophie.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.sophie.store.backend.context.subcategory.application.dto.SubcategoryDTO;
 import com.sophie.store.backend.context.subcategory.domain.model.Subcategory;
 import com.sophie.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
@@ -52,9 +49,6 @@ public class SubcategoryMapper implements Mapper<SubcategoryEntity, Subcategory,
                 .category(categoryMapper.modelToDto(model.getCategory()))
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
-                .creationDate(model.getCreationDate())
-                .updateDate(model.getUpdateDate())
-                .state(model.getState())
                 .build();
     }
 
@@ -66,9 +60,6 @@ public class SubcategoryMapper implements Mapper<SubcategoryEntity, Subcategory,
                 .category(categoryMapper.dtoToModel(dto.getCategory()))
                 .createBy(dto.getCreateBy())
                 .updateBy(dto.getUpdateBy())
-                .creationDate(dto.getCreationDate())
-                .updateDate(dto.getUpdateDate())
-                .state(dto.getState())
                 .build();
     }
 

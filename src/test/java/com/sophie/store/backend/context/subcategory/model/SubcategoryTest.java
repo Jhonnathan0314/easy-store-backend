@@ -1,6 +1,7 @@
-package com.sophie.store.backend.context.category.domain.model;
+package com.sophie.store.backend.context.subcategory.model;
 
-import com.sophie.store.backend.context.category.data.CategoryData;
+import com.sophie.store.backend.context.subcategory.data.SubcategoryData;
+import com.sophie.store.backend.context.subcategory.domain.model.Subcategory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,35 +12,35 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryTest {
+class SubcategoryTest {
 
     @InjectMocks
-    private Category category;
+    private Subcategory subcategory;
 
-    private static CategoryData data;
+    private static SubcategoryData data;
 
     @BeforeAll
     static void setUp() {
-        data = new CategoryData();
+        data = new SubcategoryData();
     }
 
     @Test
     void isValidRequestTrue() {
-        boolean response = category.isValid(data.getCategoryCreateValid());
+        boolean response = subcategory.isValid(data.getSubcategoryCreateValid());
 
         assertTrue(response);
     }
 
     @Test
     void isValidRequestFalseNull() {
-        boolean response = category.isValid(data.getCategoryCreateInvalid());
+        boolean response = subcategory.isValid(data.getSubcategoryCreateInvalid());
 
         assertFalse(response);
     }
 
     @Test
     void isValidRequestFalseEmpty() {
-        boolean response = category.isValid(data.getCategoryEmpty());
+        boolean response = subcategory.isValid(data.getSubcategoryEmpty());
 
         assertFalse(response);
     }

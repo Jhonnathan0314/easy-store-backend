@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class SubcategoryRepositoryAdapter implements SubcategoryRepository {
+public class SubcategoryRepositoryJpaAdapter implements SubcategoryRepository {
 
     private final SubcategoryJpaRepository subcategoryJpaRepository;
     private final SubcategoryMapper mapper = new SubcategoryMapper();
