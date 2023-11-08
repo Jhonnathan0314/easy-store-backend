@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class PaymentTypeRepositoryAdapter implements PaymentTypeRepository {
+public class PaymentTypeRepositoryJpaAdapter implements PaymentTypeRepository {
 
     private final PaymentTypeJpaRepository paymentTypeJpaRepository;
     private final PaymentTypeMapper mapper = new PaymentTypeMapper();

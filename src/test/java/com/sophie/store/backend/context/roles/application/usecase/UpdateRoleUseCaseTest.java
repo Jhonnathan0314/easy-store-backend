@@ -28,7 +28,7 @@ class UpdateRoleUseCaseTest {
     private UpdateRoleUseCase updateRoleUseCase;
 
     @Mock
-    private RoleRepository userRepository;
+    private RoleRepository roleRepository;
 
     private static ErrorMessages errorMessages;
     private static RoleData roleData;
@@ -41,16 +41,16 @@ class UpdateRoleUseCaseTest {
 
     @Test
     void updateSuccess() throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(roleData.getRoleActive()));
-        when(userRepository.update(any(Role.class))).thenReturn(roleData.getRoleUpdated());
+        when(roleRepository.findById(any(Long.class))).thenReturn(Optional.of(roleData.getRoleActive()));
+        when(roleRepository.update(any(Role.class))).thenReturn(roleData.getRoleUpdated());
 
         Role response = updateRoleUseCase.update(roleData.getRoleToUpdate());
 
         assertNotNull(response);
         assertEquals(response, roleData.getRoleUpdated());
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository).update(any(Role.class));
+        verify(roleRepository).findById(any(Long.class));
+        verify(roleRepository).update(any(Role.class));
     }
 
     @Test
@@ -62,8 +62,8 @@ class UpdateRoleUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_ID_RECEIVED);
 
-        verify(userRepository, never()).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Role.class));
+        verify(roleRepository, never()).findById(any(Long.class));
+        verify(roleRepository, never()).update(any(Role.class));
     }
 
     @Test
@@ -75,13 +75,13 @@ class UpdateRoleUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.INVALID_BODY);
 
-        verify(userRepository, never()).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Role.class));
+        verify(roleRepository, never()).findById(any(Long.class));
+        verify(roleRepository, never()).update(any(Role.class));
     }
 
     @Test
     void updateFailedNoResultsException() {
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+        when(roleRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         NoResultsException exception = assertThrows(
                 NoResultsException.class,
@@ -90,13 +90,13 @@ class UpdateRoleUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_RESULTS);
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Role.class));
+        verify(roleRepository).findById(any(Long.class));
+        verify(roleRepository, never()).update(any(Role.class));
     }
 
     @Test
     void updateFailedNoChangesException() {
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(roleData.getRoleActive()));
+        when(roleRepository.findById(any(Long.class))).thenReturn(Optional.of(roleData.getRoleActive()));
 
         NoChangesException exception = assertThrows(
                 NoChangesException.class,
@@ -105,8 +105,8 @@ class UpdateRoleUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_CHANGES);
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Role.class));
+        verify(roleRepository).findById(any(Long.class));
+        verify(roleRepository, never()).update(any(Role.class));
     }
 
 }
