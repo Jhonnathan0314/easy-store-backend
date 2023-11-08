@@ -2,7 +2,6 @@ package com.sophie.store.backend.context.category.infrastructure.adapter;
 
 import com.sophie.store.backend.context.category.domain.model.Category;
 import com.sophie.store.backend.context.category.domain.port.CategoryRepository;
-import com.sophie.store.backend.context.category.infrastructure.mappers.CategoryCreateMapper;
 import com.sophie.store.backend.context.category.infrastructure.mappers.CategoryMapper;
 import com.sophie.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.sophie.store.backend.context.category.infrastructure.persistence.CategoryJpaRepository;
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class CategoryRepositoryAdapter implements CategoryRepository {
+public class CategoryRepositoryJpaAdapter implements CategoryRepository {
 
     private final CategoryJpaRepository categoryJpaRepository;
     private final CategoryMapper mapper = new CategoryMapper();
