@@ -1,7 +1,15 @@
 package com.sophie.store.backend.context.user.data;
 
+import com.sophie.store.backend.context.roles.application.dto.RoleDTO;
+import com.sophie.store.backend.context.roles.application.dto.RoleResponseDTO;
 import com.sophie.store.backend.context.roles.domain.model.Role;
+import com.sophie.store.backend.context.roles.infrastructure.persistence.RoleEntity;
+import com.sophie.store.backend.context.user.application.dto.UserCreateDTO;
+import com.sophie.store.backend.context.user.application.dto.UserDTO;
+import com.sophie.store.backend.context.user.application.dto.UserResponseDTO;
+import com.sophie.store.backend.context.user.application.dto.UserUpdateDTO;
 import com.sophie.store.backend.context.user.domain.model.User;
+import com.sophie.store.backend.context.user.infrastructure.persistence.UserEntity;
 import lombok.Data;
 
 import java.util.LinkedList;
@@ -136,6 +144,75 @@ public class UserData {
     private final String encodedPassword = "12345ENCODED";
 
     private List<User> usersList;
+
+    //To mapper test
+    private final UserEntity userEntity = UserEntity.builder()
+            .id(1L)
+            .name("test")
+            .lastName("test")
+            .username("test@test.com")
+            .password("12345")
+            .role(RoleEntity.builder()
+                    .id(1L)
+                    .name("client")
+                    .build()
+            )
+            .state("active")
+            .build();
+
+    private final UserDTO userDTO = UserDTO.builder()
+            .id(1L)
+            .name("test")
+            .lastName("test")
+            .username("test@test.com")
+            .password("12345")
+            .role(RoleDTO.builder()
+                    .id(1L)
+                    .name("client")
+                    .build()
+            )
+            .build();
+
+    private final UserCreateDTO userCreateDTO = UserCreateDTO.builder()
+            .name("test")
+            .lastName("test")
+            .username("test@test.com")
+            .password("12345")
+            .build();
+
+    private final UserUpdateDTO userUpdateDTO = UserUpdateDTO.builder()
+            .id(1L)
+            .name("test")
+            .lastName("test")
+            .username("test@test.com")
+            .password("12345")
+            .build();
+
+    private final UserResponseDTO userResponseDTO = UserResponseDTO.builder()
+            .id(1L)
+            .name("test")
+            .lastName("test")
+            .username("test@test.com")
+            .role(RoleResponseDTO.builder()
+                    .id(1L)
+                    .name("client")
+                    .build()
+            )
+            .build();
+
+    private final User userModel = User.builder()
+            .id(1L)
+            .name("test")
+            .lastName("test")
+            .username("test@test.com")
+            .password("12345")
+            .role(Role.builder()
+                    .id(1L)
+                    .name("client")
+                    .build()
+            )
+            .state("active")
+            .build();
 
     public UserData() {
         usersList = new LinkedList<>();

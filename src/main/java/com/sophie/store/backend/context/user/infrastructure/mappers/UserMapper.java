@@ -22,6 +22,7 @@ public class UserMapper implements Mapper<UserEntity, User, UserDTO> {
                 .lastName(entity.getLastName())
                 .password(entity.getPassword())
                 .creationDate(entity.getCreationDate())
+                .updateDate(entity.getUpdateDate())
                 .state(entity.getState())
                 .role(roleMapper.entityToModel(entity.getRole()))
                 .build();
@@ -36,6 +37,7 @@ public class UserMapper implements Mapper<UserEntity, User, UserDTO> {
                 .lastName(model.getLastName())
                 .password(model.getPassword())
                 .creationDate(model.getCreationDate())
+                .updateDate(model.getUpdateDate())
                 .state(model.getState())
                 .role(roleMapper.modelToEntity(model.getRole()))
                 .build();
@@ -49,8 +51,6 @@ public class UserMapper implements Mapper<UserEntity, User, UserDTO> {
                 .name(model.getName())
                 .lastName(model.getLastName())
                 .password(model.getPassword())
-                .creationDate(model.getCreationDate())
-                .state(model.getState())
                 .role(roleMapper.modelToDto(model.getRole()))
                 .build();
     }
@@ -63,8 +63,6 @@ public class UserMapper implements Mapper<UserEntity, User, UserDTO> {
                 .name(dto.getName())
                 .lastName(dto.getLastName())
                 .password(dto.getPassword())
-                .creationDate(dto.getCreationDate())
-                .state(dto.getState())
                 .role(roleMapper.dtoToModel(dto.getRole()))
                 .build();
     }
