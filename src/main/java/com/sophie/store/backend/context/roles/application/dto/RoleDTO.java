@@ -1,21 +1,13 @@
 package com.sophie.store.backend.context.roles.application.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-import java.sql.Timestamp;
-
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class RoleDTO {
     private Long id;
     private String name;
-    private Timestamp creationDate;
-    private Timestamp updateDate;
-    private String state;
 }

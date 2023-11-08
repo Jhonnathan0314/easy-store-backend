@@ -1,6 +1,11 @@
 package com.sophie.store.backend.context.roles.data;
 
+import com.sophie.store.backend.context.roles.application.dto.RoleCreateDTO;
+import com.sophie.store.backend.context.roles.application.dto.RoleDTO;
+import com.sophie.store.backend.context.roles.application.dto.RoleResponseDTO;
+import com.sophie.store.backend.context.roles.application.dto.RoleUpdateDTO;
 import com.sophie.store.backend.context.roles.domain.model.Role;
+import com.sophie.store.backend.context.roles.infrastructure.persistence.RoleEntity;
 import lombok.Data;
 
 import java.util.LinkedList;
@@ -65,6 +70,38 @@ public class RoleData {
     private final String encodedPassword = "12345ENCODED";
 
     private List<Role> rolesList;
+
+    //To mapper test
+    private final RoleEntity roleEntity = RoleEntity.builder()
+            .id(1L)
+            .name("test")
+            .state("active")
+            .build();
+
+    private final RoleDTO roleDTO = RoleDTO.builder()
+            .id(1L)
+            .name("test")
+            .build();
+
+    private final RoleCreateDTO roleCreateDTO = RoleCreateDTO.builder()
+            .name("test")
+            .build();
+
+    private final RoleUpdateDTO roleUpdateDTO = RoleUpdateDTO.builder()
+            .id(1L)
+            .name("test")
+            .build();
+
+    private final RoleResponseDTO roleResponseDTO = RoleResponseDTO.builder()
+            .id(1L)
+            .name("test")
+            .build();
+
+    private final Role roleModel = Role.builder()
+            .id(1L)
+            .name("test")
+            .state("active")
+            .build();
 
     public RoleData() {
         rolesList = new LinkedList<>();

@@ -15,6 +15,7 @@ public class RoleMapper implements Mapper<RoleEntity, Role, RoleDTO> {
                 .id(entity.getId())
                 .name(entity.getName())
                 .creationDate(entity.getCreationDate())
+                .updateDate(entity.getUpdateDate())
                 .state(entity.getState())
                 .build();
     }
@@ -25,6 +26,7 @@ public class RoleMapper implements Mapper<RoleEntity, Role, RoleDTO> {
                 .id(model.getId())
                 .name(model.getName())
                 .creationDate(model.getCreationDate())
+                .updateDate(model.getUpdateDate())
                 .state(model.getState())
                 .build();
     }
@@ -34,8 +36,6 @@ public class RoleMapper implements Mapper<RoleEntity, Role, RoleDTO> {
         return RoleDTO.builder()
                 .id(model.getId())
                 .name(model.getName())
-                .creationDate(model.getCreationDate())
-                .state(model.getState())
                 .build();
     }
 
@@ -44,8 +44,6 @@ public class RoleMapper implements Mapper<RoleEntity, Role, RoleDTO> {
         return Role.builder()
                 .id(dto.getId())
                 .name(dto.getName())
-                .creationDate(dto.getCreationDate())
-                .state(dto.getState())
                 .build();
     }
 
