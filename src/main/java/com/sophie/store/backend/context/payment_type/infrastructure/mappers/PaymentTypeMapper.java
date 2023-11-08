@@ -43,9 +43,6 @@ public class PaymentTypeMapper implements Mapper<PaymentTypeEntity, PaymentType,
                 .name(model.getName())
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
-                .creationDate(model.getCreationDate())
-                .updateDate(model.getUpdateDate())
-                .state(model.getState())
                 .build();
     }
 
@@ -56,9 +53,6 @@ public class PaymentTypeMapper implements Mapper<PaymentTypeEntity, PaymentType,
                 .name(dto.getName())
                 .createBy(dto.getCreateBy())
                 .updateBy(dto.getUpdateBy())
-                .creationDate(dto.getCreationDate())
-                .updateDate(dto.getUpdateDate())
-                .state(dto.getState())
                 .build();
     }
 

@@ -1,14 +1,10 @@
 package com.sophie.store.backend.context.payment_type.application.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class PaymentTypeResponseDTO {
     private Long id;
     private String name;
