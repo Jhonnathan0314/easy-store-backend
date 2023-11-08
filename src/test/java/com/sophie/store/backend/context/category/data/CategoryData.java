@@ -1,6 +1,11 @@
 package com.sophie.store.backend.context.category.data;
 
+import com.sophie.store.backend.context.category.application.dto.CategoryCreateDTO;
+import com.sophie.store.backend.context.category.application.dto.CategoryDTO;
+import com.sophie.store.backend.context.category.application.dto.CategoryResponseDTO;
+import com.sophie.store.backend.context.category.application.dto.CategoryUpdateDTO;
 import com.sophie.store.backend.context.category.domain.model.Category;
+import com.sophie.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import lombok.Data;
 
 import java.util.LinkedList;
@@ -66,6 +71,38 @@ public class CategoryData {
 
     private List<Category> categorysList;
 
+    //To mapper test
+    private final CategoryEntity categoryEntity = CategoryEntity.builder()
+            .id(1L)
+            .name("test")
+            .state("active")
+            .build();
+
+    private final CategoryDTO categoryDTO = CategoryDTO.builder()
+            .id(1L)
+            .name("test")
+            .build();
+
+    private final CategoryCreateDTO categoryCreateDTO = CategoryCreateDTO.builder()
+            .name("test")
+            .build();
+
+    private final CategoryUpdateDTO categoryUpdateDTO = CategoryUpdateDTO.builder()
+            .id(1L)
+            .name("test")
+            .build();
+
+    private final CategoryResponseDTO categoryResponseDTO = CategoryResponseDTO.builder()
+            .id(1L)
+            .name("test")
+            .build();
+
+    private final Category categoryModel = Category.builder()
+            .id(1L)
+            .name("test")
+            .state("active")
+            .build();
+    
     public CategoryData() {
         categorysList = new LinkedList<>();
         categorysList.add(categoryResponseOne);
