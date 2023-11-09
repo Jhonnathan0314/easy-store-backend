@@ -145,14 +145,14 @@ public class PurchaseController {
     }
 
     @PostMapping("/user/{userId}/payment-type/{paymentTypeId}")
-    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> create(@RequestBody PurchaseGenerateDTO purchase,
-                                                                   @PathVariable Long userId,
-                                                                   @PathVariable Long paymentTypeId,
-                                                                   @RequestHeader("Create-By") Long createBy) {
+    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> generate(@RequestBody PurchaseGenerateDTO purchase,
+                                                                     @PathVariable Long userId,
+                                                                     @PathVariable Long paymentTypeId,
+                                                                     @RequestHeader("Create-By") Long createBy) {
         ApiResponse<PurchaseResponseDTO> response = new ApiResponse<>();
         try {
             purchase.setCreateBy(createBy);
-            response.setData(purchaseResponseMapper.modelToDto(generatePurchaseUseCase.create(purchaseGenerateMapper.dtoToModel(purchase), userId, paymentTypeId)));
+            response.setData(purchaseResponseMapper.modelToDto(generatePurchaseUseCase.generate(purchaseGenerateMapper.dtoToModel(purchase), userId, paymentTypeId)));
             return ResponseEntity.ok(response);
         } catch (InvalidBodyException | NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));

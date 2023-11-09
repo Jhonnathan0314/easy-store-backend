@@ -5,16 +5,13 @@ import com.sophie.store.backend.context.payment_type.infrastructure.persistence.
 import com.sophie.store.backend.context.user.domain.model.User;
 import com.sophie.store.backend.context.user.infrastructure.persistence.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,6 +42,6 @@ public class PurchaseEntity {
     private Long createBy;
 
     @PrePersist
-    private void onCreate() { total = new BigDecimal(0); }
+    protected void onCreate() { total = new BigDecimal(0); }
 
 }

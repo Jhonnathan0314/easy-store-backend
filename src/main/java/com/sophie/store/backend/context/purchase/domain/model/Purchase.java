@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class Purchase {
     private Long id;
     private User user;

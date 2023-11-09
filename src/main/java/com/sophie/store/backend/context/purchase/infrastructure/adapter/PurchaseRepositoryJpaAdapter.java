@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class PurchaseRepositoryAdapter implements PurchaseRepository {
+public class PurchaseRepositoryJpaAdapter implements PurchaseRepository {
 
     private final PurchaseJpaRepository purchaseJpaRepository;
     private final PurchaseMapper mapper = new PurchaseMapper();

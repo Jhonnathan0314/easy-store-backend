@@ -23,7 +23,7 @@ public class GeneratePurchaseUseCase {
     private final PaymentTypeRepository paymentTypeRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Purchase create(Purchase purchase, Long userId, Long paymentTypeId) throws InvalidBodyException, NoResultsException {
+    public Purchase generate(Purchase purchase, Long userId, Long paymentTypeId) throws InvalidBodyException, NoResultsException {
 
         Optional<User> optUser = userRepository.findById(userId);
         if(optUser.isEmpty()) throw new NoResultsException(errorMessages.NO_USER_RESULTS);

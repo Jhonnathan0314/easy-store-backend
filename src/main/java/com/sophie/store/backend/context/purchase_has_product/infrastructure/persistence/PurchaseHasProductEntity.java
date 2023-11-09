@@ -3,12 +3,9 @@ package com.sophie.store.backend.context.purchase_has_product.infrastructure.per
 import com.sophie.store.backend.context.product.infrastructure.persistence.ProductEntity;
 import com.sophie.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
