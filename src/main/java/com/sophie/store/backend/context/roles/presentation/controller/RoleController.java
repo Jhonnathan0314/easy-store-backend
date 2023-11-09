@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/role")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class RoleController {
 
     private final FindAllRoleUseCase findAllRoleUseCase;

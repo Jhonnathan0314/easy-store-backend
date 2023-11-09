@@ -25,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/purchase")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class PurchaseController {
 
     private final FindAllPurchaseUseCase findAllPurchaseUseCase;

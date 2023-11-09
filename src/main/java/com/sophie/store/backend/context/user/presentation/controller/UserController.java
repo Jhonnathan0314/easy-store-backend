@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class UserController {
 
     private final FindAllUserUseCase findAllUserUseCase;

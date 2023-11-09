@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/payment-type")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class PaymentTypeController {
 
     private final FindAllPaymentTypeUseCase findAllPaymentTypeUseCase;

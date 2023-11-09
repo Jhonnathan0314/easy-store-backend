@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/category")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CategoryController {
 
     private final FindAllCategoryUseCase findAllCategoryUseCase;
