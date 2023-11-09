@@ -11,6 +11,7 @@ public interface PurchaseHasProductRepository {
     List<PurchaseHasProduct> findAllByPurchaseId(Long purchaseId);
     List<PurchaseHasProduct> findAllByProductId(Long productId);
     PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct);
+    List<PurchaseHasProduct> addAll(List<PurchaseHasProduct> purchaseHasProducts);
     void removeById(Long id);
 
 }

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,7 @@ public class PurchaseHasProductController {
     private final FindAllByPurchaseIdPurchaseHasProductUseCase findAllByPurchaseIdPurchaseHasProductUseCase;
     private final FindAllByProductIdPurchaseHasProductUseCase findAllByProductIdPurchaseHasProductUseCase;
     private final AddPurchaseHasProductUseCase addPurchaseHasProductUseCase;
+    private final AddAllPurchaseHasProductUseCase addAllPurchaseHasProductUseCase;
     private final RemoveByIdPurchaseHasProductUseCase removeByIdPurchaseHasProductUseCase;
 
     private final PurchaseHasProductAddMapper purchaseHasProductAddMapper = new PurchaseHasProductAddMapper();
@@ -73,12 +75,28 @@ public class PurchaseHasProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> create(@RequestBody PurchaseHasProductAddDTO purchaseHasProduct,
-                                                                             @RequestHeader("Purchase-Id") Long purchaseId,
-                                                                             @RequestHeader("Product-Id") Long productId) {
+    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@RequestBody PurchaseHasProductAddDTO purchaseHasProduct,
+                                                                          @RequestHeader("Purchase-Id") Long purchaseId,
+                                                                          @RequestHeader("Product-Id") Long productId) {
         ApiResponse<PurchaseHasProductResponseDTO> response = new ApiResponse<>();
         try {
             response.setData(purchaseHasProductResponseMapper.modelToDto(addPurchaseHasProductUseCase.add(purchaseHasProductAddMapper.dtoToModel(purchaseHasProduct), purchaseId, productId)));
+            return ResponseEntity.ok(response);
+        } catch (InvalidBodyException | NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @PostMapping("/all")
+    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> addAll(@RequestBody List<PurchaseHasProductAddDTO> purchaseHasProducts,
+                                                                          @RequestHeader("Purchase-Id") Long purchaseId,
+                                                                          @RequestHeader("Products-Id") String productIdsStr) {
+        ApiResponse<List<PurchaseHasProductResponseDTO>> response = new ApiResponse<>();
+        try {
+            String[] productIdsStrList = productIdsStr.split(",");
+            List<Long> productIds = Arrays.stream(productIdsStrList).map(id -> Long.parseLong(id.trim())).toList();
+            response.setData(purchaseHasProductResponseMapper.modelsToDtos(addAllPurchaseHasProductUseCase.addAll(purchaseHasProductAddMapper.dtosToModels(purchaseHasProducts), purchaseId, productIds)));
             return ResponseEntity.ok(response);
         } catch (InvalidBodyException | NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));

@@ -43,6 +43,12 @@ public class PurchaseHasProductRepositoryJpaAdapter implements PurchaseHasProduc
     }
 
     @Override
+    public List<PurchaseHasProduct> addAll(List<PurchaseHasProduct> purchaseHasProducts) {
+        List<PurchaseHasProductEntity> purchaseHasProductEntities = purchaseHasProductJpaRepository.saveAll(mapper.modelsToEntities(purchaseHasProducts));
+        return mapper.entitiesToModels(purchaseHasProductEntities);
+    }
+
+    @Override
     public void removeById(Long id) {
         purchaseHasProductJpaRepository.deleteById(id);
     }
