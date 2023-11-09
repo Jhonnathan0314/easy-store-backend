@@ -14,6 +14,7 @@ import lombok.*;
 public class PurchaseHasProductEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
