@@ -21,7 +21,7 @@ import java.util.List;
 public class SubcategoryData {
 
     //Correct information
-    private final Subcategory subcategoryActive =  Subcategory.builder()
+    private final Subcategory subcategoryActive = Subcategory.builder()
             .id(1L)
             .name("test")
             .category(Category.builder()
@@ -31,7 +31,7 @@ public class SubcategoryData {
             .state("active")
             .build();
 
-    private final  Subcategory subcategoryInactive =  Subcategory.builder()
+    private final  Subcategory subcategoryInactive = Subcategory.builder()
             .id(1L)
             .name("test")
             .category(Category.builder()
@@ -41,13 +41,13 @@ public class SubcategoryData {
             .state("inactive")
             .build();
 
-    private final  Subcategory subcategoryEmpty =  Subcategory.builder()
+    private final  Subcategory subcategoryEmpty = Subcategory.builder()
             .id(1L)
             .name("")
             .state("")
             .build();
 
-    private final  Subcategory subcategoryCreateValid =  Subcategory.builder()
+    private final  Subcategory subcategoryCreateValid = Subcategory.builder()
             .name("test")
             .category(Category.builder()
                     .id(1L)
@@ -55,9 +55,9 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryCreateInvalid =  Subcategory.builder().build();
+    private final  Subcategory subcategoryCreateInvalid = Subcategory.builder().build();
 
-    private final  Subcategory subcategoryToUpdate =  Subcategory.builder()
+    private final  Subcategory subcategoryToUpdate = Subcategory.builder()
             .id(1L)
             .name("update")
             .category(Category.builder()
@@ -66,7 +66,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryUpdated =  Subcategory.builder()
+    private final  Subcategory subcategoryUpdated = Subcategory.builder()
             .id(1L)
             .name("update")
             .category(Category.builder()
@@ -75,7 +75,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryToUpdateNoId =  Subcategory.builder()
+    private final  Subcategory subcategoryToUpdateNoId = Subcategory.builder()
             .name("update")
             .category(Category.builder()
                     .id(1L)
@@ -83,11 +83,11 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryToUpdateInvalid =  Subcategory.builder()
+    private final  Subcategory subcategoryToUpdateInvalid = Subcategory.builder()
             .id(1L)
             .build();
 
-    private final  Subcategory subcategoryResponseOne =  Subcategory.builder()
+    private final  Subcategory subcategoryResponseOne = Subcategory.builder()
             .id(1L)
             .name("test")
             .category(Category.builder()
@@ -96,7 +96,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryResponseTwo =  Subcategory.builder()
+    private final  Subcategory subcategoryResponseTwo = Subcategory.builder()
             .id(2L)
             .name("test2")
             .category(Category.builder()
@@ -110,7 +110,7 @@ public class SubcategoryData {
     private List< Subcategory> subcategorysList;
 
     //To mapper test
-    private final SubcategoryEntity subcategoryEntity =  SubcategoryEntity.builder()
+    private final SubcategoryEntity subcategoryEntity = SubcategoryEntity.builder()
             .id(1L)
             .name("test")
             .category(CategoryEntity.builder()
@@ -120,7 +120,7 @@ public class SubcategoryData {
             .state("active")
             .build();
 
-    private final SubcategoryDTO subcategoryDTO =  SubcategoryDTO.builder()
+    private final SubcategoryDTO subcategoryDTO = SubcategoryDTO.builder()
             .id(1L)
             .name("test")
             .category(CategoryDTO.builder()
@@ -129,14 +129,14 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final SubcategoryCreateDTO subcategoryCreateDTO =  SubcategoryCreateDTO.builder()
+    private final SubcategoryCreateDTO subcategoryCreateDTO = SubcategoryCreateDTO.builder()
             .name("test")
             .category(CategoryCreateDTO.builder()
                     .name("test")
                     .build())
             .build();
 
-    private final SubcategoryUpdateDTO subcategoryUpdateDTO =  SubcategoryUpdateDTO.builder()
+    private final SubcategoryUpdateDTO subcategoryUpdateDTO = SubcategoryUpdateDTO.builder()
             .id(1L)
             .name("test")
             .category(CategoryUpdateDTO.builder()
@@ -145,7 +145,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final SubcategoryResponseDTO subcategoryResponseDTO =  SubcategoryResponseDTO.builder()
+    private final SubcategoryResponseDTO subcategoryResponseDTO = SubcategoryResponseDTO.builder()
             .id(1L)
             .name("test")
             .category(CategoryResponseDTO.builder()
@@ -154,7 +154,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryModel =  Subcategory.builder()
+    private final  Subcategory subcategoryModel = Subcategory.builder()
             .id(1L)
             .name("test")
             .category(Category.builder()

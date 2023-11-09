@@ -30,7 +30,7 @@ class UpdateSubcategoryUseCaseTest {
     private UpdateSubcategoryUseCase updateSubcategoryUseCase;
 
     @Mock
-    private SubcategoryRepository userRepository;
+    private SubcategoryRepository subcategoryRepository;
 
     @Mock
     private CategoryRepository categoryRepository;
@@ -51,16 +51,16 @@ class UpdateSubcategoryUseCaseTest {
     @Test
     void updateSuccess() throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(categoryData.getCategoryActive()));
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(subcategoryData.getSubcategoryActive()));
-        when(userRepository.update(any(Subcategory.class))).thenReturn(subcategoryData.getSubcategoryUpdated());
+        when(subcategoryRepository.findById(any(Long.class))).thenReturn(Optional.of(subcategoryData.getSubcategoryActive()));
+        when(subcategoryRepository.update(any(Subcategory.class))).thenReturn(subcategoryData.getSubcategoryUpdated());
 
         Subcategory response = updateSubcategoryUseCase.update(subcategoryData.getSubcategoryToUpdate(), categoryId);
 
         assertNotNull(response);
         assertEquals(response, subcategoryData.getSubcategoryUpdated());
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository).update(any(Subcategory.class));
+        verify(subcategoryRepository).findById(any(Long.class));
+        verify(subcategoryRepository).update(any(Subcategory.class));
     }
 
     @Test
@@ -74,8 +74,8 @@ class UpdateSubcategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_ID_RECEIVED);
 
-        verify(userRepository, never()).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Subcategory.class));
+        verify(subcategoryRepository, never()).findById(any(Long.class));
+        verify(subcategoryRepository, never()).update(any(Subcategory.class));
     }
 
     @Test
@@ -89,14 +89,14 @@ class UpdateSubcategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.INVALID_BODY);
 
-        verify(userRepository, never()).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Subcategory.class));
+        verify(subcategoryRepository, never()).findById(any(Long.class));
+        verify(subcategoryRepository, never()).update(any(Subcategory.class));
     }
 
     @Test
     void updateFailedNoResultsException() {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(categoryData.getCategoryActive()));
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+        when(subcategoryRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         NoResultsException exception = assertThrows(
                 NoResultsException.class,
@@ -105,8 +105,8 @@ class UpdateSubcategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_RESULTS);
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Subcategory.class));
+        verify(subcategoryRepository).findById(any(Long.class));
+        verify(subcategoryRepository, never()).update(any(Subcategory.class));
     }
 
     @Test
@@ -120,14 +120,14 @@ class UpdateSubcategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_CATEGORY_RESULTS);
 
-        verify(userRepository, never()).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Subcategory.class));
+        verify(subcategoryRepository, never()).findById(any(Long.class));
+        verify(subcategoryRepository, never()).update(any(Subcategory.class));
     }
 
     @Test
     void updateFailedNoChangesException() {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(categoryData.getCategoryActive()));
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(subcategoryData.getSubcategoryActive()));
+        when(subcategoryRepository.findById(any(Long.class))).thenReturn(Optional.of(subcategoryData.getSubcategoryActive()));
 
         NoChangesException exception = assertThrows(
                 NoChangesException.class,
@@ -136,8 +136,8 @@ class UpdateSubcategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_CHANGES);
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Subcategory.class));
+        verify(subcategoryRepository).findById(any(Long.class));
+        verify(subcategoryRepository, never()).update(any(Subcategory.class));
     }
 
 }

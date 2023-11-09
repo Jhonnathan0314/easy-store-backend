@@ -28,7 +28,7 @@ class UpdateCategoryUseCaseTest {
     private UpdateCategoryUseCase updateCategoryUseCase;
 
     @Mock
-    private CategoryRepository userRepository;
+    private CategoryRepository categoryRepository;
 
     private static ErrorMessages errorMessages;
     private static CategoryData categoryData;
@@ -41,16 +41,16 @@ class UpdateCategoryUseCaseTest {
 
     @Test
     void updateSuccess() throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(categoryData.getCategoryActive()));
-        when(userRepository.update(any(Category.class))).thenReturn(categoryData.getCategoryUpdated());
+        when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(categoryData.getCategoryActive()));
+        when(categoryRepository.update(any(Category.class))).thenReturn(categoryData.getCategoryUpdated());
 
         Category response = updateCategoryUseCase.update(categoryData.getCategoryToUpdate());
 
         assertNotNull(response);
         assertEquals(response, categoryData.getCategoryUpdated());
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository).update(any(Category.class));
+        verify(categoryRepository).findById(any(Long.class));
+        verify(categoryRepository).update(any(Category.class));
     }
 
     @Test
@@ -62,8 +62,8 @@ class UpdateCategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_ID_RECEIVED);
 
-        verify(userRepository, never()).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Category.class));
+        verify(categoryRepository, never()).findById(any(Long.class));
+        verify(categoryRepository, never()).update(any(Category.class));
     }
 
     @Test
@@ -75,13 +75,13 @@ class UpdateCategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.INVALID_BODY);
 
-        verify(userRepository, never()).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Category.class));
+        verify(categoryRepository, never()).findById(any(Long.class));
+        verify(categoryRepository, never()).update(any(Category.class));
     }
 
     @Test
     void updateFailedNoResultsException() {
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+        when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         NoResultsException exception = assertThrows(
                 NoResultsException.class,
@@ -90,13 +90,13 @@ class UpdateCategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_RESULTS);
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Category.class));
+        verify(categoryRepository).findById(any(Long.class));
+        verify(categoryRepository, never()).update(any(Category.class));
     }
 
     @Test
     void updateFailedNoChangesException() {
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(categoryData.getCategoryActive()));
+        when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(categoryData.getCategoryActive()));
 
         NoChangesException exception = assertThrows(
                 NoChangesException.class,
@@ -105,8 +105,8 @@ class UpdateCategoryUseCaseTest {
 
         assertEquals(exception.getMessage(), errorMessages.NO_CHANGES);
 
-        verify(userRepository).findById(any(Long.class));
-        verify(userRepository, never()).update(any(Category.class));
+        verify(categoryRepository).findById(any(Long.class));
+        verify(categoryRepository, never()).update(any(Category.class));
     }
 
 }
