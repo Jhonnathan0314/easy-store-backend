@@ -1,4 +1,4 @@
-package com.sophie.store.backend.context.subcategory.controller;
+package com.sophie.store.backend.context.subcategory.presentation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sophie.store.backend.context.subcategory.application.dto.SubcategoryCreateDTO;
