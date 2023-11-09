@@ -97,6 +97,20 @@ class PurchaseHasProductRepositoryJpaAdapterTest {
     }
 
     @Test
+    @Order(3)
+    void addAllTest() {
+        List<PurchaseHasProductEntity> mockEntities = purchaseHasProductMapper.modelsToEntities(purchaseHasProductData.getPurchaseHasProductsList());
+        when(purchaseHasProductJpaRepository.saveAll(any())).thenReturn(mockEntities);
+
+        List<PurchaseHasProduct> response = purchaseHasProductRepositoryJpaAdapter.addAll(purchaseHasProductData.getPurchaseHasProductsList());
+
+        assertNotNull(response);
+        assertEquals(response.size(), purchaseHasProductData.getPurchaseHasProductsList().size());
+
+        verify(purchaseHasProductJpaRepository).saveAll(any());
+    }
+
+    @Test
     @Order(4)
     void removeByIdTest() {
         purchaseHasProductRepositoryJpaAdapter.removeById(1L);

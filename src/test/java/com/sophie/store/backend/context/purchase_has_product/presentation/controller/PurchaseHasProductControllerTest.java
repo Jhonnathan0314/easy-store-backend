@@ -52,6 +52,9 @@ class PurchaseHasProductControllerTest {
     private AddPurchaseHasProductUseCase addPurchaseHasProductUseCase;
 
     @Mock
+    private AddAllPurchaseHasProductUseCase addAllPurchaseHasProductUseCase;
+
+    @Mock
     private RemoveByIdPurchaseHasProductUseCase removeByIdPurchaseHasProductUseCase;
 
     @Mock
@@ -205,7 +208,7 @@ class PurchaseHasProductControllerTest {
     }
 
     @Test
-    @Order(7)
+    @Order(15)
     void addFailedInvalidBodyException() throws Exception {
         ApiResponse<PurchaseHasProduct> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
@@ -234,6 +237,54 @@ class PurchaseHasProductControllerTest {
 
     @Test
     @Order(16)
+    void addAllSuccess() throws Exception {
+        when(addAllPurchaseHasProductUseCase.addAll(any(), any(Long.class), any())).thenReturn(purchaseHasProductData.getPurchaseHasProductsList());
+
+        List<PurchaseHasProductAddDTO> body = purchaseHasProductAddMapper.modelsToDtos(purchaseHasProductData.getPurchaseHasProductsList());
+
+        mockMvc.perform(post("/api/v1/purchase-has-product/all")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(body))
+                        .header("Purchase-Id", 1)
+                        .header("Products-Id", "1,1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.error").doesNotExist())
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data").isArray());
+
+        verify(addAllPurchaseHasProductUseCase).addAll(any(), any(Long.class), any());
+    }
+
+    @Test
+    @Order(17)
+    void addAllFailedInvalidBodyException() throws Exception {
+        ApiResponse<PurchaseHasProduct> expectedResponse = new ApiResponse<>();
+        expectedResponse.setData(null);
+        expectedResponse.setError(generalData.getErrorInvalidBody());
+
+        when(addAllPurchaseHasProductUseCase.addAll(any(), any(Long.class), any()))
+                .thenThrow(new InvalidBodyException(errorMessages.INVALID_BODY));
+
+        List<PurchaseHasProductAddDTO> body = purchaseHasProductAddMapper.modelsToDtos(purchaseHasProductData.getPurchaseHasProductsListInvalid());
+
+        mockMvc.perform(post("/api/v1/purchase-has-product/all")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(body))
+                        .header("Create-By", 1)
+                        .header("Purchase-Id", 1)
+                        .header("Products-Id", "1,1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andExpect(jsonPath("$.error").exists())
+                .andExpect(jsonPath("$.error.code").value(expectedResponse.getError().getCode()))
+                .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
+                .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
+
+        verify(addAllPurchaseHasProductUseCase).addAll(any(), any(Long.class), any());
+    }
+
+    @Test
+    @Order(18)
     void removeByIdSuccess() throws Exception {
         mockMvc.perform(delete("/api/v1/purchase-has-product/1"))
                 .andExpect(status().isNoContent())
@@ -244,7 +295,7 @@ class PurchaseHasProductControllerTest {
     }
 
     @Test
-    @Order(17)
+    @Order(19)
     void removeByIdFailedNonExistenceException() throws Exception {
         ApiResponse<PurchaseHasProduct> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);

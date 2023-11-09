@@ -4,7 +4,6 @@ import com.sophie.store.backend.context.category.application.dto.CategoryDTO;
 import com.sophie.store.backend.context.category.application.dto.CategoryResponseDTO;
 import com.sophie.store.backend.context.category.domain.model.Category;
 import com.sophie.store.backend.context.category.infrastructure.persistence.CategoryEntity;
-import com.sophie.store.backend.context.payment_type.application.dto.PaymentTypeCreateDTO;
 import com.sophie.store.backend.context.payment_type.application.dto.PaymentTypeDTO;
 import com.sophie.store.backend.context.payment_type.application.dto.PaymentTypeResponseDTO;
 import com.sophie.store.backend.context.payment_type.domain.model.PaymentType;
@@ -14,12 +13,11 @@ import com.sophie.store.backend.context.product.application.dto.ProductResponseD
 import com.sophie.store.backend.context.product.domain.model.Product;
 import com.sophie.store.backend.context.product.infrastructure.persistence.ProductEntity;
 import com.sophie.store.backend.context.purchase.application.dto.PurchaseDTO;
-import com.sophie.store.backend.context.purchase.application.dto.PurchaseGenerateDTO;
 import com.sophie.store.backend.context.purchase.application.dto.PurchaseResponseDTO;
 import com.sophie.store.backend.context.purchase.domain.model.Purchase;
 import com.sophie.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
-import com.sophie.store.backend.context.purchase_has_product.application.dto.PurchaseHasProductDTO;
 import com.sophie.store.backend.context.purchase_has_product.application.dto.PurchaseHasProductAddDTO;
+import com.sophie.store.backend.context.purchase_has_product.application.dto.PurchaseHasProductDTO;
 import com.sophie.store.backend.context.purchase_has_product.application.dto.PurchaseHasProductResponseDTO;
 import com.sophie.store.backend.context.purchase_has_product.domain.model.PurchaseHasProduct;
 import com.sophie.store.backend.context.purchase_has_product.infrastructure.persistence.PurchaseHasProductEntity;
@@ -31,7 +29,6 @@ import com.sophie.store.backend.context.subcategory.application.dto.SubcategoryD
 import com.sophie.store.backend.context.subcategory.application.dto.SubcategoryResponseDTO;
 import com.sophie.store.backend.context.subcategory.domain.model.Subcategory;
 import com.sophie.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
-import com.sophie.store.backend.context.user.application.dto.UserCreateDTO;
 import com.sophie.store.backend.context.user.application.dto.UserDTO;
 import com.sophie.store.backend.context.user.application.dto.UserResponseDTO;
 import com.sophie.store.backend.context.user.domain.model.User;
@@ -178,6 +175,8 @@ public class PurchaseHasProductData {
     private final PurchaseHasProduct purchaseHasProductAddInvalid = PurchaseHasProduct.builder().build();
 
     private List<PurchaseHasProduct> purchaseHasProductsList;
+    private List<PurchaseHasProduct> purchaseHasProductsListInvalid;
+    private List<PurchaseHasProduct> purchaseHasProductsEmptyList;
 
     //To mapper test
     private final PurchaseHasProductEntity purchaseHasProductEntity = PurchaseHasProductEntity.builder()
@@ -347,9 +346,17 @@ public class PurchaseHasProductData {
                     .build())
             .build();
 
+    private List<Long> productsId = List.of(1L, 1L);
+
     public PurchaseHasProductData() {
+        purchaseHasProductsEmptyList = new LinkedList<>();
+
         purchaseHasProductsList = new LinkedList<>();
         purchaseHasProductsList.add(purchaseHasProductResponseOne);
         purchaseHasProductsList.add(purchaseHasProductResponseTwo);
+
+        purchaseHasProductsListInvalid = new LinkedList<>();
+        purchaseHasProductsListInvalid.add(purchaseHasProductResponseOne);
+        purchaseHasProductsListInvalid.add(purchaseHasProductEmpty);
     }
 }
