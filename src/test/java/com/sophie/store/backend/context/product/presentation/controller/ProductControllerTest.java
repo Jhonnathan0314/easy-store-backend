@@ -1,14 +1,13 @@
-package com.sophie.store.backend.context.subcategory.presentation.controller;
+package com.sophie.store.backend.context.product.presentation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sophie.store.backend.context.subcategory.application.dto.SubcategoryCreateDTO;
-import com.sophie.store.backend.context.subcategory.application.dto.SubcategoryUpdateDTO;
-import com.sophie.store.backend.context.subcategory.application.usecase.*;
-import com.sophie.store.backend.context.subcategory.data.SubcategoryData;
-import com.sophie.store.backend.context.subcategory.domain.model.Subcategory;
-import com.sophie.store.backend.context.subcategory.infrastructure.mappers.SubcategoryCreateMapper;
-import com.sophie.store.backend.context.subcategory.infrastructure.mappers.SubcategoryUpdateMapper;
-import com.sophie.store.backend.context.subcategory.presentation.controller.SubcategoryController;
+import com.sophie.store.backend.context.product.application.dto.ProductCreateDTO;
+import com.sophie.store.backend.context.product.application.dto.ProductUpdateDTO;
+import com.sophie.store.backend.context.product.application.usecase.*;
+import com.sophie.store.backend.context.product.data.ProductData;
+import com.sophie.store.backend.context.product.domain.model.Product;
+import com.sophie.store.backend.context.product.infrastructure.mappers.ProductCreateMapper;
+import com.sophie.store.backend.context.product.infrastructure.mappers.ProductUpdateMapper;
 import com.sophie.store.backend.general.GeneralData;
 import com.sophie.store.backend.utils.constants.ErrorMessages;
 import com.sophie.store.backend.utils.exceptions.*;
@@ -33,57 +32,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class SubcategoryControllerTest {
+class ProductControllerTest {
 
     private MockMvc mockMvc;
 
     @InjectMocks
-    private SubcategoryController subcategoryController;
+    private ProductController productController;
 
     @Mock
-    private FindAllSubcategoryUseCase findAllSubcategoryUseCase;
+    private FindAllProductUseCase findAllProductUseCase;
 
     @Mock
-    private FindByIdSubcategoryUseCase findByIdSubcategoryUseCase;
+    private FindByIdProductUseCase findByIdProductUseCase;
 
     @Mock
-    private CreateSubcategoryUseCase createSubcategoryUseCase;
+    private CreateProductUseCase createProductUseCase;
 
     @Mock
-    private UpdateSubcategoryUseCase updateSubcategoryUseCase;
+    private UpdateProductUseCase updateProductUseCase;
 
     @Mock
-    private DeleteByIdSubcategoryUseCase deleteByIdSubcategoryUseCase;
+    private DeleteByIdProductUseCase deleteByIdProductUseCase;
 
     @Mock
-    private ChangeStateByIdSubcategoryUseCase changeStateByIdSubcategoryUseCase;
+    private ChangeStateByIdProductUseCase changeStateByIdProductUseCase;
 
     @Mock
-    private SubcategoryCreateMapper subcategoryCreateMapper;
+    private ProductCreateMapper productCreateMapper;
 
     @Mock
-    private SubcategoryUpdateMapper subcategoryUpdateMapper;
+    private ProductUpdateMapper productUpdateMapper;
 
     private ErrorMessages errorMessages;
-    private SubcategoryData subcategoryData;
+    private ProductData productData;
     private GeneralData generalData;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(subcategoryController).build();
-        subcategoryData = new SubcategoryData();
+        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+        productData = new ProductData();
         generalData = new GeneralData();
         errorMessages = new ErrorMessages();
-        subcategoryCreateMapper = new SubcategoryCreateMapper();
-        subcategoryUpdateMapper = new SubcategoryUpdateMapper();
+        productCreateMapper = new ProductCreateMapper();
+        productUpdateMapper = new ProductUpdateMapper();
     }
 
     @Test
     @Order(0)
     void findAllSuccess() throws Exception {
-        when(findAllSubcategoryUseCase.findAll()).thenReturn(subcategoryData.getSubcategorysList());
+        when(findAllProductUseCase.findAll()).thenReturn(productData.getProductsList());
 
-        mockMvc.perform(get("/api/v1/subcategory")
+        mockMvc.perform(get("/api/v1/product")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error").doesNotExist())
@@ -91,20 +90,20 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data").isNotEmpty());
 
-        verify(findAllSubcategoryUseCase).findAll();
+        verify(findAllProductUseCase).findAll();
     }
 
     @Test
     @Order(1)
     void findAllFailedNoResultsException() throws Exception {
-        ApiResponse<List<Subcategory>> expectedResponse = new ApiResponse<>();
+        ApiResponse<List<Product>> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNoResults());
 
-        when(findAllSubcategoryUseCase.findAll())
+        when(findAllProductUseCase.findAll())
                 .thenThrow(new NoResultsException(errorMessages.NO_RESULTS));
 
-        mockMvc.perform(get("/api/v1/subcategory")
+        mockMvc.perform(get("/api/v1/product")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.data").doesNotExist())
@@ -112,38 +111,37 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(findAllSubcategoryUseCase).findAll();
+        verify(findAllProductUseCase).findAll();
     }
 
     @Test
     @Order(2)
     void findByIdSuccess() throws Exception {
-        when(findByIdSubcategoryUseCase.findById(any(Long.class))).thenReturn(subcategoryData.getSubcategoryResponseOne());
+        when(findByIdProductUseCase.findById(any(Long.class))).thenReturn(productData.getProductResponseOne());
 
-        System.out.println("productData.getProductResponseOne() " + subcategoryData.getSubcategoryResponseOne().toString());
-
-        mockMvc.perform(get("/api/v1/subcategory/1")
+        mockMvc.perform(get("/api/v1/product/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error").doesNotExist())
                 .andExpect(jsonPath("$.data").exists())
-                .andDo((res) -> System.out.println("res: " + res.getResponse().getContentAsString()))
-                .andExpect(jsonPath("$.data").value(subcategoryData.getSubcategoryResponseOne()));
+                .andExpect(jsonPath("$.data.id").value(productData.getProductResponseOne().getId()))
+                .andExpect(jsonPath("$.data.subcategory.id").value(productData.getProductResponseOne().getSubcategory().getId()))
+                .andExpect(jsonPath("$.data.subcategory.category.id").value(productData.getProductResponseOne().getSubcategory().getCategory().getId()));
 
-        verify(findByIdSubcategoryUseCase).findById(any(Long.class));
+        verify(findByIdProductUseCase).findById(any(Long.class));
     }
 
     @Test
     @Order(3)
     void findByIdFailedNoResultsException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNoResults());
 
-        when(findByIdSubcategoryUseCase.findById(any(Long.class)))
+        when(findByIdProductUseCase.findById(any(Long.class)))
                 .thenThrow(new NoResultsException(errorMessages.NO_RESULTS));
 
-        mockMvc.perform(get("/api/v1/subcategory/12345")
+        mockMvc.perform(get("/api/v1/product/12345")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.data").doesNotExist())
@@ -151,40 +149,43 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(findByIdSubcategoryUseCase).findById(any(Long.class));
+        verify(findByIdProductUseCase).findById(any(Long.class));
     }
 
     @Test
     @Order(4)
     void createSuccess() throws Exception {
-        when(createSubcategoryUseCase.create(any(Subcategory.class), any(Long.class))).thenReturn(subcategoryData.getSubcategoryResponseOne());
+        when(createProductUseCase.create(any(Product.class), any(Long.class))).thenReturn(productData.getProductResponseOne());
 
-        SubcategoryCreateDTO body = subcategoryCreateMapper.modelToDto(subcategoryData.getSubcategoryCreateValid());
+        ProductCreateDTO body = productCreateMapper.modelToDto(productData.getProductCreateValid());
 
-        mockMvc.perform(post("/api/v1/subcategory/category/1")
+        mockMvc.perform(post("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Create-By", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error").doesNotExist())
-                .andExpect(jsonPath("$.data").value(subcategoryData.getSubcategoryResponseOne()));
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.id").value(productData.getProductResponseOne().getId()))
+                .andExpect(jsonPath("$.data.subcategory.id").value(productData.getProductResponseOne().getSubcategory().getId()))
+                .andExpect(jsonPath("$.data.subcategory.category.id").value(productData.getProductResponseOne().getSubcategory().getCategory().getId()));
 
-        verify(createSubcategoryUseCase).create(any(Subcategory.class), any(Long.class));
+        verify(createProductUseCase).create(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(5)
     void createFailedDuplicatedException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorDuplicated());
 
-        when(createSubcategoryUseCase.create(any(Subcategory.class), any(Long.class)))
+        when(createProductUseCase.create(any(Product.class), any(Long.class)))
                 .thenThrow(new DuplicatedException(errorMessages.DUPLICATED));
 
-        SubcategoryCreateDTO body = subcategoryCreateMapper.modelToDto(subcategoryData.getSubcategoryCreateValid());
+        ProductCreateDTO body = productCreateMapper.modelToDto(productData.getProductCreateValid());
 
-        mockMvc.perform(post("/api/v1/subcategory/category/1")
+        mockMvc.perform(post("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Create-By", 1))
@@ -195,22 +196,22 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(createSubcategoryUseCase).create(any(Subcategory.class), any(Long.class));
+        verify(createProductUseCase).create(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(6)
     void createFailedInvalidBodyException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorInvalidBody());
 
-        when(createSubcategoryUseCase.create(any(Subcategory.class), any(Long.class)))
+        when(createProductUseCase.create(any(Product.class), any(Long.class)))
                 .thenThrow(new InvalidBodyException(errorMessages.INVALID_BODY));
 
-        SubcategoryCreateDTO body = subcategoryCreateMapper.modelToDto(subcategoryData.getSubcategoryCreateValid());
+        ProductCreateDTO body = productCreateMapper.modelToDto(productData.getProductCreateValid());
 
-        mockMvc.perform(post("/api/v1/subcategory/category/1")
+        mockMvc.perform(post("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Create-By", 1))
@@ -221,40 +222,43 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(createSubcategoryUseCase).create(any(Subcategory.class), any(Long.class));
+        verify(createProductUseCase).create(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(7)
     void updateSuccess() throws Exception {
-        when(updateSubcategoryUseCase.update(any(Subcategory.class), any(Long.class))).thenReturn(subcategoryData.getSubcategoryResponseOne());
+        when(updateProductUseCase.update(any(Product.class), any(Long.class))).thenReturn(productData.getProductResponseOne());
 
-        SubcategoryUpdateDTO body = subcategoryUpdateMapper.modelToDto(subcategoryData.getSubcategoryToUpdate());
+        ProductUpdateDTO body = productUpdateMapper.modelToDto(productData.getProductToUpdate());
 
-        mockMvc.perform(put("/api/v1/subcategory/category/1")
+        mockMvc.perform(put("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Update-By", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error").doesNotExist())
-                .andExpect(jsonPath("$.data").value(subcategoryData.getSubcategoryResponseOne()));
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.id").value(productData.getProductResponseOne().getId()))
+                .andExpect(jsonPath("$.data.subcategory.id").value(productData.getProductResponseOne().getSubcategory().getId()))
+                .andExpect(jsonPath("$.data.subcategory.category.id").value(productData.getProductResponseOne().getSubcategory().getCategory().getId()));
 
-        verify(updateSubcategoryUseCase).update(any(Subcategory.class), any(Long.class));
+        verify(updateProductUseCase).update(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(8)
     void updateFailedNoIdReceivedException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNoIdReceived());
 
-        when(updateSubcategoryUseCase.update(any(Subcategory.class), any(Long.class)))
+        when(updateProductUseCase.update(any(Product.class), any(Long.class)))
                 .thenThrow(new NoIdReceivedException(errorMessages.NO_ID_RECEIVED));
 
-        SubcategoryUpdateDTO body = subcategoryUpdateMapper.modelToDto(subcategoryData.getSubcategoryToUpdateNoId());
+        ProductUpdateDTO body = productUpdateMapper.modelToDto(productData.getProductToUpdateNoId());
 
-        mockMvc.perform(put("/api/v1/subcategory/category/1")
+        mockMvc.perform(put("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Update-By", 1))
@@ -265,22 +269,22 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(updateSubcategoryUseCase).update(any(Subcategory.class), any(Long.class));
+        verify(updateProductUseCase).update(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(9)
     void updateFailedInvalidBodyException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorInvalidBody());
 
-        when(updateSubcategoryUseCase.update(any(Subcategory.class), any(Long.class)))
+        when(updateProductUseCase.update(any(Product.class), any(Long.class)))
                 .thenThrow(new InvalidBodyException(errorMessages.INVALID_BODY));
 
-        SubcategoryUpdateDTO body = subcategoryUpdateMapper.modelToDto(subcategoryData.getSubcategoryToUpdateInvalid());
+        ProductUpdateDTO body = productUpdateMapper.modelToDto(productData.getProductToUpdateInvalid());
 
-        mockMvc.perform(put("/api/v1/subcategory/category/1")
+        mockMvc.perform(put("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Update-By", 1))
@@ -291,22 +295,22 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(updateSubcategoryUseCase).update(any(Subcategory.class), any(Long.class));
+        verify(updateProductUseCase).update(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(10)
     void updateFailedNoResultsException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNoResults());
 
-        when(updateSubcategoryUseCase.update(any(Subcategory.class), any(Long.class)))
+        when(updateProductUseCase.update(any(Product.class), any(Long.class)))
                 .thenThrow(new NoResultsException(errorMessages.NO_RESULTS));
 
-        SubcategoryUpdateDTO body = subcategoryUpdateMapper.modelToDto(subcategoryData.getSubcategoryInactive());
+        ProductUpdateDTO body = productUpdateMapper.modelToDto(productData.getProductInactive());
 
-        mockMvc.perform(put("/api/v1/subcategory/category/1")
+        mockMvc.perform(put("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Update-By", 1))
@@ -317,22 +321,22 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(updateSubcategoryUseCase).update(any(Subcategory.class), any(Long.class));
+        verify(updateProductUseCase).update(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(11)
     void updateFailedNoChangesException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNoChanges());
 
-        when(updateSubcategoryUseCase.update(any(Subcategory.class), any(Long.class)))
+        when(updateProductUseCase.update(any(Product.class), any(Long.class)))
                 .thenThrow(new NoChangesException(errorMessages.NO_CHANGES));
 
-        SubcategoryUpdateDTO body = subcategoryUpdateMapper.modelToDto(subcategoryData.getSubcategoryToUpdate());
+        ProductUpdateDTO body = productUpdateMapper.modelToDto(productData.getProductToUpdate());
 
-        mockMvc.perform(put("/api/v1/subcategory/category/1")
+        mockMvc.perform(put("/api/v1/product/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(body))
                         .header("Update-By", 1))
@@ -343,31 +347,31 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(updateSubcategoryUseCase).update(any(Subcategory.class), any(Long.class));
+        verify(updateProductUseCase).update(any(Product.class), any(Long.class));
     }
 
     @Test
     @Order(12)
     void deleteByIdSuccess() throws Exception {
-        mockMvc.perform(delete("/api/v1/subcategory/delete/1"))
+        mockMvc.perform(delete("/api/v1/product/delete/1"))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.error").doesNotExist())
                 .andExpect(jsonPath("$.data").doesNotExist());
 
-        verify(deleteByIdSubcategoryUseCase).deleteById(any(Long.class));
+        verify(deleteByIdProductUseCase).deleteById(any(Long.class));
     }
 
     @Test
     @Order(13)
     void deleteByIdFailedNonExistenceException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNonExistence());
 
         doThrow(new NonExistenceException(errorMessages.NON_EXISTENT_DATA))
-                .when(deleteByIdSubcategoryUseCase).deleteById(any(Long.class));
+                .when(deleteByIdProductUseCase).deleteById(any(Long.class));
 
-        mockMvc.perform(delete("/api/v1/subcategory/delete/12345"))
+        mockMvc.perform(delete("/api/v1/product/delete/12345"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andExpect(jsonPath("$.error").exists())
@@ -375,35 +379,35 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(deleteByIdSubcategoryUseCase).deleteById(any(Long.class));
+        verify(deleteByIdProductUseCase).deleteById(any(Long.class));
     }
 
     @Test
     @Order(14)
     void changeStateByIdSuccess() throws Exception {
-        when(changeStateByIdSubcategoryUseCase.changeStateById(any(Long.class)))
-                .thenReturn(subcategoryData.getSubcategoryResponseOne());
+        when(changeStateByIdProductUseCase.changeStateById(any(Long.class)))
+                .thenReturn(productData.getProductResponseOne());
 
-        mockMvc.perform(delete("/api/v1/subcategory/change-state/1"))
+        mockMvc.perform(delete("/api/v1/product/change-state/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error").doesNotExist())
                 .andExpect(jsonPath("$.data").exists())
-                .andExpect(jsonPath("$.data.id").value(subcategoryData.getSubcategoryResponseOne().getId()));
+                .andExpect(jsonPath("$.data.id").value(productData.getProductResponseOne().getId()));
 
-        verify(changeStateByIdSubcategoryUseCase).changeStateById(any(Long.class));
+        verify(changeStateByIdProductUseCase).changeStateById(any(Long.class));
     }
 
     @Test
     @Order(15)
     void changeStateByIdFailedNonExistenceException() throws Exception {
-        ApiResponse<Subcategory> expectedResponse = new ApiResponse<>();
+        ApiResponse<Product> expectedResponse = new ApiResponse<>();
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNonExistence());
 
-        when(changeStateByIdSubcategoryUseCase.changeStateById(any(Long.class)))
+        when(changeStateByIdProductUseCase.changeStateById(any(Long.class)))
                 .thenThrow(new NonExistenceException(errorMessages.NON_EXISTENT_DATA));
 
-        mockMvc.perform(delete("/api/v1/subcategory/change-state/12345"))
+        mockMvc.perform(delete("/api/v1/product/change-state/12345"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andExpect(jsonPath("$.error").exists())
@@ -411,7 +415,7 @@ class SubcategoryControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(changeStateByIdSubcategoryUseCase).changeStateById(any(Long.class));
+        verify(changeStateByIdProductUseCase).changeStateById(any(Long.class));
     }
 
     private static String asJsonString(final Object obj) {

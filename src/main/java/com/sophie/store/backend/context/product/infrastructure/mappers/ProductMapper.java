@@ -61,9 +61,6 @@ public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO>
                 .subcategory(subcategoryMapper.modelToDto(model.getSubcategory()))
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
-                .creationDate(model.getCreationDate())
-                .updateDate(model.getUpdateDate())
-                .state(model.getState())
                 .build();
     }
 
@@ -79,9 +76,6 @@ public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO>
                 .subcategory(subcategoryMapper.dtoToModel(dto.getSubcategory()))
                 .createBy(dto.getCreateBy())
                 .updateBy(dto.getUpdateBy())
-                .creationDate(dto.getCreationDate())
-                .updateDate(dto.getUpdateDate())
-                .state(dto.getState())
                 .build();
     }
 

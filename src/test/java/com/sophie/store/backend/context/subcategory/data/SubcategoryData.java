@@ -31,7 +31,7 @@ public class SubcategoryData {
             .state("active")
             .build();
 
-    private final  Subcategory subcategoryInactive = Subcategory.builder()
+    private final Subcategory subcategoryInactive = Subcategory.builder()
             .id(1L)
             .name("test")
             .category(Category.builder()
@@ -41,13 +41,13 @@ public class SubcategoryData {
             .state("inactive")
             .build();
 
-    private final  Subcategory subcategoryEmpty = Subcategory.builder()
+    private final Subcategory subcategoryEmpty = Subcategory.builder()
             .id(1L)
             .name("")
             .state("")
             .build();
 
-    private final  Subcategory subcategoryCreateValid = Subcategory.builder()
+    private final Subcategory subcategoryCreateValid = Subcategory.builder()
             .name("test")
             .category(Category.builder()
                     .id(1L)
@@ -55,9 +55,9 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryCreateInvalid = Subcategory.builder().build();
+    private final Subcategory subcategoryCreateInvalid = Subcategory.builder().build();
 
-    private final  Subcategory subcategoryToUpdate = Subcategory.builder()
+    private final Subcategory subcategoryToUpdate = Subcategory.builder()
             .id(1L)
             .name("update")
             .category(Category.builder()
@@ -66,7 +66,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryUpdated = Subcategory.builder()
+    private final Subcategory subcategoryUpdated = Subcategory.builder()
             .id(1L)
             .name("update")
             .category(Category.builder()
@@ -75,7 +75,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryToUpdateNoId = Subcategory.builder()
+    private final Subcategory subcategoryToUpdateNoId = Subcategory.builder()
             .name("update")
             .category(Category.builder()
                     .id(1L)
@@ -83,11 +83,11 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryToUpdateInvalid = Subcategory.builder()
+    private final Subcategory subcategoryToUpdateInvalid = Subcategory.builder()
             .id(1L)
             .build();
 
-    private final  Subcategory subcategoryResponseOne = Subcategory.builder()
+    private final Subcategory subcategoryResponseOne = Subcategory.builder()
             .id(1L)
             .name("test")
             .category(Category.builder()
@@ -96,7 +96,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryResponseTwo = Subcategory.builder()
+    private final Subcategory subcategoryResponseTwo = Subcategory.builder()
             .id(2L)
             .name("test2")
             .category(Category.builder()
@@ -154,7 +154,7 @@ public class SubcategoryData {
                     .build())
             .build();
 
-    private final  Subcategory subcategoryModel = Subcategory.builder()
+    private final Subcategory subcategoryModel = Subcategory.builder()
             .id(1L)
             .name("test")
             .category(Category.builder()

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class ProductRepositoryAdapter implements ProductRepository {
+public class ProductRepositoryJpaAdapter implements ProductRepository {
 
     private final ProductJpaRepository productJpaRepository;
     private final ProductMapper mapper = new ProductMapper();

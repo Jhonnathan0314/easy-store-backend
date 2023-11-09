@@ -1,11 +1,9 @@
 package com.sophie.store.backend.context.product.domain.model;
 
-import com.sophie.store.backend.context.category.domain.model.Category;
 import com.sophie.store.backend.context.subcategory.domain.model.Subcategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -13,7 +11,6 @@ import java.sql.Timestamp;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class Product {
     private Long id;
     private String name;
