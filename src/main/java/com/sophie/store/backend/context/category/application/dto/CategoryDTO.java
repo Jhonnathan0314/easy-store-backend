@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 public class CategoryDTO {
     private Long id;
     private String name;
+    private String description;
     private Long createBy;
     private Long updateBy;
 }

@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class CategoryUpdateDTO {
     private Long id;
     private String name;
+    private String description;
     private Long updateBy;
 }

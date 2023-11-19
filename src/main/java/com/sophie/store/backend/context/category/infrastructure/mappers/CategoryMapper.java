@@ -15,6 +15,7 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
         return Category.builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                .description(entity.getDescription())
                 .createBy(entity.getCreateBy())
                 .updateBy(entity.getUpdateBy())
                 .creationDate(entity.getCreationDate())
@@ -28,6 +29,7 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
         return CategoryEntity.builder()
                 .id(model.getId())
                 .name(model.getName())
+                .description(model.getDescription())
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
                 .creationDate(model.getCreationDate())
@@ -41,6 +43,7 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
         return CategoryDTO.builder()
                 .id(model.getId())
                 .name(model.getName())
+                .description(model.getDescription())
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
                 .build();
@@ -51,6 +54,7 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
         return Category.builder()
                 .id(dto.getId())
                 .name(dto.getName())
+                .description(dto.getDescription())
                 .createBy(dto.getCreateBy())
                 .updateBy(dto.getUpdateBy())
                 .build();
