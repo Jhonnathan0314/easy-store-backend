@@ -16,6 +16,7 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .imageName(entity.getImageName())
                 .build();
     }
 
@@ -25,6 +26,7 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .id(model.getId())
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .build();
     }
 
@@ -34,6 +36,7 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .id(model.getId())
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .build();
     }
 
@@ -43,6 +46,7 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .imageName(dto.getImageName())
                 .build();
     }
 

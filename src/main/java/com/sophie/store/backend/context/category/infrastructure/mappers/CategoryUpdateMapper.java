@@ -16,6 +16,7 @@ public class CategoryUpdateMapper implements Mapper<CategoryEntity, Category, Ca
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .imageName(entity.getImageName())
                 .updateBy(entity.getUpdateBy())
                 .build();
     }
@@ -26,6 +27,7 @@ public class CategoryUpdateMapper implements Mapper<CategoryEntity, Category, Ca
                 .id(model.getId())
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .updateBy(model.getUpdateBy())
                 .build();
     }
@@ -36,6 +38,7 @@ public class CategoryUpdateMapper implements Mapper<CategoryEntity, Category, Ca
                 .id(model.getId())
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .updateBy(model.getUpdateBy())
                 .build();
     }
@@ -46,6 +49,7 @@ public class CategoryUpdateMapper implements Mapper<CategoryEntity, Category, Ca
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .imageName(dto.getImageName())
                 .updateBy(dto.getUpdateBy())
                 .build();
     }

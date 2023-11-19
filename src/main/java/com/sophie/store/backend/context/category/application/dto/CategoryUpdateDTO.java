@@ -13,5 +13,6 @@ public class CategoryUpdateDTO {
     private Long id;
     private String name;
     private String description;
+    private String imageName;
     private Long updateBy;
 }

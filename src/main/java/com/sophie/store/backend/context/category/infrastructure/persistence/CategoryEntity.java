@@ -25,6 +25,9 @@ public class CategoryEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image_name")
+    private String imageName;
+    
     @Column(name = "create_by", updatable = false)
     private Long createBy;
 

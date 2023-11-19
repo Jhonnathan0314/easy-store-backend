@@ -15,6 +15,7 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
         return Category.builder()
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .imageName(entity.getImageName())
                 .createBy(entity.getCreateBy())
                 .build();
     }
@@ -24,6 +25,7 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
         return CategoryEntity.builder()
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .createBy(model.getCreateBy())
                 .build();
     }
@@ -33,6 +35,7 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
         return CategoryCreateDTO.builder()
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .createBy(model.getCreateBy())
                 .build();
     }
@@ -42,6 +45,7 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
         return Category.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .imageName(dto.getImageName())
                 .createBy(dto.getCreateBy())
                 .build();
     }

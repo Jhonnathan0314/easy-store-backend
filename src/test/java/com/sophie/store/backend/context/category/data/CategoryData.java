@@ -19,6 +19,7 @@ public class CategoryData {
             .id(1L)
             .name("test")
             .description("test")
+            .imageName("test.png")
             .state("active")
             .build();
 
@@ -26,6 +27,7 @@ public class CategoryData {
             .id(1L)
             .name("test")
             .description("test")
+            .imageName("test.png")
             .state("inactive")
             .build();
 
@@ -33,12 +35,14 @@ public class CategoryData {
             .id(1L)
             .name("")
             .description("")
+            .imageName("test.png")
             .state("")
             .build();
 
     private final Category categoryCreateValid = Category.builder()
             .name("test")
             .description("test")
+            .imageName("test.png")
             .build();
 
     private final Category categoryCreateInvalid = Category.builder().build();
@@ -47,17 +51,20 @@ public class CategoryData {
             .id(1L)
             .name("update")
             .description("update")
+            .imageName("update.png")
             .build();
 
     private final Category categoryUpdated = Category.builder()
             .id(1L)
             .name("update")
             .description("update")
+            .imageName("update.png")
             .build();
 
     private final Category categoryToUpdateNoId = Category.builder()
             .name("update")
             .description("update")
+            .imageName("update.png")
             .build();
 
     private final Category categoryToUpdateInvalid = Category.builder()
@@ -68,12 +75,14 @@ public class CategoryData {
             .id(1L)
             .name("test")
             .description("test")
+            .imageName("test.png")
             .build();
 
     private final Category categoryResponseTwo = Category.builder()
             .id(2L)
             .name("test2")
             .description("test2")
+            .imageName("test2.png")
             .build();
 
     private final String encodedPassword = "12345ENCODED";
