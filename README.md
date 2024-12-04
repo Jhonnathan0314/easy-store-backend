@@ -64,11 +64,11 @@ Esto creará automáticamente las tablas necesarias y los roles iniciales en la 
 
 Para la ejecución del proyecto, asegúrese de establecer las siguientes variables de entorno:
 
-- `SOPHIE_STORE_DB_USER`: Usuario de la base de datos.
-- `SOPHIE_STORE_DB_PASSWORD`: Contraseña de la base de datos.
-- `SOPHIE_STORE_DB_HOST`: Host de la base de datos.
-- `SOPHIE_STORE_DB_PORT`: Puerto de la base de datos.
-- `SOPHIE_STORE_DB_NAME`: Nombre de la base de datos.
+- `EASY_STORE_DB_USER`: Usuario de la base de datos.
+- `EASY_STORE_DB_PASSWORD`: Contraseña de la base de datos.
+- `EASY_STORE_DB_HOST`: Host de la base de datos.
+- `EASY_STORE_DB_PORT`: Puerto de la base de datos.
+- `EASY_STORE_DB_NAME`: Nombre de la base de datos.
 - `SECRET_JWT_KEY`: Clave secreta para JWT.
 
 ## Ejecución
