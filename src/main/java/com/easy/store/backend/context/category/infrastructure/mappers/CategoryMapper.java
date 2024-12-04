@@ -1,14 +1,19 @@
 package com.easy.store.backend.context.category.infrastructure.mappers;
 
+import com.easy.store.backend.context.account.infrastructure.mappers.AccountMapper;
 import com.easy.store.backend.context.category.application.dto.CategoryDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
+import com.easy.store.backend.context.user.infrastructure.mappers.UserMapper;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CategoryMapper implements Mapper<CategoryEntity, Category, CategoryDTO> {
+
+    private final UserMapper userMapper = new UserMapper();
+    private final AccountMapper accountMapper = new AccountMapper();
 
     @Override
     public Category entityToModel(CategoryEntity entity) {
@@ -19,6 +24,8 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
                 .imageName(entity.getImageName())
                 .createBy(entity.getCreateBy())
                 .updateBy(entity.getUpdateBy())
+                .user(userMapper.entityToModel(entity.getUser()))
+                .account(accountMapper.entityToModel(entity.getAccount()))
                 .creationDate(entity.getCreationDate())
                 .updateDate(entity.getUpdateDate())
                 .state(entity.getState())
@@ -34,6 +41,8 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
                 .imageName(model.getImageName())
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
+                .user(userMapper.modelToEntity(model.getUser()))
+                .account(accountMapper.modelToEntity(model.getAccount()))
                 .creationDate(model.getCreationDate())
                 .updateDate(model.getUpdateDate())
                 .state(model.getState())
@@ -49,6 +58,8 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
                 .imageName(model.getImageName())
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
+                .user(userMapper.modelToDto(model.getUser()))
+                .account(accountMapper.modelToDto(model.getAccount()))
                 .build();
     }
 
@@ -61,6 +72,8 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
                 .imageName(dto.getImageName())
                 .createBy(dto.getCreateBy())
                 .updateBy(dto.getUpdateBy())
+                .user(userMapper.dtoToModel(dto.getUser()))
+                .account(accountMapper.dtoToModel(dto.getAccount()))
                 .build();
     }
 

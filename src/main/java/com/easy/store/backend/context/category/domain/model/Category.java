@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.category.domain.model;
 
+import com.easy.store.backend.context.account.domain.model.Account;
+import com.easy.store.backend.context.user.domain.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,12 +20,15 @@ public class Category {
     private String imageName;
     private Long createBy;
     private Long updateBy;
+    private User user;
+    private Account account;
     private Timestamp creationDate;
     private Timestamp updateDate;
     private String state;
 
     public boolean isValid(Category category) {
-        if(category.getName() == null || category.getDescription() == null) return false;
+        if(category.getName() == null || category.getDescription() == null ||
+            user == null || account == null) return false;
 
         return !category.getName().isEmpty() && !category.getDescription().isEmpty();
     }

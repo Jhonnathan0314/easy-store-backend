@@ -69,7 +69,7 @@ public class CategoryController {
             category.setCreateBy(createBy);
             response.setData(categoryResponseMapper.modelToDto(createCategoryUseCase.create(categoryCreateMapper.dtoToModel(category))));
             return ResponseEntity.ok(response);
-        } catch (DuplicatedException | InvalidBodyException e) {
+        } catch (DuplicatedException | NoIdReceivedException | InvalidBodyException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

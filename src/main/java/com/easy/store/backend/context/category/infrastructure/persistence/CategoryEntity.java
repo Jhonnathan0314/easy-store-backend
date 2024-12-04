@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.category.infrastructure.persistence;
 
+import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
+import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,6 +35,14 @@ public class CategoryEntity {
 
     @Column(name = "update_by")
     private Long updateBy;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private AccountEntity account;
 
     @CreationTimestamp
     @Column(name = "creation_date", updatable = false)

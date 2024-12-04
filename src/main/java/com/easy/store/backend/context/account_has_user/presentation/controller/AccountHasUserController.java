@@ -1,12 +1,12 @@
 package com.easy.store.backend.context.account_has_user.presentation.controller;
 
 import com.easy.store.backend.context.account_has_user.application.dto.AccountHasUserCreateDto;
-import com.easy.store.backend.context.account_has_user.application.dto.AccountHasUserDto;
+import com.easy.store.backend.context.account_has_user.application.dto.AccountHasUserResponseDto;
 import com.easy.store.backend.context.account_has_user.application.usecase.*;
 import com.easy.store.backend.context.account_has_user.domain.model.AccountHasUser;
 import com.easy.store.backend.context.account_has_user.domain.model.AccountHasUserId;
 import com.easy.store.backend.context.account_has_user.infrastructure.mappers.AccountHasUserCreateMapper;
-import com.easy.store.backend.context.account_has_user.infrastructure.mappers.AccountHasUserMapper;
+import com.easy.store.backend.context.account_has_user.infrastructure.mappers.AccountHasUserResponseMapper;
 import com.easy.store.backend.utils.exceptions.DuplicatedException;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
@@ -36,18 +36,18 @@ public class AccountHasUserController {
     private final CreateAccountHasUserUseCase createAccountHasUserUseCase;
     private final DeleteByIdAccountHasUserUseCase deleteByIdAccountHasUserUseCase;
 
-    private final AccountHasUserMapper accountHasUserMapper = new AccountHasUserMapper();
     private final AccountHasUserCreateMapper accountHasUserCreateMapper = new AccountHasUserCreateMapper();
+    private final AccountHasUserResponseMapper accountHasUserResponseMapper = new AccountHasUserResponseMapper();
 
     private final HttpUtils httpUtils = new HttpUtils();
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<ApiResponse<List<AccountHasUserDto>>> findByIdAccount(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByIdAccount(@PathVariable Long id) {
         logger.info("ACCION FINDBYIDACCOUNT ACCOUNT_HAS_ROLE -> Inicia consulta cuenta tiene usuario con id account: " + id);
-        ApiResponse<List<AccountHasUserDto>> response = new ApiResponse<>();
+        ApiResponse<List<AccountHasUserResponseDto>> response = new ApiResponse<>();
         try {
             List<AccountHasUser> users = findByAccountIdAccountHasUserUseCase.findByAccountId(id);
-            response.setData(accountHasUserMapper.modelsToDtos(users));
+            response.setData(accountHasUserResponseMapper.modelsToDtos(users));
             return ResponseEntity.ok(response);
         }catch (NoResultsException e) {
             logger.info("ACCION FINDBYIDACCOUNT ACCOUNT_HAS_ROLE -> No encontre resultados - NoResultsException");
@@ -57,12 +57,12 @@ public class AccountHasUserController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<ApiResponse<List<AccountHasUserDto>>> findByIdUser(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByIdUser(@PathVariable Long id) {
         logger.info("ACCION FINDBYIDUSER ACCOUNT_HAS_ROLE -> Inicia consulta cuenta tiene usuario con id user: " + id);
-        ApiResponse<List<AccountHasUserDto>> response = new ApiResponse<>();
+        ApiResponse<List<AccountHasUserResponseDto>> response = new ApiResponse<>();
         try {
             List<AccountHasUser> users = findByUserIdAccountHasUserUseCase.findByUserId(id);
-            response.setData(accountHasUserMapper.modelsToDtos(users));
+            response.setData(accountHasUserResponseMapper.modelsToDtos(users));
             return ResponseEntity.ok(response);
         }catch (NoResultsException e) {
             logger.info("ACCION FINDBYIDUSER ACCOUNT_HAS_ROLE -> No encontre resultados - NoResultsException");
@@ -72,16 +72,16 @@ public class AccountHasUserController {
     }
 
     @GetMapping("/account/{idAccount}/user/{idUser}")
-    public ResponseEntity<ApiResponse<AccountHasUserDto>> findById(@PathVariable Long idAccount, @PathVariable Long idUser) {
+    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> findById(@PathVariable Long idAccount, @PathVariable Long idUser) {
         logger.info("ACCION FINDBYID ACCOUNT_HAS_ROLE -> Inicia consulta cuenta tiene usuario con id cuenta: " + idAccount + " | id usuario: " + idUser);
-        ApiResponse<AccountHasUserDto> response = new ApiResponse<>();
+        ApiResponse<AccountHasUserResponseDto> response = new ApiResponse<>();
         try {
             AccountHasUserId id = AccountHasUserId.builder()
                     .accountId(idAccount)
                     .userId(idUser)
                     .build();
             AccountHasUser user = findByIdAccountHasUserUseCase.findById(id);
-            response.setData(accountHasUserMapper.modelToDto(user));
+            response.setData(accountHasUserResponseMapper.modelToDto(user));
             return ResponseEntity.ok(response);
         }catch (NoResultsException e) {
             logger.info("ACCION FINDBYID ACCOUNT_HAS_ROLE -> No encontre resultados - NoResultsException");
@@ -91,12 +91,12 @@ public class AccountHasUserController {
     }
 
     @GetMapping("/state/{state}")
-    public ResponseEntity<ApiResponse<List<AccountHasUserDto>>> findByState(@PathVariable String state) {
+    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByState(@PathVariable String state) {
         logger.info("ACCION FINDBYSTATE ACCOUNT_HAS_ROLE -> Inicia consulta cuenta tiene usuario con estado: " + state);
-        ApiResponse<List<AccountHasUserDto>> response = new ApiResponse<>();
+        ApiResponse<List<AccountHasUserResponseDto>> response = new ApiResponse<>();
         try {
             List<AccountHasUser> model = findByStateAccountHasUserUseCase.findByState(state);
-            response.setData(accountHasUserMapper.modelsToDtos(model));
+            response.setData(accountHasUserResponseMapper.modelsToDtos(model));
             return ResponseEntity.ok(response);
         }catch (NoResultsException e) {
             logger.info("ACCION FINDBYSTATE ACCOUNT_HAS_ROLE -> No encontre resultados - NoResultsException");
@@ -106,12 +106,12 @@ public class AccountHasUserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AccountHasUserDto>> create(@RequestBody AccountHasUserCreateDto dto) {
+    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> create(@RequestBody AccountHasUserCreateDto dto) {
         logger.info("ACCION CREATE ACCOUNT_HAS_ROLE -> Inicia creacion cuenta tiene usuario con body: " + dto.toString());
-        ApiResponse<AccountHasUserDto> response = new ApiResponse<>();
+        ApiResponse<AccountHasUserResponseDto> response = new ApiResponse<>();
         try {
             AccountHasUser model = createAccountHasUserUseCase.create(accountHasUserCreateMapper.dtoToModel(dto));
-            response.setData(accountHasUserMapper.modelToDto(model));
+            response.setData(accountHasUserResponseMapper.modelToDto(model));
             return ResponseEntity.ok(response);
         }catch (NonExistenceException | DuplicatedException | InvalidBodyException e) {
             logger.info("ACCION CREATE ACCOUNT_HAS_ROLE -> Ha ocurrido un error al crear cuenta tiene usuario: " + e.getMessage());

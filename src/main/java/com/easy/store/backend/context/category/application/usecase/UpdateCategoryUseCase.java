@@ -25,6 +25,9 @@ public class UpdateCategoryUseCase {
 
         if(!category.isValid(category)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
 
+        if(category.getUser().getId() == null || category.getAccount().getId() == null)
+            throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+
         Optional<Category> optCategory = categoryRepository.findById(category.getId());
         if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
 

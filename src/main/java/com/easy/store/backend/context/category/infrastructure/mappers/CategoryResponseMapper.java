@@ -1,14 +1,19 @@
 package com.easy.store.backend.context.category.infrastructure.mappers;
 
+import com.easy.store.backend.context.account.infrastructure.mappers.AccountMapper;
 import com.easy.store.backend.context.category.application.dto.CategoryResponseDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
+import com.easy.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, CategoryResponseDTO> {
+
+    private final UserResponseMapper userMapper = new UserResponseMapper();
+    private final AccountMapper accountMapper = new AccountMapper();
 
     @Override
     public Category entityToModel(CategoryEntity entity) {
@@ -17,6 +22,8 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .imageName(entity.getImageName())
+                .user(userMapper.entityToModel(entity.getUser()))
+                .account(accountMapper.entityToModel(entity.getAccount()))
                 .build();
     }
 
@@ -27,6 +34,8 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
+                .user(userMapper.modelToEntity(model.getUser()))
+                .account(accountMapper.modelToEntity(model.getAccount()))
                 .build();
     }
 
@@ -37,6 +46,8 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
+                .user(userMapper.modelToDto(model.getUser()))
+                .account(accountMapper.modelToDto(model.getAccount()))
                 .build();
     }
 
@@ -47,6 +58,8 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .imageName(dto.getImageName())
+                .user(userMapper.dtoToModel(dto.getUser()))
+                .account(accountMapper.dtoToModel(dto.getAccount()))
                 .build();
     }
 

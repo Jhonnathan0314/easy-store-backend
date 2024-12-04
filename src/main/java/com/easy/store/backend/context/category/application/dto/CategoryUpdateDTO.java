@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.category.application.dto;
 
+import com.easy.store.backend.context.account.application.dto.AccountUpdateDto;
+import com.easy.store.backend.context.user.application.dto.UserUpdateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +17,6 @@ public class CategoryUpdateDTO {
     private String description;
     private String imageName;
     private Long updateBy;
+    private UserUpdateDTO user;
+    private AccountUpdateDto account;
 }
