@@ -1,11 +1,14 @@
 package com.easy.store.backend.context.category.infrastructure.mappers;
 
+import com.easy.store.backend.context.account.domain.model.Account;
 import com.easy.store.backend.context.account.infrastructure.mappers.AccountCreateMapper;
+import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
 import com.easy.store.backend.context.category.application.dto.CategoryCreateDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserCreateMapper;
+import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
@@ -13,8 +16,6 @@ import java.util.stream.Collectors;
 
 public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, CategoryCreateDTO> {
 
-    private final UserCreateMapper userMapper = new UserCreateMapper();
-    private final AccountCreateMapper accountMapper = new AccountCreateMapper();
 
     @Override
     public Category entityToModel(CategoryEntity entity) {
@@ -23,8 +24,14 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
                 .description(entity.getDescription())
                 .imageName(entity.getImageName())
                 .createBy(entity.getCreateBy())
-                .user(userMapper.entityToModel(entity.getUser()))
-                .account(accountMapper.entityToModel(entity.getAccount()))
+                .user(User.builder()
+                        .id(entity.getUser().getId())
+                        .build()
+                )
+                .account(Account.builder()
+                        .id(entity.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -35,8 +42,14 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
                 .description(model.getDescription())
                 .imageName(model.getImageName())
                 .createBy(model.getCreateBy())
-                .user(userMapper.modelToEntity(model.getUser()))
-                .account(accountMapper.modelToEntity(model.getAccount()))
+                .user(UserEntity.builder()
+                        .id(model.getUser().getId())
+                        .build()
+                )
+                .account(AccountEntity.builder()
+                        .id(model.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -47,8 +60,8 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
                 .description(model.getDescription())
                 .imageName(model.getImageName())
                 .createBy(model.getCreateBy())
-                .user(userMapper.modelToDto(model.getUser()))
-                .account(accountMapper.modelToDto(model.getAccount()))
+                .userId(model.getUser().getId())
+                .accountId(model.getAccount().getId())
                 .build();
     }
 
@@ -60,9 +73,13 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
                 .imageName(dto.getImageName())
                 .createBy(dto.getCreateBy())
                 .user(User.builder()
-                        .id(dto.getCreateBy())
-                        .build())
-                .account(accountMapper.dtoToModel(dto.getAccount()))
+                        .id(dto.getUserId())
+                        .build()
+                )
+                .account(Account.builder()
+                        .id(dto.getAccountId())
+                        .build()
+                )
                 .build();
     }
 

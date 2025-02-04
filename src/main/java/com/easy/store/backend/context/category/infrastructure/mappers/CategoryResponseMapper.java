@@ -1,10 +1,14 @@
 package com.easy.store.backend.context.category.infrastructure.mappers;
 
+import com.easy.store.backend.context.account.domain.model.Account;
 import com.easy.store.backend.context.account.infrastructure.mappers.AccountMapper;
+import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
 import com.easy.store.backend.context.category.application.dto.CategoryResponseDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
+import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
+import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
@@ -22,8 +26,14 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .imageName(entity.getImageName())
-                .user(userMapper.entityToModel(entity.getUser()))
-                .account(accountMapper.entityToModel(entity.getAccount()))
+                .user(User.builder()
+                        .id(entity.getUser().getId())
+                        .build()
+                )
+                .account(Account.builder()
+                        .id(entity.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -34,8 +44,14 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
-                .user(userMapper.modelToEntity(model.getUser()))
-                .account(accountMapper.modelToEntity(model.getAccount()))
+                .user(UserEntity.builder()
+                        .id(model.getUser().getId())
+                        .build()
+                )
+                .account(AccountEntity.builder()
+                        .id(model.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -46,8 +62,8 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
-                .user(userMapper.modelToDto(model.getUser()))
-                .account(accountMapper.modelToDto(model.getAccount()))
+                .userId(model.getUser().getId())
+                .accountId(model.getAccount().getId())
                 .build();
     }
 
@@ -58,8 +74,14 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .imageName(dto.getImageName())
-                .user(userMapper.dtoToModel(dto.getUser()))
-                .account(accountMapper.dtoToModel(dto.getAccount()))
+                .user(User.builder()
+                        .id(dto.getUserId())
+                        .build()
+                )
+                .account(Account.builder()
+                        .id(dto.getAccountId())
+                        .build()
+                )
                 .build();
     }
 
