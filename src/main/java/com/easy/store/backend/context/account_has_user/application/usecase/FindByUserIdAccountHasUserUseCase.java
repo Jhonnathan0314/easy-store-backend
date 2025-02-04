@@ -23,7 +23,7 @@ public class FindByUserIdAccountHasUserUseCase {
         List<AccountHasUser> accountHasUsers = accountHasUserRepository.findByUserId(idUser);
 
         if(accountHasUsers.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
-        logger.info("ACCION FINDBYIDUSER ACCOUNT_HAS_ROLE -> Encontre cuenta tiene usuario con exito");
+        logger.info("ACCION FINDBYIDUSER ACCOUNT_HAS_USER -> Encontre cuenta tiene usuario con exito");
 
         return accountHasUsers;
     }

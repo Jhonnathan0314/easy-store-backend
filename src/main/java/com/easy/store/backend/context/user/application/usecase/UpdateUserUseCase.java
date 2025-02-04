@@ -33,7 +33,8 @@ public class UpdateUserUseCase {
         User userDb = optUser.get();
         if(userDb.getName().equals(user.getName())) throw new NoChangesException(errorMessages.NO_CHANGES);
 
-        user.setRole(userDb.getRole());
+        if(user.getRole() == null) user.setRole(userDb.getRole());
+
         user.setState(userDb.getState());
 
         if(user.getPassword() != null) {

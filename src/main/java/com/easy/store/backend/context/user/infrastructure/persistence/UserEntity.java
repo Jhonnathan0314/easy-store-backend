@@ -44,16 +44,12 @@ public class UserEntity {
     private String state;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", updatable = false)
+    @JoinColumn(name = "role_id")
     private RoleEntity role;
 
     @PrePersist
     protected void onCreate() {
         this.state = "active";
-        this.role = RoleEntity.builder()
-                .id(1L)
-                .name("client")
-                .build();
     }
 
 }

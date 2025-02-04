@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.user.infrastructure.mappers;
 
+import com.easy.store.backend.context.roles.infrastructure.mappers.RoleResponseMapper;
 import com.easy.store.backend.context.user.application.dto.UserCreateDTO;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
@@ -10,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class UserCreateMapper implements Mapper<UserEntity, User, UserCreateDTO> {
 
+    private final RoleResponseMapper roleMapper = new RoleResponseMapper();
+
     @Override
     public User entityToModel(UserEntity entity) {
         return User.builder()
@@ -17,6 +20,7 @@ public class UserCreateMapper implements Mapper<UserEntity, User, UserCreateDTO>
                 .name(entity.getName())
                 .lastName(entity.getLastName())
                 .password(entity.getPassword())
+                .role(roleMapper.entityToModel(entity.getRole()))
                 .build();
     }
 
@@ -27,6 +31,7 @@ public class UserCreateMapper implements Mapper<UserEntity, User, UserCreateDTO>
                 .name(model.getName())
                 .lastName(model.getLastName())
                 .password(model.getPassword())
+                .role(roleMapper.modelToEntity(model.getRole()))
                 .build();
     }
 
@@ -37,6 +42,7 @@ public class UserCreateMapper implements Mapper<UserEntity, User, UserCreateDTO>
                 .name(model.getName())
                 .lastName(model.getLastName())
                 .password(model.getPassword())
+                .role(roleMapper.modelToDto(model.getRole()))
                 .build();
     }
 
@@ -47,6 +53,7 @@ public class UserCreateMapper implements Mapper<UserEntity, User, UserCreateDTO>
                 .name(dto.getName())
                 .lastName(dto.getLastName())
                 .password(dto.getPassword())
+                .role(roleMapper.dtoToModel(dto.getRole()))
                 .build();
     }
 

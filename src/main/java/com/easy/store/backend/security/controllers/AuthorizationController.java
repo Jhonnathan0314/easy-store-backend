@@ -5,9 +5,7 @@ import com.easy.store.backend.context.user.infrastructure.mappers.UserCreateMapp
 import com.easy.store.backend.security.models.AuthResponse;
 import com.easy.store.backend.security.models.LoginRequest;
 import com.easy.store.backend.security.service.AuthorizationService;
-import com.easy.store.backend.utils.exceptions.DuplicatedException;
-import com.easy.store.backend.utils.exceptions.InvalidBodyException;
-import com.easy.store.backend.utils.exceptions.NoResultsException;
+import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +40,8 @@ public class AuthorizationController {
         try {
             response.setData(authService.register(userCreateMapper.dtoToModel(request)));
             return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | DuplicatedException e) {
+        } catch (InvalidBodyException | DuplicatedException | NonExistenceException | NoResultsException |
+                 NoIdReceivedException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

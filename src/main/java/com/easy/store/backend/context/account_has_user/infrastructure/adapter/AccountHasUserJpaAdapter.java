@@ -52,9 +52,6 @@ public class AccountHasUserJpaAdapter implements AccountHasUserRepository {
 
     @Override
     public AccountHasUser create(AccountHasUser accountHasUser) {
-        logger.info("recibo model para jpa: " + accountHasUser.toString());
-        logger.info("transformo a entity para jpa: " + accountHasUserCreateMapper
-                .modelToEntity(accountHasUser).toString());
         AccountHasUserEntity entity = accountHasUserJpaRepository
                 .save(accountHasUserCreateMapper.modelToEntity(accountHasUser));
         return accountHasUserMapper.entityToModel(entity);

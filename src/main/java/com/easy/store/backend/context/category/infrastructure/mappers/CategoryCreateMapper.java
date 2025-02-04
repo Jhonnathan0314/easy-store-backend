@@ -4,6 +4,7 @@ import com.easy.store.backend.context.account.infrastructure.mappers.AccountCrea
 import com.easy.store.backend.context.category.application.dto.CategoryCreateDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
+import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserCreateMapper;
 import com.easy.store.backend.utils.mappers.Mapper;
 
@@ -58,7 +59,9 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
                 .description(dto.getDescription())
                 .imageName(dto.getImageName())
                 .createBy(dto.getCreateBy())
-                .user(userMapper.dtoToModel(dto.getUser()))
+                .user(User.builder()
+                        .id(dto.getCreateBy())
+                        .build())
                 .account(accountMapper.dtoToModel(dto.getAccount()))
                 .build();
     }

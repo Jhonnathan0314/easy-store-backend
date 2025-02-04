@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
     String username;
     String password;
+    Long accountId;
 
     public boolean isValidRequest(LoginRequest request) {
-        if(request.getUsername() == null || request.getPassword() == null) return false;
+        if(request.getUsername() == null || request.getPassword() == null || request.getAccountId() == null) return false;
         return !request.getUsername().isEmpty()  && !request.getPassword().isEmpty();
     }
 }
