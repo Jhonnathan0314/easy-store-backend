@@ -35,6 +35,12 @@ public class CategoryRepositoryJpaAdapter implements CategoryRepository {
     }
 
     @Override
+    public List<Category> findByUserIdAndAccountId(Long userId, Long accountId) {
+        List<CategoryEntity> categoryEntities = categoryJpaRepository.findByUserIdAndAccountId(userId, accountId);
+        return responseMapper.entitiesToModels(categoryEntities);
+    }
+
+    @Override
     public Optional<Category> findByName(String name) {
         Optional<CategoryEntity> optCategoryEntity = categoryJpaRepository.findByName(name);
         return optCategoryEntity.map(responseMapper::entityToModel);

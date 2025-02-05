@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface CategoryRepository {
     List<Category> findAll();
     Optional<Category> findById(Long id);
+    List<Category> findByUserIdAndAccountId(Long userId, Long accountId);
     Optional<Category> findByName(String name);
     Category create(Category category);
     Category update(Category category);

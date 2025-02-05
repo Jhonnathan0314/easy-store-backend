@@ -26,6 +26,7 @@ public class CategoryController {
 
     private final FindAllCategoryUseCase findAllCategoryUseCase;
     private final FindByIdCategoryUseCase findByIdCategoryUseCase;
+    private final FindByUserIdAndAccountIdCategoryUseCase findByUserIdAndAccountIdCategoryUseCase;
     private final CreateCategoryUseCase createCategoryUseCase;
     private final UpdateCategoryUseCase updateCategoryUseCase;
     private final DeleteByIdCategoryUseCase deleteByIdCategoryUseCase;
@@ -55,6 +56,19 @@ public class CategoryController {
         try {
             Category category = findByIdCategoryUseCase.findById(id);
             response.setData(categoryResponseMapper.modelToDto(category));
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @GetMapping("/user/{userId}/account/{accountId}")
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findById(@PathVariable Long userId, @PathVariable Long accountId) {
+        ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<Category> categories = findByUserIdAndAccountIdCategoryUseCase.findByUserIdAndAccountId(userId, accountId);
+            response.setData(categoryResponseMapper.modelsToDtos(categories));
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
