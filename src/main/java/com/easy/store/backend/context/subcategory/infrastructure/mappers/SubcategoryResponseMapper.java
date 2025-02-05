@@ -1,6 +1,8 @@
 package com.easy.store.backend.context.subcategory.infrastructure.mappers;
 
+import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryResponseMapper;
+import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.subcategory.application.dto.SubcategoryResponseDTO;
 import com.easy.store.backend.context.subcategory.domain.model.Subcategory;
 import com.easy.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
@@ -18,7 +20,10 @@ public class SubcategoryResponseMapper implements Mapper<SubcategoryEntity, Subc
         return Subcategory.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .category(responseMapper.entityToModel(entity.getCategory()))
+                .category(Category.builder()
+                        .id(entity.getCategory().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -27,7 +32,10 @@ public class SubcategoryResponseMapper implements Mapper<SubcategoryEntity, Subc
         return SubcategoryEntity.builder()
                 .id(model.getId())
                 .name(model.getName())
-                .category(responseMapper.modelToEntity(model.getCategory()))
+                .category(CategoryEntity.builder()
+                        .id(model.getCategory().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -36,7 +44,7 @@ public class SubcategoryResponseMapper implements Mapper<SubcategoryEntity, Subc
         return SubcategoryResponseDTO.builder()
                 .id(model.getId())
                 .name(model.getName())
-                .category(responseMapper.modelToDto(model.getCategory()))
+                .categoryId(model.getCategory().getId())
                 .build();
     }
 
@@ -45,7 +53,10 @@ public class SubcategoryResponseMapper implements Mapper<SubcategoryEntity, Subc
         return Subcategory.builder()
                 .id(dto.getId())
                 .name(dto.getName())
-                .category(responseMapper.dtoToModel(dto.getCategory()))
+                .category(Category.builder()
+                        .id(dto.getCategoryId())
+                        .build()
+                )
                 .build();
     }
 

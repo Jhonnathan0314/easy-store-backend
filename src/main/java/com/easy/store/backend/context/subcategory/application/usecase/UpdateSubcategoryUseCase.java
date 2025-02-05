@@ -23,9 +23,9 @@ public class UpdateSubcategoryUseCase {
     private final SubcategoryRepository subcategoryRepository;
     private final CategoryRepository categoryRepository;
 
-    public Subcategory update(Subcategory subcategory, Long idCategory) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
+    public Subcategory update(Subcategory subcategory) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
-        Optional<Category> optCategory = categoryRepository.findById(idCategory);
+        Optional<Category> optCategory = categoryRepository.findById(subcategory.getCategory().getId());
         if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
 
         subcategory.setCategory(optCategory.get());
@@ -38,14 +38,18 @@ public class UpdateSubcategoryUseCase {
         if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
 
         Subcategory subcategoryDb = optSubcategory.get();
-        if(Objects.equals(subcategoryDb.getCategory().getId(), subcategory.getCategory().getId()) &&
-                subcategoryDb.getName().equals(subcategory.getName())) {
+        if(!areDifferences(subcategoryDb, subcategory)) {
             throw new NoChangesException(errorMessages.NO_CHANGES);
         }
 
         subcategory.setState(subcategoryDb.getState());
 
         return subcategoryRepository.update(subcategory);
+    }
+
+    private boolean areDifferences(Subcategory subcategoryDb, Subcategory subcategory) {
+        return Objects.equals(subcategoryDb.getCategory().getId(), subcategory.getCategory().getId()) &&
+                subcategoryDb.getName().equals(subcategory.getName());
     }
 
 }

@@ -9,6 +9,7 @@ public interface SubcategoryRepository {
     List<Subcategory> findAll();
     Optional<Subcategory> findById(Long id);
     Optional<Subcategory> findByName(String name);
+    List<Subcategory> findByCategoryId(Long categoryId);
     Subcategory create(Subcategory category);
     Subcategory update(Subcategory category);
     void deleteById(Long id);

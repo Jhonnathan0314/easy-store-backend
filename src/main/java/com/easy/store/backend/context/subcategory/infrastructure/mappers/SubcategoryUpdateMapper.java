@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.subcategory.infrastructure.mappers;
 
+import com.easy.store.backend.context.category.domain.model.Category;
+import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.subcategory.application.dto.SubcategoryUpdateDTO;
 import com.easy.store.backend.context.subcategory.domain.model.Subcategory;
 import com.easy.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
@@ -16,6 +18,10 @@ public class SubcategoryUpdateMapper implements Mapper<SubcategoryEntity, Subcat
                 .id(entity.getId())
                 .name(entity.getName())
                 .updateBy(entity.getUpdateBy())
+                .category(Category.builder()
+                        .id(entity.getCategory().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -25,6 +31,10 @@ public class SubcategoryUpdateMapper implements Mapper<SubcategoryEntity, Subcat
                 .id(model.getId())
                 .name(model.getName())
                 .updateBy(model.getUpdateBy())
+                .category(CategoryEntity.builder()
+                        .id(model.getCategory().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -34,6 +44,7 @@ public class SubcategoryUpdateMapper implements Mapper<SubcategoryEntity, Subcat
                 .id(model.getId())
                 .name(model.getName())
                 .updateBy(model.getUpdateBy())
+                .categoryId(model.getCategory().getId())
                 .build();
     }
 
@@ -43,6 +54,10 @@ public class SubcategoryUpdateMapper implements Mapper<SubcategoryEntity, Subcat
                 .id(dto.getId())
                 .name(dto.getName())
                 .updateBy(dto.getUpdateBy())
+                .category(Category.builder()
+                        .id(dto.getCategoryId())
+                        .build()
+                )
                 .build();
     }
 

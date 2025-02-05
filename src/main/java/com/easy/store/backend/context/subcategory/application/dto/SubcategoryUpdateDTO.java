@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class SubcategoryUpdateDTO {
     private Long id;
     private String name;
-    private CategoryUpdateDTO category;
+    private Long categoryId;
     private Long updateBy;
 }
