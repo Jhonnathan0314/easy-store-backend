@@ -9,6 +9,7 @@ public interface ProductRepository {
     List<Product> findAll();
     Optional<Product> findById(Long id);
     Optional<Product> findByName(String name);
+    List<Product> findBySubcategoryId(Long subcategoryId);
     Product create(Product product);
     Product update(Product product);
     void deleteById(Long id);

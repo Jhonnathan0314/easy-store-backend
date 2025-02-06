@@ -3,6 +3,8 @@ package com.easy.store.backend.context.product.infrastructure.mappers;
 import com.easy.store.backend.context.product.application.dto.ProductCreateDTO;
 import com.easy.store.backend.context.product.domain.model.Product;
 import com.easy.store.backend.context.product.infrastructure.persistence.ProductEntity;
+import com.easy.store.backend.context.subcategory.domain.model.Subcategory;
+import com.easy.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
@@ -19,6 +21,10 @@ public class ProductCreateMapper implements Mapper<ProductEntity, Product, Produ
                 .quantity(entity.getQuantity())
                 .qualification(entity.getQualification())
                 .createBy(entity.getCreateBy())
+                .subcategory(Subcategory.builder()
+                        .id(entity.getSubcategory().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -31,6 +37,10 @@ public class ProductCreateMapper implements Mapper<ProductEntity, Product, Produ
                 .quantity(model.getQuantity())
                 .qualification(model.getQualification())
                 .createBy(model.getCreateBy())
+                .subcategory(SubcategoryEntity.builder()
+                        .id(model.getSubcategory().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -43,6 +53,7 @@ public class ProductCreateMapper implements Mapper<ProductEntity, Product, Produ
                 .quantity(model.getQuantity())
                 .qualification(model.getQualification())
                 .createBy(model.getCreateBy())
+                .subcategoryId(model.getSubcategory().getId())
                 .build();
     }
 
@@ -55,6 +66,10 @@ public class ProductCreateMapper implements Mapper<ProductEntity, Product, Produ
                 .quantity(dto.getQuantity())
                 .qualification(dto.getQualification())
                 .createBy(dto.getCreateBy())
+                .subcategory(Subcategory.builder()
+                        .id(dto.getSubcategoryId())
+                        .build()
+                )
                 .build();
     }
 

@@ -21,9 +21,9 @@ public class CreateProductUseCase {
     private final SubcategoryRepository subcategoryRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Product create(Product product, Long idSubcategory) throws NoResultsException, DuplicatedException, InvalidBodyException {
+    public Product create(Product product) throws NoResultsException, DuplicatedException, InvalidBodyException {
 
-        Optional<Subcategory> optSubcategory = subcategoryRepository.findById(idSubcategory);
+        Optional<Subcategory> optSubcategory = subcategoryRepository.findById(product.getSubcategory().getId());
         if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
 
         product.setSubcategory(optSubcategory.get());

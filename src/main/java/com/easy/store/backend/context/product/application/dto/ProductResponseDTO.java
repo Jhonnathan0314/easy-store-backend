@@ -1,6 +1,5 @@
 package com.easy.store.backend.context.product.application.dto;
 
-import com.easy.store.backend.context.subcategory.application.dto.SubcategoryResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +16,5 @@ public class ProductResponseDTO {
     private BigDecimal price;
     private Integer quantity;
     private Integer qualification;
-    private SubcategoryResponseDTO subcategory;
+    private Long subcategoryId;
 }

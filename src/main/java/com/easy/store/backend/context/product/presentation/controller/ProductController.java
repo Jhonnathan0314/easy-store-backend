@@ -26,6 +26,7 @@ public class ProductController {
 
     private final FindAllProductUseCase findAllProductUseCase;
     private final FindByIdProductUseCase findByIdProductUseCase;
+    private final FindBySubcategoryIdProductUseCase findBySubcategoryIdProductUseCase;
     private final CreateProductUseCase createProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
     private final DeleteByIdProductUseCase deleteByIdProductUseCase;
@@ -62,12 +63,25 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/subcategory/{idSubcategory}")
-    public ResponseEntity<ApiResponse<ProductResponseDTO>> create(@RequestBody ProductCreateDTO product, @PathVariable Long idSubcategory, @RequestHeader("Create-By") Long createBy) {
+    @GetMapping("/subcategory/{subcategoryId}")
+    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> findBySubcategoryId(@PathVariable Long subcategoryId) {
+        ApiResponse<List<ProductResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<ProductResponseDTO> products = productResponseMapper.modelsToDtos(findBySubcategoryIdProductUseCase.findBySubcategoryId(subcategoryId));
+            response.setData(products);
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<ApiResponse<ProductResponseDTO>> create(@RequestBody ProductCreateDTO product, @RequestHeader("Create-By") Long createBy) {
         ApiResponse<ProductResponseDTO> response = new ApiResponse<>();
         try {
             product.setCreateBy(createBy);
-            response.setData(productResponseMapper.modelToDto(createProductUseCase.create(productCreateMapper.dtoToModel(product), idSubcategory)));
+            response.setData(productResponseMapper.modelToDto(createProductUseCase.create(productCreateMapper.dtoToModel(product))));
             return ResponseEntity.ok(response);
         } catch (DuplicatedException | InvalidBodyException | NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
@@ -75,12 +89,12 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/subcategory/{idSubcategory}")
-    public ResponseEntity<ApiResponse<ProductResponseDTO>> update(@RequestBody ProductUpdateDTO product, @PathVariable Long idSubcategory, @RequestHeader("Update-By") Long updateBy) {
+    @PutMapping()
+    public ResponseEntity<ApiResponse<ProductResponseDTO>> update(@RequestBody ProductUpdateDTO product, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<ProductResponseDTO> response = new ApiResponse<>();
         try {
             product.setUpdateBy(updateBy);
-            response.setData(productResponseMapper.modelToDto(updateProductUseCase.update(productUpdateMapper.dtoToModel(product), idSubcategory)));
+            response.setData(productResponseMapper.modelToDto(updateProductUseCase.update(productUpdateMapper.dtoToModel(product))));
             return ResponseEntity.ok(response);
         } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));

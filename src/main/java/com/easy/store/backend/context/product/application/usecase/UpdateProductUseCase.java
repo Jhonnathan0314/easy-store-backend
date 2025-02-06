@@ -23,9 +23,9 @@ public class UpdateProductUseCase {
     private final ProductRepository productRepository;
     private final SubcategoryRepository subcategoryRepository;
 
-    public Product update(Product product, Long idSubcategory) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
+    public Product update(Product product) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
-        Optional<Subcategory> optSubcategory = subcategoryRepository.findById(idSubcategory);
+        Optional<Subcategory> optSubcategory = subcategoryRepository.findById(product.getSubcategory().getId());
         if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
 
         product.setSubcategory(optSubcategory.get());
