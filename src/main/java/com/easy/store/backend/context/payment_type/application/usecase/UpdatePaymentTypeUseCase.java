@@ -29,11 +29,16 @@ public class UpdatePaymentTypeUseCase {
         if(optPaymentType.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
 
         PaymentType paymentTypeDb = optPaymentType.get();
-        if(paymentTypeDb.getName().equals(paymentType.getName())) throw new NoChangesException(errorMessages.NO_CHANGES);
+        if(!areDifferences(paymentTypeDb, paymentType)) throw new NoChangesException(errorMessages.NO_CHANGES);
 
         paymentType.setState(paymentTypeDb.getState());
 
         return paymentTypeRepository.update(paymentType);
+    }
+
+    private boolean areDifferences(PaymentType paymentTypeDb, PaymentType paymentType) {
+        return !paymentTypeDb.getName().equals(paymentType.getName()) ||
+                !paymentTypeDb.getAccount().getId().equals(paymentType.getAccount().getId());
     }
 
 }

@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.payment_type.infrastructure.mappers;
 
+import com.easy.store.backend.context.account.domain.model.Account;
+import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
 import com.easy.store.backend.context.payment_type.application.dto.PaymentTypeUpdateDTO;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
@@ -16,6 +18,10 @@ public class PaymentTypeUpdateMapper implements Mapper<PaymentTypeEntity, Paymen
                 .id(entity.getId())
                 .name(entity.getName())
                 .updateBy(entity.getUpdateBy())
+                .account(Account.builder()
+                        .id(entity.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -25,6 +31,10 @@ public class PaymentTypeUpdateMapper implements Mapper<PaymentTypeEntity, Paymen
                 .id(model.getId())
                 .name(model.getName())
                 .updateBy(model.getUpdateBy())
+                .account(AccountEntity.builder()
+                        .id(model.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -34,6 +44,7 @@ public class PaymentTypeUpdateMapper implements Mapper<PaymentTypeEntity, Paymen
                 .id(model.getId())
                 .name(model.getName())
                 .updateBy(model.getUpdateBy())
+                .accountId(model.getAccount().getId())
                 .build();
     }
 
@@ -43,6 +54,10 @@ public class PaymentTypeUpdateMapper implements Mapper<PaymentTypeEntity, Paymen
                 .id(dto.getId())
                 .name(dto.getName())
                 .updateBy(dto.getUpdateBy())
+                .account(Account.builder()
+                        .id(dto.getAccountId())
+                        .build()
+                )
                 .build();
     }
 

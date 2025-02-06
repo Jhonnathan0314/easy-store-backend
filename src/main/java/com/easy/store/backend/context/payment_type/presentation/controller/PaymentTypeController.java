@@ -26,6 +26,7 @@ public class PaymentTypeController {
 
     private final FindAllPaymentTypeUseCase findAllPaymentTypeUseCase;
     private final FindByIdPaymentTypeUseCase findByIdPaymentTypeUseCase;
+    private final FindByAccountIdPaymentTypeUseCase findByAccountIdPaymentTypeUseCase;
     private final CreatePaymentTypeUseCase createPaymentTypeUseCase;
     private final UpdatePaymentTypeUseCase updatePaymentTypeUseCase;
     private final DeleteByIdPaymentTypeUseCase deleteByIdPaymentTypeUseCase;
@@ -62,6 +63,19 @@ public class PaymentTypeController {
         }
     }
 
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<ApiResponse<List<PaymentTypeResponseDTO>>> findByAccountId(@PathVariable Long accountId) {
+        ApiResponse<List<PaymentTypeResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<PaymentTypeResponseDTO> paymentTypes = paymentTypeResponseMapper.modelsToDtos(findByAccountIdPaymentTypeUseCase.findByAccountId(accountId));
+            response.setData(paymentTypes);
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<PaymentTypeResponseDTO>> create(@RequestBody PaymentTypeCreateDTO paymentType, @RequestHeader("Create-By") Long createBy) {
         ApiResponse<PaymentTypeResponseDTO> response = new ApiResponse<>();
@@ -69,7 +83,7 @@ public class PaymentTypeController {
             paymentType.setCreateBy(createBy);
             response.setData(paymentTypeResponseMapper.modelToDto(createPaymentTypeUseCase.create(paymentTypeCreateMapper.dtoToModel(paymentType))));
             return ResponseEntity.ok(response);
-        } catch (DuplicatedException | InvalidBodyException e) {
+        } catch (DuplicatedException | InvalidBodyException | NoIdReceivedException | NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

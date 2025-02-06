@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.payment_type.infrastructure.mappers;
 
+import com.easy.store.backend.context.account.domain.model.Account;
+import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
 import com.easy.store.backend.context.payment_type.application.dto.PaymentTypeResponseDTO;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
@@ -15,6 +17,10 @@ public class PaymentTypeResponseMapper implements Mapper<PaymentTypeEntity, Paym
         return PaymentType.builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                .account(Account.builder()
+                        .id(entity.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -23,6 +29,10 @@ public class PaymentTypeResponseMapper implements Mapper<PaymentTypeEntity, Paym
         return PaymentTypeEntity.builder()
                 .id(model.getId())
                 .name(model.getName())
+                .account(AccountEntity.builder()
+                        .id(model.getAccount().getId())
+                        .build()
+                )
                 .build();
     }
 
@@ -31,6 +41,7 @@ public class PaymentTypeResponseMapper implements Mapper<PaymentTypeEntity, Paym
         return PaymentTypeResponseDTO.builder()
                 .id(model.getId())
                 .name(model.getName())
+                .accountId(model.getAccount().getId())
                 .build();
     }
 
@@ -39,6 +50,10 @@ public class PaymentTypeResponseMapper implements Mapper<PaymentTypeEntity, Paym
         return PaymentType.builder()
                 .id(dto.getId())
                 .name(dto.getName())
+                .account(Account.builder()
+                        .id(dto.getAccountId())
+                        .build()
+                )
                 .build();
     }
 

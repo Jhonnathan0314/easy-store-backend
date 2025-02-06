@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.payment_type.infrastructure.persistence;
 
+import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,6 +22,10 @@ public class PaymentTypeEntity {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private AccountEntity account;
 
     @Column(name = "create_by", updatable = false)
     private Long createBy;

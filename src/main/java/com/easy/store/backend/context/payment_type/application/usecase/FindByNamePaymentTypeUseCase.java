@@ -13,8 +13,8 @@ public class FindByNamePaymentTypeUseCase {
 
     private final PaymentTypeRepository paymentTypeRepository;
 
-    public Optional<PaymentType> findByName(String name) {
-        return paymentTypeRepository.findByName(name);
+    public Optional<PaymentType> findByNameAndAccountId(String name, Long accountId) {
+        return paymentTypeRepository.findByNameAndAccountId(name, accountId);
     }
 
 }

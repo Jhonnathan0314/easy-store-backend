@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class PaymentTypeCreateDTO {
     private String name;
     private Long createBy;
+    private Long accountId;
 }

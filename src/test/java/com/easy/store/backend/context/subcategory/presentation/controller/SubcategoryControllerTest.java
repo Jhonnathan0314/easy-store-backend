@@ -119,8 +119,6 @@ class SubcategoryControllerTest {
     void findByIdSuccess() throws Exception {
         when(findByIdSubcategoryUseCase.findById(any(Long.class))).thenReturn(subcategoryData.getSubcategoryResponseOne());
 
-        System.out.println("productData.getProductResponseOne() " + subcategoryData.getSubcategoryResponseOne().toString());
-
         mockMvc.perform(get("/api/v1/subcategory/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
