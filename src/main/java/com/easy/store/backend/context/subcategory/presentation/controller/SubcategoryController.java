@@ -26,6 +26,7 @@ public class SubcategoryController {
 
     private final FindAllSubcategoryUseCase findAllSubcategoryUseCase;
     private final FindByIdSubcategoryUseCase findByIdSubcategoryUseCase;
+    private final FindByAccountIdSubcategoryUseCase findByAccountIdSubcategoryUseCase;
     private final FindByCategoryIdSubcategoryUseCase findByCategoryIdSubcategoryUseCase;
     private final CreateSubcategoryUseCase createSubcategoryUseCase;
     private final UpdateSubcategoryUseCase updateSubcategoryUseCase;
@@ -56,6 +57,19 @@ public class SubcategoryController {
         try {
             Subcategory subcategory = findByIdSubcategoryUseCase.findById(id);
             response.setData(subcategoryResponseMapper.modelToDto(subcategory));
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @GetMapping("/account/{idAccount}")
+    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByAccountId(@PathVariable Long idAccount) {
+        ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findByAccountIdSubcategoryUseCase.findByAccountId(idAccount));
+            response.setData(subcategories);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));

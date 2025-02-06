@@ -41,6 +41,12 @@ public class SubcategoryRepositoryJpaAdapter implements SubcategoryRepository {
     }
 
     @Override
+    public List<Subcategory> findByAccountId(Long accountId) {
+        List<SubcategoryEntity> subcategoryEntities = subcategoryJpaRepository.findByAccountId(accountId);
+        return responseMapper.entitiesToModels(subcategoryEntities);
+    }
+
+    @Override
     public List<Subcategory> findByCategoryId(Long categoryId) {
         List<SubcategoryEntity> subcategoryEntities = subcategoryJpaRepository.findByCategoryId(categoryId);
         return responseMapper.entitiesToModels(subcategoryEntities);
