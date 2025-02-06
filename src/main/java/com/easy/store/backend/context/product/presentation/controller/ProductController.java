@@ -26,6 +26,8 @@ public class ProductController {
 
     private final FindAllProductUseCase findAllProductUseCase;
     private final FindByIdProductUseCase findByIdProductUseCase;
+    private final FindByAccountIdProductUseCase findByAccountIdProductUseCase;
+    private final FindByCategoryIdProductUseCase findByCategoryIdProductUseCase;
     private final FindBySubcategoryIdProductUseCase findBySubcategoryIdProductUseCase;
     private final CreateProductUseCase createProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
@@ -56,6 +58,32 @@ public class ProductController {
         try {
             Product product = findByIdProductUseCase.findById(id);
             response.setData(productResponseMapper.modelToDto(product));
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> findByAccountId(@PathVariable Long accountId) {
+        ApiResponse<List<ProductResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<ProductResponseDTO> products = productResponseMapper.modelsToDtos(findByAccountIdProductUseCase.findByAccountId(accountId));
+            response.setData(products);
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> findByCategoryId(@PathVariable Long categoryId) {
+        ApiResponse<List<ProductResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<ProductResponseDTO> products = productResponseMapper.modelsToDtos(findByCategoryIdProductUseCase.findByCategoryId(categoryId));
+            response.setData(products);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));

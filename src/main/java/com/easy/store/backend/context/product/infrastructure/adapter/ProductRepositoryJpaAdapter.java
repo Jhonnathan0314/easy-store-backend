@@ -42,6 +42,18 @@ public class ProductRepositoryJpaAdapter implements ProductRepository {
     }
 
     @Override
+    public List<Product> findByAccountId(Long accountId) {
+        List<ProductEntity> productEntities = productJpaRepository.findByAccountId(accountId);
+        return responseMapper.entitiesToModels(productEntities);
+    }
+
+    @Override
+    public List<Product> findByCategoryId(Long categoryId) {
+        List<ProductEntity> productEntities = productJpaRepository.findByCategoryId(categoryId);
+        return responseMapper.entitiesToModels(productEntities);
+    }
+
+    @Override
     public List<Product> findBySubcategoryId(Long subcategoryId) {
         List<ProductEntity> productEntities = productJpaRepository.findBySubcategoryId(subcategoryId);
         return responseMapper.entitiesToModels(productEntities);
