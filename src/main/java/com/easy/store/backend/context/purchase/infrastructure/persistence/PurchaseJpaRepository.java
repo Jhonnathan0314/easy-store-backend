@@ -14,9 +14,10 @@ public interface PurchaseJpaRepository extends JpaRepository<PurchaseEntity, Lon
             "inner join account a on a.id = c.account_id\n" +
             "where a.id = ?1")
     List<PurchaseEntity> findByAccountId(Long accountId);
-    @Query(value = "select * from purchase where DATE(date) = ?", nativeQuery = true)
+    List<PurchaseEntity> findByCategoryId(Long categoryId);
     List<PurchaseEntity> findByUserId(Long userId);
     List<PurchaseEntity> findByPaymentTypeId(Long paymentTypeId);
+    @Query(value = "select * from purchase where DATE(creation_date) = ?", nativeQuery = true)
     List<PurchaseEntity> findByCreationDate(Timestamp creationDate);
     List<PurchaseEntity> findByCreationDateBetween(Timestamp fromDate, Timestamp toDate);
     List<PurchaseEntity> findByTotalBetween(BigDecimal fromTotal, BigDecimal toTotal);
