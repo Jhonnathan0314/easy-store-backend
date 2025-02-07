@@ -8,17 +8,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class FindAllCategoryUseCase {
 
+    private final Logger logger = Logger.getLogger(FindAllCategoryUseCase.class.getName());
+
     private final CategoryRepository categoryRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Category> findAll() throws NoResultsException {
+
+        logger.info("ACCION FINDALL CATEGORY -> Iniciando búsqueda");
+
         List<Category> categories = categoryRepository.findAll();
         if(categories == null || categories.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        logger.info("ACCION FINDALL CATEGORY -> Encontré categorias con éxito");
+
         return categories;
     }
 

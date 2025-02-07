@@ -14,10 +14,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateProductUseCase {
+
+    private final Logger logger = Logger.getLogger(UpdateProductUseCase.class.getName());
 
     private final ErrorMessages errorMessages = new ErrorMessages();
     private final ProductRepository productRepository;
@@ -25,17 +28,23 @@ public class UpdateProductUseCase {
 
     public Product update(Product product) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
+        logger.info("ACCION UDPATE PRODUCT -> Inicia el proceso");
+
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(product.getSubcategory().getId());
         if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
+        logger.info("ACCION UDPATE PRODUCT -> Categoria encontrada con éxito");
 
         product.setSubcategory(optSubcategory.get());
 
         if(product.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        logger.info("ACCION UDPATE PRODUCT -> Validé id");
 
         if(!product.isValid(product)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        logger.info("ACCION UDPATE PRODUCT -> Validé cuerpo de la petición");
 
         Optional<Product> optProduct = productRepository.findById(product.getId());
         if(optProduct.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        logger.info("ACCION UDPATE PRODUCT -> Validé existencia del producto");
 
         Product productDb = optProduct.get();
         if(Objects.equals(productDb.getSubcategory().getId(), product.getSubcategory().getId()) &&
@@ -46,8 +55,11 @@ public class UpdateProductUseCase {
                 Objects.equals(productDb.getQualification(), product.getQualification())) {
             throw new NoChangesException(errorMessages.NO_CHANGES);
         }
+        logger.info("ACCION UDPATE PRODUCT -> Validé que hayan cambios a aplicar");
 
         product.setState(productDb.getState());
+
+        logger.info("ACCION UDPATE PRODUCT -> Actualizando producto");
 
         return productRepository.update(product);
     }

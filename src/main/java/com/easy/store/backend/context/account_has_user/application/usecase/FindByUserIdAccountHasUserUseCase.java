@@ -20,10 +20,12 @@ public class FindByUserIdAccountHasUserUseCase {
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<AccountHasUser> findByUserId(Long idUser) throws NoResultsException {
-        List<AccountHasUser> accountHasUsers = accountHasUserRepository.findByUserId(idUser);
 
+        logger.info("ACCION FINDBYUSERID ACCOUNT_HAS_USER -> Iniciando búsqueda con idUser: " + idUser);
+
+        List<AccountHasUser> accountHasUsers = accountHasUserRepository.findByUserId(idUser);
         if(accountHasUsers.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
-        logger.info("ACCION FINDBYIDUSER ACCOUNT_HAS_USER -> Encontre cuenta tiene usuario con exito");
+        logger.info("ACCION FINDBYUSERID ACCOUNT_HAS_USER -> Encontré cuenta tiene usuario con éxito");
 
         return accountHasUsers;
     }

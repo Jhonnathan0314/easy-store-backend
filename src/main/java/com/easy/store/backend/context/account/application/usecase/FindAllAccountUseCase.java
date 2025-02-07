@@ -20,10 +20,12 @@ public class FindAllAccountUseCase {
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Account> findAll() throws NoResultsException {
-        List<Account> accounts = accountRepository.findAll();
 
+        logger.info("ACCION FINDALL ACCOUNT -> Iniciando busqueda");
+
+        List<Account> accounts = accountRepository.findAll();
         if(accounts.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
-        logger.info("ACCION FINDALL ACCOUNT -> Encontre cuentas con exito");
+        logger.info("ACCION FINDALL ACCOUNT -> Encontré cuentas con éxito");
 
         return accounts;
     }

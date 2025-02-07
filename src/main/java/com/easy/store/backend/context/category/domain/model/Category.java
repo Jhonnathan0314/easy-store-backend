@@ -32,4 +32,21 @@ public class Category {
 
         return !category.getName().isEmpty() && !category.getDescription().isEmpty();
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", imageName='" + imageName + '\'' +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
+                ", user=" + user +
+                ", account=" + account +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

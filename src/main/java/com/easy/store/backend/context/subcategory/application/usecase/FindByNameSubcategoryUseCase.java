@@ -2,19 +2,32 @@ package com.easy.store.backend.context.subcategory.application.usecase;
 
 import com.easy.store.backend.context.subcategory.domain.model.Subcategory;
 import com.easy.store.backend.context.subcategory.domain.port.SubcategoryRepository;
+import com.easy.store.backend.utils.constants.ErrorMessages;
+import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class FindByNameSubcategoryUseCase {
 
-    private final SubcategoryRepository subcategoryRepository;
+    private final Logger logger = Logger.getLogger(FindByNameSubcategoryUseCase.class.getName());
 
-    public Optional<Subcategory> findByName(String name) {
-        return subcategoryRepository.findByName(name);
+    private final SubcategoryRepository subcategoryRepository;
+    private final ErrorMessages errorMessages = new ErrorMessages();
+
+    public Optional<Subcategory> findByName(String name) throws NoResultsException {
+
+        logger.info("ACCION FINDBYNAME SUBCATEGORY -> Iniciando búsqueda");
+
+        Optional<Subcategory> optionalSubcategory = subcategoryRepository.findByName(name);;
+        if(optionalSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        logger.info("ACCION FINDBYNAME SUBCATEGORY -> Encontré categoria con éxito");
+
+        return optionalSubcategory;
     }
 
 }

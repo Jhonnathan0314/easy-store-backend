@@ -12,10 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class CreateProductUseCase {
+
+    private final Logger logger = Logger.getLogger(CreateProductUseCase.class.getName());
 
     private final ProductRepository productRepository;
     private final SubcategoryRepository subcategoryRepository;
@@ -23,14 +26,21 @@ public class CreateProductUseCase {
 
     public Product create(Product product) throws NoResultsException, DuplicatedException, InvalidBodyException {
 
+        logger.info("ACCION CREATE PRODUCT -> Iniciando proceso con body: " + product.toString());
+
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(product.getSubcategory().getId());
         if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
+        logger.info("ACCION CREATE PRODUCT -> Subcategoria encontrada con éxito");
 
         product.setSubcategory(optSubcategory.get());
 
         if(!product.isValid(product)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        logger.info("ACCION CREATE PRODUCT -> Validé cuerpo de la petición");
 
         if(productRepository.findByName(product.getName()).isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
+        logger.info("ACCION CREATE PRODUCT -> Validé producto no duplicado");
+
+        logger.info("ACCION CREATE PRODUCT -> Creando producto");
 
         return productRepository.create(product);
     }

@@ -22,17 +22,20 @@ public class CreateCategoryUseCase {
 
     public Category create(Category category) throws DuplicatedException, NoIdReceivedException, InvalidBodyException {
 
-        logger.info("ACCION CREATE CATEGORY -> Inicia el proceso");
-        if(!category.isValid(category)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        logger.info("ACCION CREATE CATEGORY -> Iniciando proceso con body: " + category.toString());
 
-        logger.info("ACCION CREATE CATEGORY -> Valide cuerpo de la peticion");
+        if(!category.isValid(category)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        logger.info("ACCION CREATE CATEGORY -> Validé cuerpo de la petición");
+
         if(category.getUser().getId() == null || category.getAccount().getId() == null)
             throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        logger.info("ACCION CREATE CATEGORY -> Validé ids de usuario y cuenta");
 
-        logger.info("ACCION CREATE CATEGORY -> Valide ids de usuario y cuenta");
         if(categoryRepository.findByName(category.getName()).isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
+        logger.info("ACCION CREATE CATEGORY -> Validé categoria no duplicada");
 
-        logger.info("ACCION CREATE CATEGORY -> Valide categoria duplicada");
+        logger.info("ACCION CREATE CATEGORY -> Creando categoria");
+
         return categoryRepository.create(category);
     }
 

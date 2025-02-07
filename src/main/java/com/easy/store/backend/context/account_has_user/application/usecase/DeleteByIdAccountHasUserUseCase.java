@@ -21,10 +21,14 @@ public class DeleteByIdAccountHasUserUseCase {
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void deleteById(AccountHasUserId id) throws NonExistenceException {
-        Optional<AccountHasUser> accountHasUsers = accountHasUserRepository.findById(id);
 
+        logger.info("ACCION CREATE ACCOUNT_HAS_USER -> Iniciando creación con id: " + id.toString());
+
+        Optional<AccountHasUser> accountHasUsers = accountHasUserRepository.findById(id);
         if(accountHasUsers.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION DELETEBYID ACCOUNT_HAS_ROLE -> Encontre cuenta tiene usuario con exito");
+
+        logger.info("ACCION CREATE ACCOUNT_HAS_USER -> Eliminando account_has_user");
 
         accountHasUserRepository.deleteById(id);
     }

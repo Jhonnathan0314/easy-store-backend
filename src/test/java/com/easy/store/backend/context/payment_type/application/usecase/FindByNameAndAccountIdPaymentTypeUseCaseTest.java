@@ -19,10 +19,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FindByNamePaymentTypeUseCaseTest {
+class FindByNameAndAccountIdPaymentTypeUseCaseTest {
 
     @InjectMocks
-    private FindByNamePaymentTypeUseCase findByNamePaymentTypeUseCase;
+    private FindByNameAndAccountIdPaymentTypeUseCase findByNameAndAccountIdPaymentTypeUseCase;
 
     @Mock
     private PaymentTypeRepository paymentTypeRepository;
@@ -38,7 +38,7 @@ class FindByNamePaymentTypeUseCaseTest {
     void findByNameSuccess() {
         when(paymentTypeRepository.findByName(any(String.class))).thenReturn(Optional.of(paymentTypeData.getPaymentTypeActive()));
 
-        PaymentType response = findByNamePaymentTypeUseCase.findByName(paymentTypeData.getPaymentTypeActive().getName()).orElse(null);
+        PaymentType response = findByNameAndAccountIdPaymentTypeUseCase.findByName(paymentTypeData.getPaymentTypeActive().getName()).orElse(null);
 
         assertNotNull(response);
         assertEquals(response, paymentTypeData.getPaymentTypeActive());

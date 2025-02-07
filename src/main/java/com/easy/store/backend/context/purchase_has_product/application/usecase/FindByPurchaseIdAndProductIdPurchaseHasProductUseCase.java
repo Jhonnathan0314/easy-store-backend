@@ -9,17 +9,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class FindByPurchaseIdAndProductIdPurchaseHasProductUseCase {
 
+    private final Logger logger = Logger.getLogger(FindByPurchaseIdAndProductIdPurchaseHasProductUseCase.class.getName());
+
     private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public PurchaseHasProduct findByPurchaseIdAndProductId(PurchaseHasProductId id) throws NoResultsException {
+
+        logger.info("ACCION FINDBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Iniciando búsqueda con id: " + id.toString());
+
         Optional<PurchaseHasProduct> purchaseHasProducts = purchaseHasProductRepository.findByPurchaseIdAndProductId(id);
         if(purchaseHasProducts.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        logger.info("ACCION FINDBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Encontré purchase_has_product con éxito");
+
         return purchaseHasProducts.get();
     }
 

@@ -20,10 +20,12 @@ public class FindByStateAccountHasUserUseCase {
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<AccountHasUser> findByState(String state) throws NoResultsException {
-        List<AccountHasUser> accountHasUsers = accountHasUserRepository.findByState(state);
 
+        logger.info("ACCION FINDBYSTATE ACCOUNT_HAS_USER -> Iniciando búsqueda con state: " + state);
+
+        List<AccountHasUser> accountHasUsers = accountHasUserRepository.findByState(state);
         if(accountHasUsers.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
-        logger.info("ACCION FINDBYSTATE ACCOUNT_HAS_ROLE -> Encontre cuenta tiene usuario con exito");
+        logger.info("ACCION FINDBYSTATE ACCOUNT_HAS_USER -> Encontré cuenta tiene usuario con éxito");
 
         return accountHasUsers;
     }

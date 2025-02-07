@@ -9,9 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @Service
 @RequiredArgsConstructor
 public class CreateUserUseCase {
+
+    private final Logger logger = Logger.getLogger(CreateUserUseCase.class.getName());
 
     private final UserRepository userRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
@@ -19,13 +23,21 @@ public class CreateUserUseCase {
 
     public User create(User user) throws DuplicatedException, InvalidBodyException {
 
+        logger.info("ACCION CREATE USER -> Iniciando proceso con body: " + user.toString());
+
         if(user.getPassword() == null) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        logger.info("ACCION CREATE USER -> Validé cuerpo de la petición");
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         if(!user.isValid(user)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        logger.info("ACCION CREATE USER -> Validé cuerpo de la petición");
 
-        if(userRepository.findByUsername(user.getUsername()).isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
+        if(userRepository.findByUsername(user.getUsername()).isPresent())
+            throw new DuplicatedException(errorMessages.DUPLICATED);
+        logger.info("ACCION CREATE USER -> Validé usuario no duplicado");
+
+        logger.info("ACCION CREATE USER -> Creando usuario");
 
         return userRepository.create(user);
     }

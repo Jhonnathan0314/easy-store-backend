@@ -20,10 +20,14 @@ public class DeleteByIdAccountUseCase {
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void deleteById(Long id) throws NonExistenceException {
+
+        logger.info("ACCION DELETEBYID ACCOUNT -> Iniciando eliminado con id: " + id);
+
         Optional<Account> accounts = accountRepository.findById(id);
-        
         if(accounts.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION DELETEBYID ACCOUNT -> Encontre cuenta con exito");
+        logger.info("ACCION DELETEBYID ACCOUNT -> Encontré cuenta con éxito");
+
+        logger.info("ACCION DELETEBYID ACCOUNT -> Eliminando cuenta");
 
         accountRepository.deleteById(id);
     }

@@ -8,21 +8,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class ChangeStateByIdCategoryUseCase {
 
+    private final Logger logger = Logger.getLogger(ChangeStateByIdCategoryUseCase.class.getName());
+
     private final CategoryRepository categoryRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Category changeStateById(Long id) throws NonExistenceException {
+
+        logger.info("ACCION CHANGESTATEBYID CATEGORY -> Iniciando proceso con id: " + id);
+
         Optional<Category> optCategory = categoryRepository.findById(id);
         if(optCategory.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        logger.info("ACCION CHANGESTATEBYID CATEGORY -> Categoria encontrada con éxito");
+
         Category category = optCategory.get();
         category.setState(category.getState().equals("active") ? "inactive" : "active");
-        category = categoryRepository.update(category);
-        return category;
+
+        logger.info("ACCION CHANGESTATEBYID CATEGORY -> Actualizando estado");
+        return categoryRepository.update(category);
     }
 
 }

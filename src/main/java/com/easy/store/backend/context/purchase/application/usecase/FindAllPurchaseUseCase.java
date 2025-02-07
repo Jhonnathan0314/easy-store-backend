@@ -8,17 +8,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class FindAllPurchaseUseCase {
 
+    private final Logger logger = Logger.getLogger(FindAllPurchaseUseCase.class.getName());
+
     private final PurchaseRepository purchaseRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Purchase> findAll() throws NoResultsException {
+
+        logger.info("ACCION FINDALL PURCHASE -> Iniciando búsqueda");
+
         List<Purchase> purchases = purchaseRepository.findAll();
         if(purchases == null || purchases.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        logger.info("ACCION FINDALL PURCHASE -> Encontré compras con éxito");
+
         return purchases;
     }
 }

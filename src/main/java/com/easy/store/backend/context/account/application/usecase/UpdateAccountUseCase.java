@@ -25,19 +25,23 @@ public class UpdateAccountUseCase {
     public Account update(Account account) throws InvalidBodyException, NoChangesException,
             NoIdReceivedException, NonExistenceException {
 
+        logger.info("ACCION UPDATE ACCOUNT -> Iniciando actualización con body: " + account.toString());
+
         if(account.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
-        logger.info("ACCION UPDATE ACCOUNT -> Id validado con exito");
+        logger.info("ACCION UPDATE ACCOUNT -> Id validado con éxito");
 
         if(!account.isValid(account)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
-        logger.info("ACCION UPDATE ACCOUNT -> Body validado con exito");
+        logger.info("ACCION UPDATE ACCOUNT -> Body validado con éxito");
 
         Optional<Account> accountIdOpt = accountRepository.findById(account.getId());
 
         if(accountIdOpt.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION UPDATE ACCOUNT -> Validacion cuenta existente con exito");
+        logger.info("ACCION UPDATE ACCOUNT -> Validación cuenta existente con éxito");
 
         if(account.equals(accountIdOpt.get())) throw new NoChangesException(errorMessages.NO_CHANGES);
-        logger.info("ACCION UPDATE ACCOUNT -> Validacion cambios a aplicar con exito");
+        logger.info("ACCION UPDATE ACCOUNT -> Validación cambios a aplicar con éxito");
+
+        logger.info("ACCION UPDATE ACCOUNT -> Actualizando cuenta");
 
         return accountRepository.update(account);
     }

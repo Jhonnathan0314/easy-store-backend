@@ -21,8 +21,12 @@ public class CreateAccountUseCase {
 
     public Account create(Account account) throws InvalidBodyException {
 
+        logger.info("ACCION CREATE ACCOUNT -> Iniciando creación con body: " + account.toString());
+
         if(!account.isValid(account)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
-        logger.info("ACCION CREATE ACCOUNT -> Body validado con exito");
+        logger.info("ACCION CREATE ACCOUNT -> Body validado con éxito");
+
+        logger.info("ACCION CREATE ACCOUNT -> Creando cuenta");
 
         return accountRepository.create(account);
     }

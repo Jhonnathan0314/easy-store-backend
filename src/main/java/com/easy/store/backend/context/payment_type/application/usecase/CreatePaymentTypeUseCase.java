@@ -14,10 +14,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class CreatePaymentTypeUseCase {
+
+    private final Logger logger = Logger.getLogger(CreatePaymentTypeUseCase.class.getName());
 
     private final PaymentTypeRepository paymentTypeRepository;
     private final AccountRepository accountRepository;
@@ -25,16 +28,25 @@ public class CreatePaymentTypeUseCase {
 
     public PaymentType create(PaymentType paymentType) throws DuplicatedException, InvalidBodyException, NoIdReceivedException, NonExistenceException {
 
+        logger.info("ACCION CREATE PAYMENT_TYPE -> Iniciando proceso con body: " + paymentType.toString());
+
         if(!paymentType.isValid(paymentType)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        logger.info("ACCION CREATE PAYMENT_TYPE -> Validé cuerpo de la petición");
 
         if(paymentType.getAccount().getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        logger.info("ACCION CREATE PAYMENT_TYPE -> Validé id de cuenta");
 
         Account account = accountRepository.findById(paymentType.getAccount().getId()).orElse(null);
         if(account == null) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        logger.info("ACCION CREATE PAYMENT_TYPE -> Cuenta encontra con éxito");
+
         paymentType.setAccount(account);
 
         Optional<PaymentType> paymentTypeDb = paymentTypeRepository.findByNameAndAccountId(paymentType.getName(), paymentType.getAccount().getId());
         if(paymentTypeDb.isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
+        logger.info("ACCION CREATE PAYMENT_TYPE -> Validé tipo de pago no duplicado");
+
+        logger.info("ACCION CREATE PAYMENT_TYPE -> Creando tipo de pago");
 
         return paymentTypeRepository.create(paymentType);
     }

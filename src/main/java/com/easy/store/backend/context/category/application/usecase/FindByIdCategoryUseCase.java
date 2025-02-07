@@ -8,17 +8,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class FindByIdCategoryUseCase {
 
+    private final Logger logger = Logger.getLogger(FindByIdCategoryUseCase.class.getName());
+
     private final CategoryRepository categoryRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Category findById(Long id) throws NoResultsException {
+
+        logger.info("ACCION FINDBYID CATEGORY -> Iniciando búsqueda");
+
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if(optionalCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        logger.info("ACCION FINDBYID CATEGORY -> Encontré categoria con éxito");
+
         return optionalCategory.get();
     }
 

@@ -9,19 +9,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class RemoveByIdPurchaseHasProductUseCase {
 
-    private final PurchaseHasProductRepository purchaseHasProductRepository;
+    private final Logger logger = Logger.getLogger(RemoveByIdPurchaseHasProductUseCase.class.getName());
 
+    private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void removeByPurchaseIdAndProductId(PurchaseHasProductId id) throws NonExistenceException {
 
+        logger.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Iniciando eliminado con id: " + id.toString());
+
         Optional<PurchaseHasProduct> optPurchaseHasProduct = purchaseHasProductRepository.findByPurchaseIdAndProductId(id);
         if(optPurchaseHasProduct.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        logger.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Validé existencia con éxito");
+
+        logger.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Inicia eliminado");
 
         purchaseHasProductRepository.removeByPurchaseIdAndProductId(id);
     }

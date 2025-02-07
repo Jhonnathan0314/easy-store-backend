@@ -8,21 +8,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class ChangeStateByIdProductUseCase {
 
+    private final Logger logger = Logger.getLogger(ChangeStateByIdProductUseCase.class.getName());
+
     private final ProductRepository productRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Product changeStateById(Long id) throws NonExistenceException {
+
+        logger.info("ACCION CHANGESTATEBYID PRODUCT -> Iniciando proceso con id: " + id);
+
         Optional<Product> optProduct = productRepository.findById(id);
         if(optProduct.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        logger.info("ACCION CHANGESTATEBYID PRODUCT -> Producto encontrado con éxito");
+
         Product product = optProduct.get();
         product.setState(product.getState().equals("active") ? "inactive" : "active");
-        product = productRepository.update(product);
-        return product;
+
+        logger.info("ACCION CHANGESTATEBYID PRODUCT -> Actualizando estado");
+        return productRepository.update(product);
     }
 
 }
