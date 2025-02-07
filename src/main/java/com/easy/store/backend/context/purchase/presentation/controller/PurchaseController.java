@@ -197,7 +197,8 @@ public class PurchaseController {
             purchase.setUpdateBy(updateBy);
             response.setData(purchaseResponseMapper.modelToDto(updatePurchaseUseCase.update(purchaseUpdateMapper.dtoToModel(purchase))));
             return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException | NoIdReceivedException | NoChangesException e) {
+        } catch (InvalidBodyException | NoResultsException | NoIdReceivedException | NoChangesException |
+                 NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

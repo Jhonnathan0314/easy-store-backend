@@ -1,6 +1,7 @@
 package com.easy.store.backend.security.config;
 
 import com.easy.store.backend.context.user.application.usecase.FindByUsernameUserUseCase;
+import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider() throws NoResultsException {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -37,8 +38,14 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailService() {
-        return username -> findByUsernameUserUseCase.findByUsername(username).orElse(null);
+    public UserDetailsService userDetailService() throws NoResultsException {
+        return username -> {
+            try {
+                return findByUsernameUserUseCase.findByUsername(username).orElse(null);
+            } catch (NoResultsException e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
 
 }
