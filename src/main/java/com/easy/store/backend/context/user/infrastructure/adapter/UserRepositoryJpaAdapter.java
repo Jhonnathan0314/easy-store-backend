@@ -40,6 +40,12 @@ public class UserRepositoryJpaAdapter implements UserRepository {
     }
 
     @Override
+    public List<User> findByAccountId(Long accountId) {
+        List<UserEntity> userEntities = userJpaRepository.findByAccountId(accountId);
+        return mapper.entitiesToModels(userEntities);
+    }
+
+    @Override
     public User create(User user) {
         UserEntity userEntity = userJpaRepository.save(userCreateMapper.modelToEntity(user));
         return mapper.entityToModel(userEntity);

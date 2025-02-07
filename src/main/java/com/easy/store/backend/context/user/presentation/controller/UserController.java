@@ -26,6 +26,7 @@ public class UserController {
 
     private final FindAllUserUseCase findAllUserUseCase;
     private final FindByIdUserUseCase findByIdUserUseCase;
+    private final FindByAccountIdUserUseCase findByAccountIdUserUseCase;
     private final CreateUserUseCase createUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteByIdUserUseCase deleteByIdUserUseCase;
@@ -55,6 +56,19 @@ public class UserController {
         try {
             User user = findByIdUserUseCase.findById(id);
             response.setData(userResponseMapper.modelToDto(user));
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> findByAccountId(@PathVariable Long accountId) {
+        ApiResponse<List<UserResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<UserResponseDTO> users = userResponseMapper.modelsToDtos(findByAccountIdUserUseCase.findByAccountId(accountId));
+            response.setData(users);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));

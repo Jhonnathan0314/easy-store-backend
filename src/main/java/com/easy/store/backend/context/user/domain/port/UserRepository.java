@@ -9,6 +9,7 @@ public interface UserRepository {
     List<User> findAll();
     Optional<User> findById(Long id);
     Optional<User> findByUsername(String name);
+    List<User> findByAccountId(Long accountId);
     User create(User user);
     User update(User user);
     void deleteById(Long id);
