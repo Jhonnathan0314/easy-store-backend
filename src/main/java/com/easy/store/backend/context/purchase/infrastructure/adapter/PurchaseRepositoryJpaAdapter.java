@@ -37,6 +37,12 @@ public class PurchaseRepositoryJpaAdapter implements PurchaseRepository {
     }
 
     @Override
+    public List<Purchase> findByAccountId(Long accountId) {
+        List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByAccountId(accountId);
+        return responseMapper.entitiesToModels(purchaseEntities);
+    }
+
+    @Override
     public List<Purchase> findByUserId(Long userId) {
         List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByUserId(userId);
         return responseMapper.entitiesToModels(purchaseEntities);

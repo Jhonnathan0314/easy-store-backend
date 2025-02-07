@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface PurchaseRepository {
     List<Purchase> findAll();
     Optional<Purchase> findById(Long id);
+    List<Purchase> findByAccountId(Long accountId);
     List<Purchase> findByUserId(Long userId);
     List<Purchase> findByPaymentTypeId(Long paymentTypeId);
     List<Purchase> findByCreationDate(Timestamp creationDate);

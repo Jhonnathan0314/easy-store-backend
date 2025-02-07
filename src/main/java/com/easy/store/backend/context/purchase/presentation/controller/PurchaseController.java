@@ -30,6 +30,7 @@ public class PurchaseController {
 
     private final FindAllPurchaseUseCase findAllPurchaseUseCase;
     private final FindByIdPurchaseUseCase findByIdPurchaseUseCase;
+    private final FindByAccountIdPurchaseUseCase findByAccountIdPurchaseUseCase;
     private final FindByUserIdPurchaseUseCase findByUserIdPurchaseUseCase;
     private final FindByPaymentTypeIdPurchaseUseCase findByPaymentTypeIdPurchaseUseCase;
     private final FindByDatePurchaseUseCase findByDatePurchaseUseCase;
@@ -64,6 +65,19 @@ public class PurchaseController {
         try {
             Purchase purchase = findByIdPurchaseUseCase.findById(id);
             response.setData(purchaseResponseMapper.modelToDto(purchase));
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByAccountId(@PathVariable Long accountId) {
+        ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByAccountIdPurchaseUseCase.findByAccountId(accountId));
+            response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
