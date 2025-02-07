@@ -7,19 +7,19 @@ import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FindByIdPurchaseHasProductUseCase {
+public class FindByProductIdPurchaseHasProductUseCase {
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public PurchaseHasProduct findById(Long id) throws NoResultsException {
-        Optional<PurchaseHasProduct> optPurchaseHasProducts = purchaseHasProductRepository.findById(id);
-        if(optPurchaseHasProducts.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
-        return optPurchaseHasProducts.get();
+    public List<PurchaseHasProduct> findByProductId(Long productId) throws NoResultsException {
+        List<PurchaseHasProduct> purchaseHasProducts = purchaseHasProductRepository.findByProductId(productId);
+        if(purchaseHasProducts == null || purchaseHasProducts.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        return purchaseHasProducts;
     }
 
 }

@@ -7,26 +7,29 @@ import com.easy.store.backend.context.purchase.domain.port.PurchaseRepository;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.domain.port.UserRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
-import com.easy.store.backend.utils.exceptions.InvalidBodyException;
-import com.easy.store.backend.utils.exceptions.NoResultsException;
+import com.easy.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class GeneratePurchaseUseCase {
+public class UpdatePurchaseUseCase {
 
     private final PurchaseRepository purchaseRepository;
     private final UserRepository userRepository;
     private final PaymentTypeRepository paymentTypeRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Purchase generate(Purchase purchase) throws InvalidBodyException, NoResultsException {
+    public Purchase update(Purchase purchase) throws NoIdReceivedException, InvalidBodyException, NoResultsException, NoChangesException {
 
-        if(!purchase.isValid(purchase)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(purchase.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+
+        Optional<Purchase> optPurchase = purchaseRepository.findById(purchase.getId());
+        if(optPurchase.isEmpty()) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+
+        if(!purchase.isValid(purchase)) throw new NoResultsException(errorMessages.NO_PURCHASE_RESULTS);
 
         Optional<User> optUser = userRepository.findById(purchase.getUser().getId());
         if(optUser.isEmpty()) throw new NoResultsException(errorMessages.NO_USER_RESULTS);
@@ -34,11 +37,19 @@ public class GeneratePurchaseUseCase {
         Optional<PaymentType> optPaymentType = paymentTypeRepository.findById(purchase.getPaymentType().getId());
         if(optPaymentType.isEmpty()) throw new NoResultsException(errorMessages.NO_PAYMENT_TYPE_RESULTS);
 
-        purchase.setTotal(new BigDecimal("0"));
+        if(!areDifferences(optPurchase.get(), purchase)) throw new NoChangesException(errorMessages.NO_CHANGES);
+
+        purchase.setTotal(optPurchase.get().getTotal());
         purchase.setUser(optUser.get());
         purchase.setPaymentType(optPaymentType.get());
 
-        return purchaseRepository.generate(purchase);
+        return purchaseRepository.update(purchase);
+    }
+
+    private boolean areDifferences(Purchase purchaseDb, Purchase purchase) {
+        return !purchaseDb.getState().equals(purchase.getState()) ||
+                !purchaseDb.getUser().getId().equals(purchase.getUser().getId()) ||
+                !purchaseDb.getPaymentType().getId().equals(purchase.getPaymentType().getId());
     }
 
 }

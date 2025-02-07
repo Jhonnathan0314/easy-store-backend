@@ -16,5 +16,9 @@ public class PurchaseDTO {
     private PaymentTypeDTO paymentType;
     private Timestamp date;
     private BigDecimal total;
+    private String state;
     private Long createBy;
+    private Long updateBy;
+    private Timestamp creationDate;
+    private Timestamp updateDate;
 }

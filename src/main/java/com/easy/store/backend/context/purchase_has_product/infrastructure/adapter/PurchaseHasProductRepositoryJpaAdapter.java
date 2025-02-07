@@ -1,8 +1,11 @@
 package com.easy.store.backend.context.purchase_has_product.infrastructure.adapter;
 
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProduct;
+import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseHasProductRepository;
-import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductMapper;
+import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductAddMapper;
+import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductResponseMapper;
+import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductUpdateMapper;
 import com.easy.store.backend.context.purchase_has_product.infrastructure.persistence.PurchaseHasProductEntity;
 import com.easy.store.backend.context.purchase_has_product.infrastructure.persistence.PurchaseHasProductJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,41 +19,54 @@ import java.util.Optional;
 public class PurchaseHasProductRepositoryJpaAdapter implements PurchaseHasProductRepository {
 
     private final PurchaseHasProductJpaRepository purchaseHasProductJpaRepository;
-    private final PurchaseHasProductMapper mapper = new PurchaseHasProductMapper();
+    private final PurchaseHasProductAddMapper addMapper = new PurchaseHasProductAddMapper();
+    private final PurchaseHasProductUpdateMapper updateMapper = new PurchaseHasProductUpdateMapper();
+    private final PurchaseHasProductResponseMapper responseMapper = new PurchaseHasProductResponseMapper();
 
     @Override
-    public Optional<PurchaseHasProduct> findById(Long id) {
-        Optional<PurchaseHasProductEntity> optPurchaseHasProduct = purchaseHasProductJpaRepository.findById(id);
-        return optPurchaseHasProduct.map(mapper::entityToModel);
+    public Optional<PurchaseHasProduct> findByPurchaseIdAndProductId(PurchaseHasProductId id) {
+        Optional<PurchaseHasProductEntity> optPurchaseHasProduct = purchaseHasProductJpaRepository.findByPurchaseIdAndProductId(id.getPurchaseId(), id.getProductId());
+        return optPurchaseHasProduct.map(responseMapper::entityToModel);
     }
 
     @Override
-    public List<PurchaseHasProduct> findAllByPurchaseId(Long purchaseId) {
-        List<PurchaseHasProductEntity> purchaseHasProducts = purchaseHasProductJpaRepository.findAllByPurchaseId(purchaseId);
-        return mapper.entitiesToModels(purchaseHasProducts);
+    public List<PurchaseHasProduct> findByPurchaseId(Long purchaseId) {
+        List<PurchaseHasProductEntity> purchaseHasProducts = purchaseHasProductJpaRepository.findByPurchaseId(purchaseId);
+        return responseMapper.entitiesToModels(purchaseHasProducts);
     }
 
     @Override
-    public List<PurchaseHasProduct> findAllByProductId(Long productId) {
-        List<PurchaseHasProductEntity> purchaseHasProducts = purchaseHasProductJpaRepository.findAllByProductId(productId);
-        return mapper.entitiesToModels(purchaseHasProducts);
+    public List<PurchaseHasProduct> findByProductId(Long productId) {
+        List<PurchaseHasProductEntity> purchaseHasProducts = purchaseHasProductJpaRepository.findByProductId(productId);
+        return responseMapper.entitiesToModels(purchaseHasProducts);
     }
 
     @Override
     public PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct) {
-        PurchaseHasProductEntity purchaseHasProductEntity = purchaseHasProductJpaRepository.save(mapper.modelToEntity(purchaseHasProduct));
-        return mapper.entityToModel(purchaseHasProductEntity);
+        PurchaseHasProductEntity purchaseHasProductEntity = purchaseHasProductJpaRepository.save(addMapper.modelToEntity(purchaseHasProduct));
+        return responseMapper.entityToModel(purchaseHasProductEntity);
     }
 
     @Override
     public List<PurchaseHasProduct> addAll(List<PurchaseHasProduct> purchaseHasProducts) {
-        List<PurchaseHasProductEntity> purchaseHasProductEntities = purchaseHasProductJpaRepository.saveAll(mapper.modelsToEntities(purchaseHasProducts));
-        return mapper.entitiesToModels(purchaseHasProductEntities);
+        List<PurchaseHasProductEntity> purchaseHasProductEntities = purchaseHasProductJpaRepository.saveAll(addMapper.modelsToEntities(purchaseHasProducts));
+        return responseMapper.entitiesToModels(purchaseHasProductEntities);
     }
 
     @Override
-    public void removeById(Long id) {
+    public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) {
+        PurchaseHasProductEntity purchaseHasProductEntity = purchaseHasProductJpaRepository.save(updateMapper.modelToEntity(purchaseHasProduct));
+        return responseMapper.entityToModel(purchaseHasProductEntity);
+    }
+
+    @Override
+    public void removeByPurchaseIdAndProductId(PurchaseHasProductId id) {
         purchaseHasProductJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public void removeAll(List<PurchaseHasProductId> ids) {
+        purchaseHasProductJpaRepository.deleteAllByIdInBatch(ids);
     }
 
 }

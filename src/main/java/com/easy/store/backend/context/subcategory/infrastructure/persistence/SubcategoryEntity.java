@@ -47,4 +47,17 @@ public class SubcategoryEntity {
     @PrePersist
     protected void onCreate() { this.state = "active"; }
 
+    @Override
+    public String toString() {
+        return "SubcategoryEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category=" + category +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

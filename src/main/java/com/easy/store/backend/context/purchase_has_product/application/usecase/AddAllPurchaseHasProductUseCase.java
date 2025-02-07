@@ -12,6 +12,7 @@ import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,21 +26,22 @@ public class AddAllPurchaseHasProductUseCase {
 
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public List<PurchaseHasProduct> addAll(List<PurchaseHasProduct> purchaseHasProducts, Long purchaseId, List<Long> productIds) throws NoResultsException, InvalidBodyException {
-        if(purchaseHasProducts.size() != productIds.size()) throw new InvalidBodyException(errorMessages.NO_SIZE_EQUALS);
-
-        for (int i = 0; i < purchaseHasProducts.size(); i++) {
-            Optional<Purchase> optPurchase = purchaseRepository.findById(purchaseId);
+    public List<PurchaseHasProduct> addAll(List<PurchaseHasProduct> purchaseHasProducts) throws NoResultsException, InvalidBodyException {
+        for (PurchaseHasProduct purchaseHasProduct : purchaseHasProducts) {
+            Optional<Purchase> optPurchase = purchaseRepository.findById(purchaseHasProduct.getId().getPurchaseId());
             if (optPurchase.isEmpty()) throw new NoResultsException(errorMessages.NO_PURCHASE_RESULTS);
 
-            Optional<Product> optProduct = productRepository.findById(productIds.get(i));
+            Optional<Product> optProduct = productRepository.findById(purchaseHasProduct.getId().getProductId());
             if (optProduct.isEmpty()) throw new NoResultsException(errorMessages.NO_PRODUCT_RESULTS);
 
-            purchaseHasProducts.get(i).setPurchase(optPurchase.get());
-            purchaseHasProducts.get(i).setProduct(optProduct.get());
+            purchaseHasProduct.setPurchase(optPurchase.get());
+            purchaseHasProduct.setProduct(optProduct.get());
 
-            if (!purchaseHasProducts.get(i).isValid(purchaseHasProducts.get(i)))
+            if (!purchaseHasProduct.isValid(purchaseHasProduct))
                 throw new InvalidBodyException(errorMessages.INVALID_BODY);
+
+            purchaseHasProduct.setUnitPrice(optProduct.get().getPrice());
+            purchaseHasProduct.setSubtotal(optProduct.get().getPrice().multiply(BigDecimal.valueOf(purchaseHasProduct.getQuantity())));
         }
         return purchaseHasProductRepository.addAll(purchaseHasProducts);
     }

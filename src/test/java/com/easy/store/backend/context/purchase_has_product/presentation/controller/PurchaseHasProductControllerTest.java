@@ -43,10 +43,10 @@ class PurchaseHasProductControllerTest {
     private FindByIdPurchaseHasProductUseCase findByIdPurchaseHasProductUseCase;
 
     @Mock
-    private FindAllByProductIdPurchaseHasProductUseCase findAllByProductIdPurchaseHasProductUseCase;
+    private FindByProductIdPurchaseHasProductUseCase findByProductIdPurchaseHasProductUseCase;
 
     @Mock
-    private FindAllByPurchaseIdPurchaseHasProductUseCase findAllByPurchaseIdPurchaseHasProductUseCase;
+    private FindByPurchaseIdPurchaseHasProductUseCase findByPurchaseIdPurchaseHasProductUseCase;
 
     @Mock
     private AddPurchaseHasProductUseCase addPurchaseHasProductUseCase;
@@ -114,7 +114,7 @@ class PurchaseHasProductControllerTest {
     @Test
     @Order(2)
     void findAllByProductIdSuccess() throws Exception {
-        when(findAllByProductIdPurchaseHasProductUseCase.findAllByProductId(any(Long.class))).thenReturn(purchaseHasProductData.getPurchaseHasProductsList());
+        when(findByProductIdPurchaseHasProductUseCase.findAllByProductId(any(Long.class))).thenReturn(purchaseHasProductData.getPurchaseHasProductsList());
 
         mockMvc.perform(get("/api/v1/purchase-has-product/product/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -124,7 +124,7 @@ class PurchaseHasProductControllerTest {
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data").isNotEmpty());
 
-        verify(findAllByProductIdPurchaseHasProductUseCase).findAllByProductId(any(Long.class));
+        verify(findByProductIdPurchaseHasProductUseCase).findAllByProductId(any(Long.class));
     }
 
     @Test
@@ -134,7 +134,7 @@ class PurchaseHasProductControllerTest {
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNoResults());
 
-        when(findAllByProductIdPurchaseHasProductUseCase.findAllByProductId(any(Long.class)))
+        when(findByProductIdPurchaseHasProductUseCase.findAllByProductId(any(Long.class)))
                 .thenThrow(new NoResultsException(errorMessages.NO_RESULTS));
 
         mockMvc.perform(get("/api/v1/purchase-has-product/product/1")
@@ -145,13 +145,13 @@ class PurchaseHasProductControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(findAllByProductIdPurchaseHasProductUseCase).findAllByProductId(any(Long.class));
+        verify(findByProductIdPurchaseHasProductUseCase).findAllByProductId(any(Long.class));
     }
 
     @Test
     @Order(4)
     void findAllByPurchaseIdSuccess() throws Exception {
-        when(findAllByPurchaseIdPurchaseHasProductUseCase.findAllByPurchaseId(any(Long.class))).thenReturn(purchaseHasProductData.getPurchaseHasProductsList());
+        when(findByPurchaseIdPurchaseHasProductUseCase.findAllByPurchaseId(any(Long.class))).thenReturn(purchaseHasProductData.getPurchaseHasProductsList());
 
         mockMvc.perform(get("/api/v1/purchase-has-product/purchase/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -161,7 +161,7 @@ class PurchaseHasProductControllerTest {
                 .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data").isNotEmpty());
 
-        verify(findAllByPurchaseIdPurchaseHasProductUseCase).findAllByPurchaseId(any(Long.class));
+        verify(findByPurchaseIdPurchaseHasProductUseCase).findAllByPurchaseId(any(Long.class));
     }
 
     @Test
@@ -171,7 +171,7 @@ class PurchaseHasProductControllerTest {
         expectedResponse.setData(null);
         expectedResponse.setError(generalData.getErrorNoResults());
 
-        when(findAllByPurchaseIdPurchaseHasProductUseCase.findAllByPurchaseId(any(Long.class)))
+        when(findByPurchaseIdPurchaseHasProductUseCase.findAllByPurchaseId(any(Long.class)))
                 .thenThrow(new NoResultsException(errorMessages.NO_RESULTS));
 
         mockMvc.perform(get("/api/v1/purchase-has-product/purchase/1")
@@ -182,7 +182,7 @@ class PurchaseHasProductControllerTest {
                 .andExpect(jsonPath("$.error.title").value(expectedResponse.getError().getTitle()))
                 .andExpect(jsonPath("$.error.detail").value(expectedResponse.getError().getDetail()));
 
-        verify(findAllByPurchaseIdPurchaseHasProductUseCase).findAllByPurchaseId(any(Long.class));
+        verify(findByPurchaseIdPurchaseHasProductUseCase).findAllByPurchaseId(any(Long.class));
     }
 
     @Test

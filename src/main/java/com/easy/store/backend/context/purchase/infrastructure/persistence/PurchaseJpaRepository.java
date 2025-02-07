@@ -10,10 +10,10 @@ import java.util.List;
 public interface PurchaseJpaRepository extends JpaRepository<PurchaseEntity, Long> {
 
     @Query(value = "select * from purchase where DATE(date) = ?", nativeQuery = true)
-    List<PurchaseEntity> findAllByDate(Timestamp date);
-    List<PurchaseEntity> findAllByUserId(Long userId);
-    List<PurchaseEntity> findAllByPaymentTypeId(Long paymentTypeId);
-    List<PurchaseEntity> findByDateBetween(Timestamp fromDate, Timestamp toDate);
+    List<PurchaseEntity> findByUserId(Long userId);
+    List<PurchaseEntity> findByPaymentTypeId(Long paymentTypeId);
+    List<PurchaseEntity> findByCreationDate(Timestamp creationDate);
+    List<PurchaseEntity> findByCreationDateBetween(Timestamp fromDate, Timestamp toDate);
     List<PurchaseEntity> findByTotalBetween(BigDecimal fromTotal, BigDecimal toTotal);
 
 }

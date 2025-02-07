@@ -1,11 +1,15 @@
 package com.easy.store.backend.context.purchase.infrastructure.mappers;
 
+import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeMapper;
 import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeResponseMapper;
+import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseResponseDTO;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
+import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
+import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
@@ -20,10 +24,17 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
     public Purchase entityToModel(PurchaseEntity entity) {
         return Purchase.builder()
                 .id(entity.getId())
-                .user(userMapper.entityToModel(entity.getUser()))
-                .paymentType(paymentTypeMapper.entityToModel(entity.getPaymentType()))
+                .user(User.builder()
+                        .id(entity.getUser().getId())
+                        .build()
+                )
+                .paymentType(PaymentType.builder()
+                        .id(entity.getPaymentType().getId())
+                        .build()
+                )
                 .total(entity.getTotal())
-                .date(entity.getDate())
+                .state(entity.getState())
+                .creationDate(entity.getCreationDate())
                 .build();
     }
 
@@ -31,10 +42,17 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
     public PurchaseEntity modelToEntity(Purchase model) {
         return PurchaseEntity.builder()
                 .id(model.getId())
-                .user(userMapper.modelToEntity(model.getUser()))
-                .paymentType(paymentTypeMapper.modelToEntity(model.getPaymentType()))
+                .user(UserEntity.builder()
+                        .id(model.getUser().getId())
+                        .build()
+                )
+                .paymentType(PaymentTypeEntity.builder()
+                        .id(model.getPaymentType().getId())
+                        .build()
+                )
                 .total(model.getTotal())
-                .date(model.getDate())
+                .state(model.getState())
+                .creationDate(model.getCreationDate())
                 .build();
     }
 
@@ -42,10 +60,11 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
     public PurchaseResponseDTO modelToDto(Purchase model) {
         return PurchaseResponseDTO.builder()
                 .id(model.getId())
-                .user(userMapper.modelToDto(model.getUser()))
-                .paymentType(paymentTypeMapper.modelToDto(model.getPaymentType()))
+                .userId(model.getUser().getId())
+                .paymentTypeId(model.getPaymentType().getId())
                 .total(model.getTotal())
-                .date(model.getDate())
+                .state(model.getState())
+                .creationDate(model.getCreationDate())
                 .build();
     }
 
@@ -53,10 +72,17 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
     public Purchase dtoToModel(PurchaseResponseDTO dto) {
         return Purchase.builder()
                 .id(dto.getId())
-                .user(userMapper.dtoToModel(dto.getUser()))
-                .paymentType(paymentTypeMapper.dtoToModel(dto.getPaymentType()))
+                .user(User.builder()
+                        .id(dto.getUserId())
+                        .build()
+                )
+                .paymentType(PaymentType.builder()
+                        .id(dto.getPaymentTypeId())
+                        .build()
+                )
                 .total(dto.getTotal())
-                .date(dto.getDate())
+                .state(dto.getState())
+                .creationDate(dto.getCreationDate())
                 .build();
     }
 

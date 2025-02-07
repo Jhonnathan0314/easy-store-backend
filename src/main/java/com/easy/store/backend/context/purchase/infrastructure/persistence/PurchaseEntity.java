@@ -7,6 +7,7 @@ import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -31,17 +32,41 @@ public class PurchaseEntity {
     @JoinColumn(name = "payment_type_id")
     private PaymentTypeEntity paymentType;
 
-    @CreationTimestamp
-    @Column(name = "date", updatable = false)
-    private Timestamp date;
-
     @Column(name = "total")
     private BigDecimal total;
+
+    @Column(name = "state")
+    private String state;
+
+    @CreationTimestamp
+    @Column(name = "creation_date", updatable = false)
+    private Timestamp creationDate;
+
+    @UpdateTimestamp
+    @Column(name = "update_date")
+    private Timestamp updateDate;
 
     @Column(name = "create_by", updatable = false)
     private Long createBy;
 
+    @Column(name = "update_by")
+    private Long updateBy;
+
     @PrePersist
     protected void onCreate() { total = new BigDecimal(0); }
 
+    @Override
+    public String toString() {
+        return "PurchaseEntity{" +
+                "id=" + id +
+                ", user=" + user +
+                ", paymentType=" + paymentType +
+                ", total=" + total +
+                ", state='" + state + '\'' +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
+                '}';
+    }
 }

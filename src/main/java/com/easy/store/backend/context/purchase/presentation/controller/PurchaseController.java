@@ -2,13 +2,13 @@ package com.easy.store.backend.context.purchase.presentation.controller;
 
 import com.easy.store.backend.context.purchase.application.dto.PurchaseGenerateDTO;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseResponseDTO;
+import com.easy.store.backend.context.purchase.application.dto.PurchaseUpdateDTO;
 import com.easy.store.backend.context.purchase.application.usecase.*;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseGenerateMapper;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseResponseMapper;
-import com.easy.store.backend.utils.exceptions.InvalidBodyException;
-import com.easy.store.backend.utils.exceptions.NoResultsException;
-import com.easy.store.backend.utils.exceptions.NonExistenceException;
+import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseUpdateMapper;
+import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +36,11 @@ public class PurchaseController {
     private final FindByDateBetweenPurchaseUseCase findByDateBetweenPurchaseUseCase;
     private final FindByTotalBetweenPurchaseUseCase findByTotalBetweenPurchaseUseCase;
     private final GeneratePurchaseUseCase generatePurchaseUseCase;
+    private final UpdatePurchaseUseCase updatePurchaseUseCase;
     private final DeleteByIdPurchaseUseCase deleteByIdPurchaseUseCase;
 
     private final PurchaseGenerateMapper purchaseGenerateMapper = new PurchaseGenerateMapper();
+    private final PurchaseUpdateMapper purchaseUpdateMapper = new PurchaseUpdateMapper();
     private final PurchaseResponseMapper purchaseResponseMapper = new PurchaseResponseMapper();
 
     private final HttpUtils httpUtils = new HttpUtils();
@@ -95,14 +97,14 @@ public class PurchaseController {
         }
     }
 
-    @GetMapping("/date")
+    @GetMapping("/creation-date")
     public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByDate(@RequestHeader("Creation-Date") String dateStr) {
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         try {
             LocalDate date = LocalDate.parse(dateStr);
             LocalDateTime dateTime = date.atStartOfDay();
             Timestamp findDate = Timestamp.valueOf(dateTime);
-            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDatePurchaseUseCase.findByDate(findDate));
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDatePurchaseUseCase.findByCreationDate(findDate));
             response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
@@ -111,7 +113,7 @@ public class PurchaseController {
         }
     }
 
-    @GetMapping("/range/dates")
+    @GetMapping("/creation-date/range")
     public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findBetweenRangeDates(@RequestHeader("From-Date") String fromDateStr, @RequestHeader("To-Date") String toDateStr) {
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         try {
@@ -123,7 +125,7 @@ public class PurchaseController {
             LocalDateTime dateTimeTwo = dateTwo.atStartOfDay();
             Timestamp toDate = Timestamp.valueOf(dateTimeTwo);
 
-            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDateBetweenPurchaseUseCase.findByDateBetween(fromDate, toDate));
+            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDateBetweenPurchaseUseCase.findByCreationDateBetween(fromDate, toDate));
             response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
@@ -132,7 +134,7 @@ public class PurchaseController {
         }
     }
 
-    @GetMapping("/range/total")
+    @GetMapping("/subtotal/range")
     public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findBetweenRangeDates(@RequestHeader("From-Total") BigDecimal fromTotal, @RequestHeader("To-Total") BigDecimal toTotal) {
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         try {
@@ -145,17 +147,29 @@ public class PurchaseController {
         }
     }
 
-    @PostMapping("/user/{userId}/payment-type/{paymentTypeId}")
+    @PostMapping
     public ResponseEntity<ApiResponse<PurchaseResponseDTO>> generate(@RequestBody PurchaseGenerateDTO purchase,
-                                                                     @PathVariable Long userId,
-                                                                     @PathVariable Long paymentTypeId,
                                                                      @RequestHeader("Create-By") Long createBy) {
         ApiResponse<PurchaseResponseDTO> response = new ApiResponse<>();
         try {
             purchase.setCreateBy(createBy);
-            response.setData(purchaseResponseMapper.modelToDto(generatePurchaseUseCase.generate(purchaseGenerateMapper.dtoToModel(purchase), userId, paymentTypeId)));
+            response.setData(purchaseResponseMapper.modelToDto(generatePurchaseUseCase.generate(purchaseGenerateMapper.dtoToModel(purchase))));
             return ResponseEntity.ok(response);
         } catch (InvalidBodyException | NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> update(@RequestBody PurchaseUpdateDTO purchase,
+                                                                     @RequestHeader("Update-By") Long updateBy) {
+        ApiResponse<PurchaseResponseDTO> response = new ApiResponse<>();
+        try {
+            purchase.setUpdateBy(updateBy);
+            response.setData(purchaseResponseMapper.modelToDto(updatePurchaseUseCase.update(purchaseUpdateMapper.dtoToModel(purchase))));
+            return ResponseEntity.ok(response);
+        } catch (InvalidBodyException | NoResultsException | NoIdReceivedException | NoChangesException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

@@ -7,18 +7,36 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @AllArgsConstructor
 public class PurchaseHasProduct {
-    private Long id;
+
+    private PurchaseHasProductId id;
     private Purchase purchase;
     private Product product;
     private Integer quantity;
+    private BigDecimal unitPrice;
+    private BigDecimal subtotal;
 
     public boolean isValid(PurchaseHasProduct purchaseHasProduct) {
-        if(purchaseHasProduct.getQuantity() == null) return false;
+        if(purchaseHasProduct.getQuantity() == null ||
+            purchaseHasProduct.id == null) return false;
 
         return !purchaseHasProduct.getQuantity().toString().isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return "PurchaseHasProduct{" +
+                "id=" + id +
+                ", purchase=" + purchase +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                ", subtotal=" + subtotal +
+                '}';
     }
 }

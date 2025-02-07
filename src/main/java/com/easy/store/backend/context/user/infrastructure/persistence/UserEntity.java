@@ -52,4 +52,18 @@ public class UserEntity {
         this.state = "active";
     }
 
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", state='" + state + '\'' +
+                ", role=" + role +
+                '}';
+    }
 }

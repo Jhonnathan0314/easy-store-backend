@@ -22,8 +22,11 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .user(userMapper.entityToModel(entity.getUser()))
                 .paymentType(paymentTypeMapper.entityToModel(entity.getPaymentType()))
                 .total(entity.getTotal())
-                .date(entity.getDate())
+                .state(entity.getState())
+                .creationDate(entity.getCreationDate())
                 .createBy(entity.getCreateBy())
+                .updateDate(entity.getUpdateDate())
+                .updateBy(entity.getUpdateBy())
                 .build();
     }
 
@@ -34,8 +37,11 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .user(userMapper.modelToEntity(model.getUser()))
                 .paymentType(paymentTypeMapper.modelToEntity(model.getPaymentType()))
                 .total(model.getTotal())
-                .date(model.getDate())
+                .state(model.getState())
+                .creationDate(model.getCreationDate())
                 .createBy(model.getCreateBy())
+                .updateDate(model.getUpdateDate())
+                .updateBy(model.getUpdateBy())
                 .build();
     }
 
@@ -46,8 +52,11 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .user(userMapper.modelToDto(model.getUser()))
                 .paymentType(paymentTypeMapper.modelToDto(model.getPaymentType()))
                 .total(model.getTotal())
-                .date(model.getDate())
+                .state(model.getState())
+                .creationDate(model.getCreationDate())
                 .createBy(model.getCreateBy())
+                .updateDate(model.getUpdateDate())
+                .updateBy(model.getUpdateBy())
                 .build();
     }
 
@@ -58,8 +67,11 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .user(userMapper.dtoToModel(dto.getUser()))
                 .paymentType(paymentTypeMapper.dtoToModel(dto.getPaymentType()))
                 .total(dto.getTotal())
-                .date(dto.getDate())
+                .state(dto.getState())
+                .creationDate(dto.getCreationDate())
                 .createBy(dto.getCreateBy())
+                .updateDate(dto.getUpdateDate())
+                .updateBy(dto.getUpdateBy())
                 .build();
     }
 

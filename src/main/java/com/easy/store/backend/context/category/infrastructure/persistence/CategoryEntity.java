@@ -58,4 +58,20 @@ public class CategoryEntity {
     @PrePersist
     protected void onCreate() { this.state = "active"; }
 
+    @Override
+    public String toString() {
+        return "CategoryEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", imageName='" + imageName + '\'' +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
+                ", user=" + user +
+                ", account=" + account +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

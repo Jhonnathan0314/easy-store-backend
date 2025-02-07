@@ -1,7 +1,6 @@
 package com.easy.store.backend.context.purchase_has_product.application.dto;
 
-import com.easy.store.backend.context.product.application.dto.ProductCreateDTO;
-import com.easy.store.backend.context.purchase.application.dto.PurchaseGenerateDTO;
+import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PurchaseHasProductAddDTO {
+    private PurchaseHasProductId id;
     private Integer quantity;
 }

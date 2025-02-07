@@ -17,8 +17,8 @@ public class FindByDateBetweenPurchaseUseCase {
     private final PurchaseRepository purchaseRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public List<Purchase> findByDateBetween(Timestamp fromDate, Timestamp toDate) throws NoResultsException {
-        List<Purchase> purchases = purchaseRepository.findByDateBetween(fromDate, toDate);
+    public List<Purchase> findByCreationDateBetween(Timestamp fromDate, Timestamp toDate) throws NoResultsException {
+        List<Purchase> purchases = purchaseRepository.findByCreationDateBetween(fromDate, toDate);
         if(purchases == null || purchases.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
         return purchases;
     }

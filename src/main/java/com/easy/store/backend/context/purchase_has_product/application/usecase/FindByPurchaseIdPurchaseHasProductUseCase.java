@@ -11,13 +11,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FindAllByProductIdPurchaseHasProductUseCase {
+public class FindByPurchaseIdPurchaseHasProductUseCase {
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public List<PurchaseHasProduct> findAllByProductId(Long productId) throws NoResultsException {
-        List<PurchaseHasProduct> purchaseHasProducts = purchaseHasProductRepository.findAllByProductId(productId);
+    public List<PurchaseHasProduct> findByPurchaseId(Long purchaseId) throws NoResultsException {
+        List<PurchaseHasProduct> purchaseHasProducts = purchaseHasProductRepository.findByPurchaseId(purchaseId);
         if(purchaseHasProducts == null || purchaseHasProducts.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
         return purchaseHasProducts;
     }

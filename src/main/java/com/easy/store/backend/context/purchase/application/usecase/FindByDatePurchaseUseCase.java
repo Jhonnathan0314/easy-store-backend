@@ -17,8 +17,8 @@ public class FindByDatePurchaseUseCase {
     private final PurchaseRepository purchaseRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public List<Purchase> findByDate(Timestamp date) throws NoResultsException {
-        List<Purchase> purchases = purchaseRepository.findByDate(date);
+    public List<Purchase> findByCreationDate(Timestamp creationDate) throws NoResultsException {
+        List<Purchase> purchases = purchaseRepository.findByCreationDate(creationDate);
         if(purchases == null || purchases.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
         return purchases;
     }

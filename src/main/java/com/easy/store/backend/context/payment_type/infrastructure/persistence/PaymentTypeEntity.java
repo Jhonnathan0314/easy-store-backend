@@ -47,4 +47,17 @@ public class PaymentTypeEntity {
     @PrePersist
     protected void onCreate() { this.state = "active"; }
 
+    @Override
+    public String toString() {
+        return "PaymentTypeEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", account=" + account +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

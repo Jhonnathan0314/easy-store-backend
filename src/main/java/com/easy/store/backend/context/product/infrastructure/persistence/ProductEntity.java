@@ -61,4 +61,21 @@ public class ProductEntity {
     @PrePersist
     protected void onCreate() { this.state = "active"; }
 
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", qualification=" + qualification +
+                ", subcategory=" + subcategory +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

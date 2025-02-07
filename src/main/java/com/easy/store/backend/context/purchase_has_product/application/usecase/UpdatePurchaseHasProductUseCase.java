@@ -5,9 +5,12 @@ import com.easy.store.backend.context.product.domain.port.ProductRepository;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.domain.port.PurchaseRepository;
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProduct;
+import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseHasProductRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
+import com.easy.store.backend.utils.exceptions.DuplicatedException;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
+import com.easy.store.backend.utils.exceptions.NoChangesException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AddPurchaseHasProductUseCase {
+public class UpdatePurchaseHasProductUseCase {
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final PurchaseRepository purchaseRepository;
@@ -25,22 +28,37 @@ public class AddPurchaseHasProductUseCase {
 
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException {
+    public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException {
+
+        if(!purchaseHasProduct.isValid(purchaseHasProduct)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+
         Optional<Purchase> optPurchase = purchaseRepository.findById(purchaseHasProduct.getId().getPurchaseId());
         if(optPurchase.isEmpty()) throw new NoResultsException(errorMessages.NO_PURCHASE_RESULTS);
 
         Optional<Product> optProduct = productRepository.findById(purchaseHasProduct.getId().getProductId());
         if(optProduct.isEmpty()) throw new NoResultsException(errorMessages.NO_PRODUCT_RESULTS);
 
+        PurchaseHasProductId id = PurchaseHasProductId.builder()
+                .purchaseId(optPurchase.get().getId())
+                .productId(optProduct.get().getId())
+                .build();
+
+        Optional<PurchaseHasProduct> optPurchaseHasProduct = purchaseHasProductRepository.findByPurchaseIdAndProductId(id);
+        if(optPurchaseHasProduct.isEmpty()) throw new NoResultsException(errorMessages.NON_EXISTENT_DATA);
+
+        if(!areDifferences(optPurchaseHasProduct.get(), purchaseHasProduct)) throw new NoChangesException(errorMessages.NO_CHANGES);
+
         purchaseHasProduct.setPurchase(optPurchase.get());
         purchaseHasProduct.setProduct(optProduct.get());
-
-        if(!purchaseHasProduct.isValid(purchaseHasProduct)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
 
         purchaseHasProduct.setUnitPrice(optProduct.get().getPrice());
         purchaseHasProduct.setSubtotal(optProduct.get().getPrice().multiply(BigDecimal.valueOf(purchaseHasProduct.getQuantity())));
 
         return purchaseHasProductRepository.add(purchaseHasProduct);
+    }
+
+    private boolean areDifferences(PurchaseHasProduct purchaseHasProductDb, PurchaseHasProduct purchaseHasProduct) {
+        return !purchaseHasProductDb.getQuantity().equals(purchaseHasProduct.getQuantity());
     }
 
 }

@@ -21,10 +21,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FindAllByProductIdPurchaseHasProductUseCaseTest {
+class FindByProductIdPurchaseHasProductUseCaseTest {
 
     @InjectMocks
-    private FindAllByProductIdPurchaseHasProductUseCase findAllByProductIdPurchaseHasProductUseCase;
+    private FindByProductIdPurchaseHasProductUseCase findByProductIdPurchaseHasProductUseCase;
 
     @Mock
     private PurchaseHasProductRepository purchaseHasProductRepository;
@@ -42,7 +42,7 @@ class FindAllByProductIdPurchaseHasProductUseCaseTest {
     void findAllPurchaseHasProductSuccess() throws NoResultsException {
         when(purchaseHasProductRepository.findAllByProductId(any(Long.class))).thenReturn(purchaseHasProductData.getPurchaseHasProductsList());
 
-        List<PurchaseHasProduct> response = findAllByProductIdPurchaseHasProductUseCase.findAllByProductId(purchaseHasProductData.getPurchaseHasProductResponseOne().getProduct().getId());
+        List<PurchaseHasProduct> response = findByProductIdPurchaseHasProductUseCase.findAllByProductId(purchaseHasProductData.getPurchaseHasProductResponseOne().getProduct().getId());
 
         assertNotNull(response);
         assertNotEquals(response.size(), 0);
@@ -54,7 +54,7 @@ class FindAllByProductIdPurchaseHasProductUseCaseTest {
 
         NoResultsException exception = assertThrows(
                 NoResultsException.class,
-                () ->  findAllByProductIdPurchaseHasProductUseCase.findAllByProductId(purchaseHasProductData.getPurchaseHasProductResponseOne().getProduct().getId())
+                () ->  findByProductIdPurchaseHasProductUseCase.findAllByProductId(purchaseHasProductData.getPurchaseHasProductResponseOne().getProduct().getId())
         );
 
         assertEquals(exception.getMessage(), errorMessages.NO_RESULTS);

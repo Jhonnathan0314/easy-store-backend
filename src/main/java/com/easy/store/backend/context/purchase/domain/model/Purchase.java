@@ -17,13 +17,20 @@ public class Purchase {
     private Long id;
     private User user;
     private PaymentType paymentType;
-    private Timestamp date;
     private BigDecimal total;
+    private String state;
     private Long createBy;
+    private Long updateBy;
+    private Timestamp creationDate;
+    private Timestamp updateDate;
 
     public boolean isValid(Purchase purchase) {
-        if(purchase.getUser() == null || purchase.getPaymentType() == null) return false;
+        if(purchase.getUser() == null ||
+                purchase.getPaymentType() == null ||
+                purchase.state == null) return false;
 
-        return purchase.getUser().getId() != null && purchase.getPaymentType().getId() != null;
+        return purchase.getUser().getId() != null &&
+                purchase.getPaymentType().getId() != null &&
+                !purchase.getState().isEmpty();
     }
 }
