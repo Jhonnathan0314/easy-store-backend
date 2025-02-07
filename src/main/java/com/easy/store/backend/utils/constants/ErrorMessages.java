@@ -8,6 +8,7 @@ public class ErrorMessages {
     public final String NO_RESULTS = "No se encontraron resultados.";
     public final String NO_CHANGES = "No se encontraron cambios que guardar.";
     public final String NO_ID_RECEIVED = "No se encontró el id para realizar su petición.";
+    public final String INVALID_ACTION = "No se puede realizar esta acción, hay dependencias que impiden su proceso.";
 
     public final String NO_CATEGORY_RESULTS = "No se encontró la categoría que será asignada.";
     public final String NO_USER_RESULTS = "No se encontró el usuario que será asignado.";

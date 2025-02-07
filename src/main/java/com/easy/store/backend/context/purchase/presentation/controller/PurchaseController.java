@@ -210,7 +210,7 @@ public class PurchaseController {
         try {
             deleteByIdPurchaseUseCase.deleteById(id);
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExistenceException e) {
+        } catch (NonExistenceException | InvalidActionException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
