@@ -3,7 +3,6 @@ package com.easy.store.backend.context.purchase.infrastructure.adapter;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.domain.port.PurchaseRepository;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseGenerateMapper;
-import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseMapper;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseResponseMapper;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseUpdateMapper;
 import com.easy.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
@@ -21,7 +20,8 @@ import java.util.Optional;
 public class PurchaseRepositoryJpaAdapter implements PurchaseRepository {
 
     private final PurchaseJpaRepository purchaseJpaRepository;
-    private final PurchaseMapper mapper = new PurchaseMapper();
+    private final PurchaseGenerateMapper generateMapper = new PurchaseGenerateMapper();
+    private final PurchaseUpdateMapper updateMapper = new PurchaseUpdateMapper();
     private final PurchaseResponseMapper responseMapper = new PurchaseResponseMapper();
 
     @Override
@@ -68,13 +68,13 @@ public class PurchaseRepositoryJpaAdapter implements PurchaseRepository {
 
     @Override
     public Purchase generate(Purchase purchase) {
-        PurchaseEntity purchaseEntity = purchaseJpaRepository.save(mapper.modelToEntity(purchase));
+        PurchaseEntity purchaseEntity = purchaseJpaRepository.save(generateMapper.modelToEntity(purchase));
         return responseMapper.entityToModel(purchaseEntity);
     }
 
     @Override
     public Purchase update(Purchase purchase) {
-        PurchaseEntity purchaseEntity = purchaseJpaRepository.save(mapper.modelToEntity(purchase));
+        PurchaseEntity purchaseEntity = purchaseJpaRepository.save(updateMapper.modelToEntity(purchase));
         return responseMapper.entityToModel(purchaseEntity);
     }
 

@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.purchase.infrastructure.persistence;
 
+import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
 import com.easy.store.backend.context.user.domain.model.User;
@@ -31,6 +32,10 @@ public class PurchaseEntity {
     @ManyToOne
     @JoinColumn(name = "payment_type_id")
     private PaymentTypeEntity paymentType;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
 
     @Column(name = "total")
     private BigDecimal total;

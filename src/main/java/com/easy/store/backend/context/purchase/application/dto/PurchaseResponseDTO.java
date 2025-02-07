@@ -12,6 +12,7 @@ public class PurchaseResponseDTO {
     private Long id;
     private Long userId;
     private Long paymentTypeId;
+    private Long categoryId;
     private BigDecimal total;
     private String state;
     private Timestamp creationDate;

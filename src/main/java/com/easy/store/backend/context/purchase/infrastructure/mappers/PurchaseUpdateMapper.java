@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.purchase.infrastructure.mappers;
 
+import com.easy.store.backend.context.category.domain.model.Category;
+import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseUpdateDTO;
@@ -26,6 +28,10 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
                         .id(entity.getPaymentType().getId())
                         .build()
                 )
+                .category(Category.builder()
+                        .id(entity.getCategory().getId())
+                        .build()
+                )
                 .createBy(entity.getCreateBy())
                 .state(entity.getState())
                 .build();
@@ -43,8 +49,13 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
                         .id(model.getPaymentType().getId())
                         .build()
                 )
+                .category(CategoryEntity.builder()
+                        .id(model.getCategory().getId())
+                        .build()
+                )
                 .createBy(model.getCreateBy())
                 .state(model.getState())
+                .total(model.getTotal())
                 .build();
     }
 
@@ -54,6 +65,7 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
                 .id(model.getId())
                 .userId(model.getUser().getId())
                 .paymentTypeId(model.getPaymentType().getId())
+                .categoryId(model.getCategory().getId())
                 .updateBy(model.getCreateBy())
                 .state(model.getState())
                 .build();
@@ -69,6 +81,10 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
                 )
                 .paymentType(PaymentType.builder()
                         .id(dto.getPaymentTypeId())
+                        .build()
+                )
+                .category(Category.builder()
+                        .id(dto.getCategoryId())
                         .build()
                 )
                 .updateBy(dto.getUpdateBy())

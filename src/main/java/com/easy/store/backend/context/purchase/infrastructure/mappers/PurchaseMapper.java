@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.purchase.infrastructure.mappers;
 
+import com.easy.store.backend.context.category.infrastructure.mappers.CategoryMapper;
 import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeMapper;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseDTO;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
@@ -14,6 +15,7 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
 
     private final UserMapper userMapper = new UserMapper();
     private final PaymentTypeMapper paymentTypeMapper = new PaymentTypeMapper();
+    private final CategoryMapper categoryMapper = new CategoryMapper();
 
     @Override
     public Purchase entityToModel(PurchaseEntity entity) {
@@ -21,6 +23,7 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .id(entity.getId())
                 .user(userMapper.entityToModel(entity.getUser()))
                 .paymentType(paymentTypeMapper.entityToModel(entity.getPaymentType()))
+                .category(categoryMapper.entityToModel(entity.getCategory()))
                 .total(entity.getTotal())
                 .state(entity.getState())
                 .creationDate(entity.getCreationDate())
@@ -36,6 +39,7 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .id(model.getId())
                 .user(userMapper.modelToEntity(model.getUser()))
                 .paymentType(paymentTypeMapper.modelToEntity(model.getPaymentType()))
+                .category(categoryMapper.modelToEntity(model.getCategory()))
                 .total(model.getTotal())
                 .state(model.getState())
                 .creationDate(model.getCreationDate())
@@ -51,6 +55,7 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .id(model.getId())
                 .user(userMapper.modelToDto(model.getUser()))
                 .paymentType(paymentTypeMapper.modelToDto(model.getPaymentType()))
+                .category(categoryMapper.modelToDto(model.getCategory()))
                 .total(model.getTotal())
                 .state(model.getState())
                 .creationDate(model.getCreationDate())
@@ -66,6 +71,7 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .id(dto.getId())
                 .user(userMapper.dtoToModel(dto.getUser()))
                 .paymentType(paymentTypeMapper.dtoToModel(dto.getPaymentType()))
+                .category(categoryMapper.dtoToModel(dto.getCategory()))
                 .total(dto.getTotal())
                 .state(dto.getState())
                 .creationDate(dto.getCreationDate())

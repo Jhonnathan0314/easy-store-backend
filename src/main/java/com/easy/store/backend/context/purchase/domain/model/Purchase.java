@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.purchase.domain.model;
 
+import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.user.domain.model.User;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class Purchase {
     private Long id;
     private User user;
     private PaymentType paymentType;
+    private Category category;
     private BigDecimal total;
     private String state;
     private Long createBy;
@@ -27,10 +29,12 @@ public class Purchase {
     public boolean isValid(Purchase purchase) {
         if(purchase.getUser() == null ||
                 purchase.getPaymentType() == null ||
+                purchase.getCategory() == null ||
                 purchase.state == null) return false;
 
         return purchase.getUser().getId() != null &&
                 purchase.getPaymentType().getId() != null &&
+                purchase.getCategory().getId() != null &&
                 !purchase.getState().isEmpty();
     }
 }

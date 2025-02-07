@@ -17,6 +17,7 @@ public class PurchaseUpdateDTO {
     private Long id;
     private Long userId;
     private Long paymentTypeId;
+    private Long categoryId;
     private String state;
     private Long updateBy;
 }

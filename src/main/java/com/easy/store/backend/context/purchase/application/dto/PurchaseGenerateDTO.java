@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class PurchaseGenerateDTO {
     private Long userId;
     private Long paymentTypeId;
+    private Long categoryId;
     private BigDecimal total;
     private String state;
     private Long createBy;

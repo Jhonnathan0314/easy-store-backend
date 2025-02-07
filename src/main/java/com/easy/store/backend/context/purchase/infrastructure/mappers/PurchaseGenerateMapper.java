@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.purchase.infrastructure.mappers;
 
+import com.easy.store.backend.context.category.domain.model.Category;
+import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseGenerateDTO;
@@ -25,6 +27,10 @@ public class PurchaseGenerateMapper implements Mapper<PurchaseEntity, Purchase, 
                         .id(entity.getPaymentType().getId())
                         .build()
                 )
+                .category(Category.builder()
+                        .id(entity.getCategory().getId())
+                        .build()
+                )
                 .createBy(entity.getCreateBy())
                 .state(entity.getState())
                 .build();
@@ -41,8 +47,13 @@ public class PurchaseGenerateMapper implements Mapper<PurchaseEntity, Purchase, 
                         .id(model.getPaymentType().getId())
                         .build()
                 )
+                .category(CategoryEntity.builder()
+                        .id(model.getCategory().getId())
+                        .build()
+                )
                 .createBy(model.getCreateBy())
                 .state(model.getState())
+                .total(model.getTotal())
                 .build();
     }
 
@@ -51,6 +62,7 @@ public class PurchaseGenerateMapper implements Mapper<PurchaseEntity, Purchase, 
         return PurchaseGenerateDTO.builder()
                 .userId(model.getUser().getId())
                 .paymentTypeId(model.getPaymentType().getId())
+                .categoryId(model.getCategory().getId())
                 .createBy(model.getCreateBy())
                 .state(model.getState())
                 .build();
@@ -65,6 +77,10 @@ public class PurchaseGenerateMapper implements Mapper<PurchaseEntity, Purchase, 
                 )
                 .paymentType(PaymentType.builder()
                         .id(dto.getPaymentTypeId())
+                        .build()
+                )
+                .category(Category.builder()
+                        .id(dto.getCategoryId())
                         .build()
                 )
                 .createBy(dto.getCreateBy())
