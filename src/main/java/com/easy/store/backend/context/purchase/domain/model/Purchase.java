@@ -2,6 +2,7 @@ package com.easy.store.backend.context.purchase.domain.model;
 
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
+import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProduct;
 import com.easy.store.backend.context.user.domain.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,6 +27,7 @@ public class Purchase {
     private Long updateBy;
     private Timestamp creationDate;
     private Timestamp updateDate;
+    private List<PurchaseHasProduct> products;
 
     public boolean isValid(Purchase purchase) {
         if(purchase.getUser() == null ||

@@ -3,24 +3,22 @@ package com.easy.store.backend.context.purchase.infrastructure.mappers;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
-import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeMapper;
-import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeResponseMapper;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseResponseDTO;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
+import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductResponseMapper;
 import com.easy.store.backend.context.user.domain.model.User;
-import com.easy.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
 import com.easy.store.backend.utils.mappers.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, PurchaseResponseDTO> {
 
-    private final UserResponseMapper userMapper = new UserResponseMapper();
-    private final PaymentTypeResponseMapper paymentTypeMapper = new PaymentTypeResponseMapper();
+    private final PurchaseHasProductResponseMapper hasProductResponseMapper = new PurchaseHasProductResponseMapper();
 
     @Override
     public Purchase entityToModel(PurchaseEntity entity) {
@@ -40,6 +38,7 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
                 )
                 .total(entity.getTotal())
                 .state(entity.getState())
+                .products(new ArrayList<>())
                 .creationDate(entity.getCreationDate())
                 .build();
     }
@@ -76,6 +75,7 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
                 .total(model.getTotal())
                 .state(model.getState())
                 .creationDate(model.getCreationDate())
+                .products(hasProductResponseMapper.modelsToDtos(model.getProducts()))
                 .build();
     }
 
@@ -98,6 +98,7 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
                 .total(dto.getTotal())
                 .state(dto.getState())
                 .creationDate(dto.getCreationDate())
+                .products(new ArrayList<>())
                 .build();
     }
 
