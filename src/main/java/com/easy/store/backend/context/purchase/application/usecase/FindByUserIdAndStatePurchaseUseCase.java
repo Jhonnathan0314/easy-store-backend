@@ -13,21 +13,21 @@ import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
-public class FindByUserIdPurchaseUseCase {
+public class FindByUserIdAndStatePurchaseUseCase {
 
-    private final Logger logger = Logger.getLogger(FindByUserIdPurchaseUseCase.class.getName());
+    private final Logger logger = Logger.getLogger(FindByUserIdAndStatePurchaseUseCase.class.getName());
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public List<Purchase> findByUserId(Long userId) throws NoResultsException {
+    public List<Purchase> findByUserIdAndState(Long userId, String state) throws NoResultsException {
 
-        logger.info("ACCION FINDBYUSERID PURCHASE -> Iniciando búsqueda con id: " + userId);
+        logger.info("ACCION FINDBYUSERIDANDSTATE PURCHASE -> Iniciando búsqueda con id: " + userId);
 
-        List<Purchase> purchases = purchaseRepository.findByUserId(userId);
+        List<Purchase> purchases = purchaseRepository.findByUserIdAndState(userId, state);
         if(purchases == null || purchases.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
-        logger.info("ACCION FINDBYUSERID PURCHASE -> Encontré compras con éxito");
+        logger.info("ACCION FINDBYUSERIDANDSTATE PURCHASE -> Encontré compras con éxito");
 
         for (Purchase purchase : purchases) {
             purchase.setProducts(purchaseHasProductRepository.findByPurchaseId(purchase.getId()));

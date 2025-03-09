@@ -16,6 +16,7 @@ public interface PurchaseJpaRepository extends JpaRepository<PurchaseEntity, Lon
     List<PurchaseEntity> findByAccountId(Long accountId);
     List<PurchaseEntity> findByCategoryId(Long categoryId);
     List<PurchaseEntity> findByUserId(Long userId);
+    List<PurchaseEntity> findByUserIdAndState(Long userId, String state);
     List<PurchaseEntity> findByPaymentTypeId(Long paymentTypeId);
     @Query(value = "select * from purchase where DATE(creation_date) = ?", nativeQuery = true)
     List<PurchaseEntity> findByCreationDate(Timestamp creationDate);

@@ -13,6 +13,7 @@ public interface PurchaseRepository {
     List<Purchase> findByAccountId(Long accountId);
     List<Purchase> findByCategoryId(Long categoryId);
     List<Purchase> findByUserId(Long userId);
+    List<Purchase> findByUserIdAndState(Long userId, String state);
     List<Purchase> findByPaymentTypeId(Long paymentTypeId);
     List<Purchase> findByCreationDate(Timestamp creationDate);
     List<Purchase> findByCreationDateBetween(Timestamp fromDate, Timestamp toDate);
