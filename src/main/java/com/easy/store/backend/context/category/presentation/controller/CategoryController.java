@@ -26,6 +26,7 @@ public class CategoryController {
 
     private final FindAllCategoryUseCase findAllCategoryUseCase;
     private final FindByIdCategoryUseCase findByIdCategoryUseCase;
+    private final FindByAccountIdCategoryUseCase findByAccountIdCategoryUseCase;
     private final FindByUserIdAndAccountIdCategoryUseCase findByUserIdAndAccountIdCategoryUseCase;
     private final CreateCategoryUseCase createCategoryUseCase;
     private final UpdateCategoryUseCase updateCategoryUseCase;
@@ -56,6 +57,19 @@ public class CategoryController {
         try {
             Category category = findByIdCategoryUseCase.findById(id);
             response.setData(categoryResponseMapper.modelToDto(category));
+            return ResponseEntity.ok(response);
+        } catch (NoResultsException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findByAccountId(@PathVariable Long accountId) {
+        ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
+        try {
+            List<Category> categories = findByAccountIdCategoryUseCase.findByAccountId(accountId);
+            response.setData(categoryResponseMapper.modelsToDtos(categories));
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
