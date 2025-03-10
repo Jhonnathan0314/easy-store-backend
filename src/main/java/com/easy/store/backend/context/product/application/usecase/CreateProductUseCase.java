@@ -40,6 +40,8 @@ public class CreateProductUseCase {
         if(productRepository.findByName(product.getName()).isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
         logger.info("ACCION CREATE PRODUCT -> Validé producto no duplicado");
 
+        if(product.getImageName().isEmpty()) product.setImageName("product.png");
+
         logger.info("ACCION CREATE PRODUCT -> Creando producto");
 
         return productRepository.create(product);

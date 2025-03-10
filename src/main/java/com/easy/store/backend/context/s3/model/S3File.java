@@ -14,5 +14,8 @@ public class S3File {
     private String extension;
     private String name;
     private String content;
+    private String context;
+    private Long accountId;
+    private Long size;
 
 }

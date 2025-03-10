@@ -34,15 +34,11 @@ public class S3Controller {
         }
     }
 
-    @PostMapping("/put/accountId/{accountId}/context/{context}/objectName/{objectName}")
-    public ResponseEntity<ApiResponse<Boolean>> putObjectName(
-            @PathVariable("accountId") Long accountId,
-            @PathVariable String context,
-            @PathVariable String objectName,
-            @RequestBody S3File file) {
+    @PostMapping("/put")
+    public ResponseEntity<ApiResponse<Boolean>> putObjectName(@RequestBody S3File file) {
         ApiResponse<Boolean> response = new ApiResponse<>();
         try {
-            boolean isCreated = s3Service.putObject(accountId, context, objectName, file);
+            boolean isCreated = s3Service.putObject(file);
             response.setData(isCreated);
             return ResponseEntity.ok(response);
         } catch (Exception e){

@@ -11,13 +11,13 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long>
     Optional<ProductEntity> findByName(String name);
     List<ProductEntity> findBySubcategoryId(Long subcategoryId);
 
-    @Query(nativeQuery = true, value = "select p.id, p.name, p.price, p.quantity, p.qualification, p.description, p.create_by, p.creation_date, p.update_by, p.update_date, p.state, p.subcategory_id from product p\n" +
+    @Query(nativeQuery = true, value = "select p.id, p.name, p.price, p.quantity, p.qualification, p.description, p.create_by, p.creation_date, p.update_by, p.update_date, p.state, p.subcategory_id, p.image_name from product p\n" +
             "inner join subcategory s on s.id = p.subcategory_id\n" +
             "inner join category c on c.id = s.category_id\n" +
             "where c.id = ?1")
     List<ProductEntity> findByCategoryId(Long categoryId);
 
-    @Query(nativeQuery = true, value = "select p.id, p.name, p.price, p.quantity, p.qualification, p.description, p.create_by, p.creation_date, p.update_by, p.update_date, p.state, p.subcategory_id from product p\n" +
+    @Query(nativeQuery = true, value = "select p.id, p.name, p.price, p.quantity, p.qualification, p.description, p.create_by, p.creation_date, p.update_by, p.update_date, p.state, p.subcategory_id, p.image_name from product p\n" +
             "inner join subcategory s on s.id = p.subcategory_id\n" +
             "inner join category c on c.id = s.category_id\n" +
             "inner join account a on a.id = c.account_id\n" +

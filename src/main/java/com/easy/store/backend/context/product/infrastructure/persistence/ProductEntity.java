@@ -1,6 +1,5 @@
 package com.easy.store.backend.context.product.infrastructure.persistence;
 
-import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +26,9 @@ public class ProductEntity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "image_name")
+    private String imageName;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -67,6 +69,7 @@ public class ProductEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", imageName='" + imageName + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", qualification=" + qualification +
