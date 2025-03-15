@@ -32,6 +32,7 @@ public class CategoryUpdateMapper implements Mapper<CategoryEntity, Category, Ca
                         .id(entity.getAccount().getId())
                         .build()
                 )
+                .state(entity.getState())
                 .build();
     }
 
@@ -51,6 +52,7 @@ public class CategoryUpdateMapper implements Mapper<CategoryEntity, Category, Ca
                         .id(model.getAccount().getId())
                         .build()
                 )
+                .state(model.getState())
                 .build();
     }
 

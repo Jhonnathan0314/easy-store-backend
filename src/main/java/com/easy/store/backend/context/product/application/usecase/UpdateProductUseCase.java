@@ -47,12 +47,7 @@ public class UpdateProductUseCase {
         logger.info("ACCION UDPATE PRODUCT -> Validé existencia del producto");
 
         Product productDb = optProduct.get();
-        if(Objects.equals(productDb.getSubcategory().getId(), product.getSubcategory().getId()) &&
-                productDb.getName().equals(product.getName()) &&
-                productDb.getDescription().equals(product.getDescription()) &&
-                productDb.getPrice().compareTo(product.getPrice()) == 0 &&
-                Objects.equals(productDb.getQuantity(), product.getQuantity()) &&
-                Objects.equals(productDb.getQualification(), product.getQualification())) {
+        if(areNoChanges(productDb, product)) {
             throw new NoChangesException(errorMessages.NO_CHANGES);
         }
         logger.info("ACCION UDPATE PRODUCT -> Validé que hayan cambios a aplicar");
@@ -62,6 +57,16 @@ public class UpdateProductUseCase {
         logger.info("ACCION UDPATE PRODUCT -> Actualizando producto");
 
         return productRepository.update(product);
+    }
+
+    private boolean areNoChanges(Product productDb, Product product) {
+        return Objects.equals(productDb.getSubcategory().getId(), product.getSubcategory().getId()) &&
+                productDb.getName().equals(product.getName()) &&
+                productDb.getDescription().equals(product.getDescription()) &&
+                productDb.getImageName().equals(product.getImageName()) &&
+                productDb.getPrice().compareTo(product.getPrice()) == 0 &&
+                Objects.equals(productDb.getQuantity(), product.getQuantity()) &&
+                Objects.equals(productDb.getQualification(), product.getQualification());
     }
 
 }

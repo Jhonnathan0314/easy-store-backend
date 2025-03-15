@@ -27,6 +27,7 @@ public class ProductUpdateMapper implements Mapper<ProductEntity, Product, Produ
                         .id(entity.getSubcategory().getId())
                         .build()
                 )
+                .state(entity.getState())
                 .build();
     }
 
@@ -45,6 +46,7 @@ public class ProductUpdateMapper implements Mapper<ProductEntity, Product, Produ
                         .id(model.getSubcategory().getId())
                         .build()
                 )
+                .state(model.getState())
                 .build();
     }
 

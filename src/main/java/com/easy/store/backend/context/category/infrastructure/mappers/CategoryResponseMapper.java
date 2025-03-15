@@ -34,6 +34,7 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                         .id(entity.getAccount().getId())
                         .build()
                 )
+                .state(entity.getState())
                 .build();
     }
 
@@ -52,6 +53,7 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                         .id(model.getAccount().getId())
                         .build()
                 )
+                .state(model.getState())
                 .build();
     }
 
