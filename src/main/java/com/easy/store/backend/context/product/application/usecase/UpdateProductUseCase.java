@@ -64,6 +64,7 @@ public class UpdateProductUseCase {
                 productDb.getName().equals(product.getName()) &&
                 productDb.getDescription().equals(product.getDescription()) &&
                 productDb.getImageName().equals(product.getImageName()) &&
+                Objects.equals(productDb.getImageNumber(), product.getImageNumber()) &&
                 productDb.getPrice().compareTo(product.getPrice()) == 0 &&
                 Objects.equals(productDb.getQuantity(), product.getQuantity()) &&
                 Objects.equals(productDb.getQualification(), product.getQualification());

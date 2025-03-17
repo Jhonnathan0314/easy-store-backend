@@ -30,6 +30,12 @@ public class ProductEntity {
     @Column(name = "image_name")
     private String imageName;
 
+    @Column(name = "image_number")
+    private Integer imageNumber;
+
+    @Column(name = "image_last_number")
+    private Integer imageLastNumber;
+
     @Column(name = "price")
     private BigDecimal price;
 
@@ -70,6 +76,7 @@ public class ProductEntity {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", imageName='" + imageName + '\'' +
+                ", imageNumber='" + imageNumber + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", qualification=" + qualification +

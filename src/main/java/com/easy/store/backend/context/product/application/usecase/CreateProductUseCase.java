@@ -41,6 +41,7 @@ public class CreateProductUseCase {
         logger.info("ACCION CREATE PRODUCT -> Validé producto no duplicado");
 
         if(product.getImageName().isEmpty()) product.setImageName("product.png");
+        if(product.getImageNumber() == null) product.setImageNumber(0);
 
         logger.info("ACCION CREATE PRODUCT -> Creando producto");
 
