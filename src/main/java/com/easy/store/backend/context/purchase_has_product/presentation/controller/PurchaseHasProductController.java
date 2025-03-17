@@ -119,7 +119,7 @@ public class PurchaseHasProductController {
         }
     }
 
-    @DeleteMapping("/puchase/{purchaseId}/product/{productId}")
+    @DeleteMapping("/purchase/{purchaseId}/product/{productId}")
     public ResponseEntity<ApiResponse<Object>> deleteByPurchaseIdAndProductId(@PathVariable Long purchaseId, @PathVariable Long productId) {
         ApiResponse<Object> response = new ApiResponse<>();
         try {
