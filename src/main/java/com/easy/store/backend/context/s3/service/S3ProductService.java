@@ -11,20 +11,26 @@ import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @Service
 @RequiredArgsConstructor
 public class S3ProductService {
+
+    private Logger logger = Logger.getLogger(S3ProductService.class.getName());
 
     private final S3Service s3Service;
     private final FindByIdProductUseCase findByIdProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
 
-    public Product addFile(S3File s3File, Long id) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
-        Product product = findByIdProductUseCase.findById(id);
+    public Product addFile(S3File s3File, Long productId) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+        logger.info("ACCION ADDFILE PRODUCT -> Inicia carga de archivo para el producto: " + productId);
+        Product product = findByIdProductUseCase.findById(productId);
         product.setImageNumber(product.getImageNumber() + 1);
         product.setImageLastNumber(product.getImageLastNumber() + 1);
-        s3File.setName(id + "-" + product.getImageLastNumber() + ".png");
+        s3File.setName(productId + "-" + product.getImageLastNumber() + ".png");
 
+        logger.info("ACCION ADDFILE PRODUCT -> Subiendo archivo: " + s3File);
         s3Service.putObject(s3File);
 
         if (product.getImageName().isEmpty() || product.getImageName().equals("product.png")) {
@@ -32,12 +38,19 @@ public class S3ProductService {
         }else{
             product.setImageName(product.getImageName().concat("," + s3File.getName()));
         }
+        logger.info("ACCION ADDFILE PRODUCT -> Actualizando producto: " + product);
         product = updateProductUseCase.update(product);
+        logger.info("ACCION ADDFILE PRODUCT -> Finalizo actualizacion de producto");
         return product;
     }
 
     public Product deleteFile(S3File s3File, Long productId, Long accountId) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+        logger.info("ACCION DELETEFILE PRODUCT -> Inicia eliminado de archivo para el producto: " + productId);
+
+        logger.info("ACCION DELETEFILE PRODUCT -> Eliminando archivo: " + s3File);
         s3Service.deleteObject(accountId, "product", s3File.getName());
+
+        logger.info("ACCION DELETEFILE PRODUCT -> Ajustando atributos producto");
         Product product = findByIdProductUseCase.findById(productId);
         product.setImageNumber(product.getImageNumber() - 1);
         product.setImageName(product.getImageName().replace(s3File.getName(), ""));
@@ -48,7 +61,10 @@ public class S3ProductService {
         if(product.getImageName().endsWith(",")){
             product.setImageName(product.getImageName().substring(0, product.getImageName().length() - 1));
         }
+
+        logger.info("ACCION DELETEFILE PRODUCT -> Actualizando producto: " + product);
         product = updateProductUseCase.update(product);
+        logger.info("ACCION DELETEFILE PRODUCT -> Producto actualizado");
         return product;
     }
 }

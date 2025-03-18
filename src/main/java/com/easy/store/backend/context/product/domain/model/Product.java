@@ -43,4 +43,25 @@ public class Product {
 
         return product.getSubcategory().getId() != null;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", imageName='" + imageName + '\'' +
+                ", imageNumber=" + imageNumber +
+                ", imageLastNumber=" + imageLastNumber +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", qualification=" + qualification +
+                ", subcategory=" + subcategory +
+                ", createBy=" + createBy +
+                ", updateBy=" + updateBy +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

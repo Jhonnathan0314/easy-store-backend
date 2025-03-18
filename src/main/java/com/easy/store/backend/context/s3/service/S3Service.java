@@ -24,8 +24,9 @@ public class S3Service {
     public S3File getObject(Long accountId, String context, String objectName) throws IOException {
         String key = "account/" + accountId + "/" + context + "/" + objectName;
 
-        logger.info("ACCION GETOBJECT KEY -> " + key);
+        logger.info("ACCION GETOBJECT -> Iniciando búsqueda con key: " + key);
 
+        logger.info("ACCION GETOBJECT -> Buscando archivo");
         GetObjectRequest request = GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -37,6 +38,7 @@ public class S3Service {
         byte[] bytes = responseInputStream.readAllBytes();
         String base64Content = Base64.getEncoder().encodeToString(bytes);
 
+        logger.info("ACCION GETOBJECT -> Retornando archivo");
         return S3File.builder()
                 .extension(extension)
                 .name(objectName)
@@ -73,11 +75,16 @@ public class S3Service {
 
     public boolean deleteObject(Long accountId, String context, String objectName) {
         String key = "account/" + accountId + "/" + context + "/" + objectName;
+
+        logger.info("ACCION DELETEOBJECT -> Iniciando eliminado con key: " + key);
+
+        logger.info("ACCION DELETEOBJECT -> Eliminando archivo");
         DeleteObjectRequest request = DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
         s3Client.deleteObject(request);
+        logger.info("ACCION DELETEOBJECT -> Archivo eliminado");
         return true;
     }
 
