@@ -5,10 +5,12 @@ import com.easy.store.backend.context.product.domain.port.ProductRepository;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.domain.port.PurchaseRepository;
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProduct;
+import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseHasProductRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
+import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +30,7 @@ public class AddPurchaseHasProductUseCase {
 
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException {
+    public PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NonExistenceException {
 
         logger.info("ACCION ADD PURCHASE_HAS_PRODUCT -> Iniciando proceso con body: " + purchaseHasProduct.toString());
 
@@ -47,7 +49,19 @@ public class AddPurchaseHasProductUseCase {
         logger.info("ACCION ADD PURCHASE_HAS_PRODUCT -> Validé cuerpo de la petición");
 
         purchaseHasProduct.setUnitPrice(optProduct.get().getPrice());
+
+        purchaseHasProductRepository.findByPurchaseIdAndProductId(
+                PurchaseHasProductId.builder()
+                        .productId(optProduct.get().getId())
+                        .purchaseId(optPurchase.get().getId())
+                        .build()
+        ).ifPresent(purchaseHasProductDb -> {
+            purchaseHasProduct.setQuantity(purchaseHasProductDb.getQuantity() + purchaseHasProduct.getQuantity());
+        });
+
         purchaseHasProduct.setSubtotal(optProduct.get().getPrice().multiply(BigDecimal.valueOf(purchaseHasProduct.getQuantity())));
+
+        if(purchaseHasProduct.getQuantity() > optProduct.get().getQuantity()) throw new NonExistenceException(errorMessages.NO_STOCK);
 
         logger.info("ACCION ADD PURCHASE_HAS_PRODUCT -> Agregando producto a la compra");
 

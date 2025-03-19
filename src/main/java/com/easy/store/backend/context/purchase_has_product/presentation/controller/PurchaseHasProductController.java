@@ -89,7 +89,7 @@ public class PurchaseHasProductController {
         try {
             response.setData(purchaseHasProductResponseMapper.modelToDto(addPurchaseHasProductUseCase.add(purchaseHasProductAddMapper.dtoToModel(purchaseHasProduct))));
             return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException e) {
+        } catch (InvalidBodyException | NoResultsException | NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
