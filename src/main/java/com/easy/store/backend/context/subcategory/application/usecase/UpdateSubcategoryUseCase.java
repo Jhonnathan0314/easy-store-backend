@@ -61,8 +61,8 @@ public class UpdateSubcategoryUseCase {
     }
 
     private boolean areDifferences(Subcategory subcategoryDb, Subcategory subcategory) {
-        return Objects.equals(subcategoryDb.getCategory().getId(), subcategory.getCategory().getId()) &&
-                subcategoryDb.getName().equals(subcategory.getName());
+        return !Objects.equals(subcategoryDb.getCategory().getId(), subcategory.getCategory().getId()) ||
+                !subcategoryDb.getName().equals(subcategory.getName());
     }
 
 }
