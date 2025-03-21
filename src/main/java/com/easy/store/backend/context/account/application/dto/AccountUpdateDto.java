@@ -15,6 +15,7 @@ public class AccountUpdateDto {
     private String name;
     private String description;
     private String state;
+    private String imageName;
 
     @Override
     public String toString() {

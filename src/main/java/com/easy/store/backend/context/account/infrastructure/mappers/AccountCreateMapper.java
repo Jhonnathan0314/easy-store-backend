@@ -15,6 +15,7 @@ public class AccountCreateMapper implements Mapper<AccountEntity, Account, Accou
         return Account.builder()
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .imageName(entity.getImageName())
                 .build();
     }
 
@@ -23,6 +24,7 @@ public class AccountCreateMapper implements Mapper<AccountEntity, Account, Accou
         return AccountEntity.builder()
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .build();
     }
 
@@ -31,6 +33,7 @@ public class AccountCreateMapper implements Mapper<AccountEntity, Account, Accou
         return AccountCreateDto.builder()
                 .name(model.getName())
                 .description(model.getDescription())
+                .imageName(model.getImageName())
                 .build();
     }
 
@@ -39,6 +42,7 @@ public class AccountCreateMapper implements Mapper<AccountEntity, Account, Accou
         return Account.builder()
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .imageName(dto.getImageName())
                 .build();
     }
 

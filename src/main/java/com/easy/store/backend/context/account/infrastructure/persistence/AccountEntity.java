@@ -28,6 +28,9 @@ public class AccountEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image_name")
+    private String imageName;
+
     @CreationTimestamp
     @Column(name = "creation_date", updatable = false)
     private Timestamp creationDate;

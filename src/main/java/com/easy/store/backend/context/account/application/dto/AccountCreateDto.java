@@ -13,6 +13,7 @@ public class AccountCreateDto {
 
     private String name;
     private String description;
+    private String imageName;
 
     @Override
     public String toString() {

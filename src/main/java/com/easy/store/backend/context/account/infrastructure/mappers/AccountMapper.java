@@ -17,6 +17,7 @@ public class AccountMapper implements Mapper<AccountEntity, Account, AccountDto>
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .state(entity.getState())
+                .imageName(entity.getImageName())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public class AccountMapper implements Mapper<AccountEntity, Account, AccountDto>
                 .name(model.getName())
                 .description(model.getDescription())
                 .state(model.getState())
+                .imageName(model.getImageName())
                 .build();
     }
 
@@ -37,6 +39,7 @@ public class AccountMapper implements Mapper<AccountEntity, Account, AccountDto>
                 .name(model.getName())
                 .description(model.getDescription())
                 .state(model.getState())
+                .imageName(model.getImageName())
                 .build();
     }
 
@@ -47,6 +50,7 @@ public class AccountMapper implements Mapper<AccountEntity, Account, AccountDto>
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .state(dto.getState())
+                .imageName(dto.getImageName())
                 .build();
     }
 

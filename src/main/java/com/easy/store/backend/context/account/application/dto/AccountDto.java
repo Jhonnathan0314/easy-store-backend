@@ -13,5 +13,6 @@ public class AccountDto {
     private String name;
     private String description;
     private String state;
+    private String imageName;
 
 }

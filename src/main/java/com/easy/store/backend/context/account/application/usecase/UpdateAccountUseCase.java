@@ -41,6 +41,8 @@ public class UpdateAccountUseCase {
         if(account.equals(accountIdOpt.get())) throw new NoChangesException(errorMessages.NO_CHANGES);
         logger.info("ACCION UPDATE ACCOUNT -> Validación cambios a aplicar con éxito");
 
+        if(account.getImageName() == null || account.getImageName().isEmpty()) account.setImageName("store.png");
+
         logger.info("ACCION UPDATE ACCOUNT -> Actualizando cuenta");
 
         return accountRepository.update(account);

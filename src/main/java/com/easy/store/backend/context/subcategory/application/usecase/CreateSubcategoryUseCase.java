@@ -38,10 +38,6 @@ public class CreateSubcategoryUseCase {
         if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
         logger.info("ACCION CREATE SUBCATEGORY -> Validé cuerpo de la petición");
 
-        if(subcategoryRepository.findByName(subcategory.getName()).isPresent())
-            throw new DuplicatedException(errorMessages.DUPLICATED);
-        logger.info("ACCION CREATE SUBCATEGORY -> Validé subcategoria no duplicada");
-
         logger.info("ACCION CREATE SUBCATEGORY -> Creando subcategoria");
 
         return subcategoryRepository.create(subcategory);

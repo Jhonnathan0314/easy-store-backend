@@ -26,6 +26,8 @@ public class CreateAccountUseCase {
         if(!account.isValid(account)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
         logger.info("ACCION CREATE ACCOUNT -> Body validado con éxito");
 
+        if(account.getImageName() == null || account.getImageName().isEmpty()) account.setImageName("store.png");
+
         logger.info("ACCION CREATE ACCOUNT -> Creando cuenta");
 
         return accountRepository.create(account);

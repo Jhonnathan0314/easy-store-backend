@@ -17,6 +17,7 @@ public class Account {
     private String name;
     private String description;
     private String state;
+    private String imageName;
 
     public boolean isValid(Account account) {
         if(account.getName() == null ||
@@ -29,12 +30,12 @@ public class Account {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Account account)) return false;
-        return Objects.equals(getName(), account.getName()) && Objects.equals(getDescription(), account.getDescription()) && getState() == account.getState();
+        return Objects.equals(getId(), account.getId()) && Objects.equals(getName(), account.getName()) && Objects.equals(getDescription(), account.getDescription()) && Objects.equals(getState(), account.getState()) && Objects.equals(getImageName(), account.getImageName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getDescription(), getState());
+        return Objects.hash(getId(), getName(), getDescription(), getState(), getImageName());
     }
 
     @Override
@@ -44,6 +45,7 @@ public class Account {
                 ", name=" + name +
                 ", description=" + description +
                 ", state=" + state +
+                ", imageName=" + imageName +
                 '}';
     }
 }
