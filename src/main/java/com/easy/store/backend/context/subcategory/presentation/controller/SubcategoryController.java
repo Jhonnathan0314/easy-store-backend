@@ -97,7 +97,7 @@ public class SubcategoryController {
             subcategory.setCreateBy(createBy);
             response.setData(subcategoryResponseMapper.modelToDto(createSubcategoryUseCase.create(subcategoryCreateMapper.dtoToModel(subcategory))));
             return ResponseEntity.ok(response);
-        } catch (DuplicatedException | InvalidBodyException | NoResultsException e) {
+        } catch (InvalidBodyException | NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

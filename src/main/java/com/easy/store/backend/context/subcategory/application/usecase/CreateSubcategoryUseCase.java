@@ -24,8 +24,7 @@ public class CreateSubcategoryUseCase {
     private final CategoryRepository categoryRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Subcategory create(Subcategory subcategory) throws
-            NoResultsException, DuplicatedException, InvalidBodyException {
+    public Subcategory create(Subcategory subcategory) throws NoResultsException, InvalidBodyException {
 
         logger.info("ACCION CREATE SUBCATEGORY -> Iniciando proceso con body: " + subcategory.toString());
 

@@ -24,7 +24,7 @@ public class CreateProductUseCase {
     private final SubcategoryRepository subcategoryRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Product create(Product product) throws NoResultsException, DuplicatedException, InvalidBodyException {
+    public Product create(Product product) throws NoResultsException, InvalidBodyException {
 
         logger.info("ACCION CREATE PRODUCT -> Iniciando proceso con body: " + product.toString());
 
@@ -36,9 +36,6 @@ public class CreateProductUseCase {
 
         if(!product.isValid(product)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
         logger.info("ACCION CREATE PRODUCT -> Validé cuerpo de la petición");
-
-        if(productRepository.findByName(product.getName()).isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
-        logger.info("ACCION CREATE PRODUCT -> Validé producto no duplicado");
 
         if(product.getImageName().isEmpty()) product.setImageName("product.png");
         if(product.getImageNumber() == null) product.setImageNumber(0);

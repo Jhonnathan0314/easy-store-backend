@@ -111,7 +111,7 @@ public class ProductController {
             product.setCreateBy(createBy);
             response.setData(productResponseMapper.modelToDto(createProductUseCase.create(productCreateMapper.dtoToModel(product))));
             return ResponseEntity.ok(response);
-        } catch (DuplicatedException | InvalidBodyException | NoResultsException e) {
+        } catch (InvalidBodyException | NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
