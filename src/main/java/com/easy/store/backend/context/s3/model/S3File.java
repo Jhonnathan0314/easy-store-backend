@@ -23,7 +23,7 @@ public class S3File {
         return "S3File{" +
                 "extension='" + extension + '\'' +
                 ", name='" + name + '\'' +
-                ", content='" + content.substring(0, 10) + '\'' +
+                ", content='" + (content.isEmpty() ? "" : content.substring(0, 10)) + '\'' +
                 ", context='" + context + '\'' +
                 ", accountId=" + accountId +
                 ", size=" + size +
