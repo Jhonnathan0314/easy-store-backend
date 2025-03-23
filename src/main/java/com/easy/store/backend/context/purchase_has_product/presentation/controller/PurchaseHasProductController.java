@@ -113,7 +113,7 @@ public class PurchaseHasProductController {
         try {
             response.setData(purchaseHasProductResponseMapper.modelToDto(updatePurchaseHasProductUseCase.update(purchaseHasProductUpdateMapper.dtoToModel(purchaseHasProduct))));
             return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException | NoChangesException e) {
+        } catch (InvalidBodyException | NoResultsException | NoChangesException | NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }

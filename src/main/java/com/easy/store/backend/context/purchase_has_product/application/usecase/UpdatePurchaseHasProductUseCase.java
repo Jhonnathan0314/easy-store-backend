@@ -8,10 +8,7 @@ import com.easy.store.backend.context.purchase_has_product.domain.model.Purchase
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseHasProductRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
-import com.easy.store.backend.utils.exceptions.DuplicatedException;
-import com.easy.store.backend.utils.exceptions.InvalidBodyException;
-import com.easy.store.backend.utils.exceptions.NoChangesException;
-import com.easy.store.backend.utils.exceptions.NoResultsException;
+import com.easy.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +27,7 @@ public class UpdatePurchaseHasProductUseCase {
     private final ProductRepository productRepository;
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException {
+    public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException {
 
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Inicia el proceso con body: " + purchaseHasProduct.toString());
 
@@ -56,6 +53,8 @@ public class UpdatePurchaseHasProductUseCase {
 
         if(!areDifferences(optPurchaseHasProduct.get(), purchaseHasProduct)) throw new NoChangesException(errorMessages.NO_CHANGES);
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé que hayan cambios a aplicar");
+
+        if(optProduct.get().getQuantity() < purchaseHasProduct.getQuantity()) throw new NonExistenceException(errorMessages.NO_STOCK);
 
         purchaseHasProduct.setPurchase(optPurchase.get());
         purchaseHasProduct.setProduct(optProduct.get());
