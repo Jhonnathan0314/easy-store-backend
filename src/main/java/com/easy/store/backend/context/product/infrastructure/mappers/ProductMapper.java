@@ -26,6 +26,7 @@ public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO>
                 .quantity(entity.getQuantity())
                 .qualification(entity.getQualification())
                 .subcategory(subcategoryMapper.entityToModel(entity.getSubcategory()))
+                .categoryId(entity.getCategoryId())
                 .createBy(entity.getCreateBy())
                 .updateBy(entity.getUpdateBy())
                 .creationDate(entity.getCreationDate())
@@ -47,6 +48,7 @@ public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO>
                 .quantity(model.getQuantity())
                 .qualification(model.getQualification())
                 .subcategory(subcategoryMapper.modelToEntity(model.getSubcategory()))
+                .categoryId(model.getCategoryId())
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
                 .creationDate(model.getCreationDate())
@@ -68,6 +70,7 @@ public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO>
                 .quantity(model.getQuantity())
                 .qualification(model.getQualification())
                 .subcategory(subcategoryMapper.modelToDto(model.getSubcategory()))
+                .categoryId(model.getCategoryId())
                 .createBy(model.getCreateBy())
                 .updateBy(model.getUpdateBy())
                 .build();
@@ -86,6 +89,7 @@ public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO>
                 .quantity(dto.getQuantity())
                 .qualification(dto.getQualification())
                 .subcategory(subcategoryMapper.dtoToModel(dto.getSubcategory()))
+                .categoryId(dto.getCategoryId())
                 .createBy(dto.getCreateBy())
                 .updateBy(dto.getUpdateBy())
                 .build();

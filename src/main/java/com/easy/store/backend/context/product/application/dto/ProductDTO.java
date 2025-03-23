@@ -21,6 +21,7 @@ public class ProductDTO {
     private Integer quantity;
     private Integer qualification;
     private SubcategoryDTO subcategory;
+    private Long categoryId;
     private Long createBy;
     private Long updateBy;
 }

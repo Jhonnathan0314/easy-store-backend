@@ -22,6 +22,7 @@ public class Product {
     private Integer quantity;
     private Integer qualification;
     private Subcategory subcategory;
+    private Long categoryId;
     private Long createBy;
     private Long updateBy;
     private Timestamp creationDate;

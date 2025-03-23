@@ -20,4 +20,5 @@ public class ProductResponseDTO {
     private Integer quantity;
     private Integer qualification;
     private Long subcategoryId;
+    private Long categoryId;
 }

@@ -28,6 +28,7 @@ public class ProductResponseMapper implements Mapper<ProductEntity, Product, Pro
                         .id(entity.getSubcategory().getId())
                         .build()
                 )
+                .categoryId(entity.getCategoryId())
                 .state(entity.getState())
                 .build();
     }
@@ -48,6 +49,7 @@ public class ProductResponseMapper implements Mapper<ProductEntity, Product, Pro
                         .id(model.getSubcategory().getId())
                         .build()
                 )
+                .categoryId(model.getCategoryId())
                 .state(model.getState())
                 .build();
     }
@@ -65,6 +67,7 @@ public class ProductResponseMapper implements Mapper<ProductEntity, Product, Pro
                 .quantity(model.getQuantity())
                 .qualification(model.getQualification())
                 .subcategoryId(model.getSubcategory().getId())
+                .categoryId(model.getCategoryId())
                 .build();
     }
 
@@ -84,6 +87,7 @@ public class ProductResponseMapper implements Mapper<ProductEntity, Product, Pro
                         .id(dto.getSubcategoryId())
                         .build()
                 )
+                .categoryId(dto.getCategoryId())
                 .build();
     }
 
