@@ -49,31 +49,19 @@ public class AuthorizationService {
         Optional<User> userDb = findByUsernameUserUseCase.findByUsername(request.getUsername());
         if(userDb.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
 
-        boolean accountHasUser = hasValidAccount(userDb.get(), request);
+        List<AccountHasUser> hasUserDb = findByUserIdAccountHasUserUseCase.findByUserId(userDb.get().getId());
 
-        if(!accountHasUser) throw new NoResultsException(errorMessages.NON_EXISTENT_DATA);
+        if(hasUserDb.isEmpty()) throw new NoResultsException(errorMessages.NON_EXISTENT_DATA);
 
         Map<String, String> extraClaims = new HashMap<>();
         extraClaims.put("user_role", userDb.get().getRole().getName());
         extraClaims.put("user_id", userDb.get().getId().toString());
-        extraClaims.put("account_id", request.getAccountId().toString());
+        extraClaims.put("account_id", hasUserDb.get(0).getAccountId().getId().toString());
 
         String token = jwtService.generateToken(userDb.get(), extraClaims);
         return AuthResponse.builder()
                 .token(token)
                 .build();
-    }
-
-    private boolean hasValidAccount(User user, LoginRequest request) throws NoResultsException {
-        List<AccountHasUser> hasUserList = findByUserIdAccountHasUserUseCase.findByUserId(user.getId());
-        if(hasUserList.isEmpty()) return false;
-
-        for (AccountHasUser accountHasUser : hasUserList) {
-            if (Objects.equals(accountHasUser.getAccountId().getId(), request.getAccountId())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public AuthResponse register(User request) throws InvalidBodyException, DuplicatedException, NonExistenceException, NoResultsException, NoIdReceivedException, NoChangesException {
