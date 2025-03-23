@@ -83,8 +83,8 @@ public class AuthorizationService {
                 .name(request.getName())
                 .lastName(request.getLastName())
                 .role(Role.builder()
-                        .id(3L)
-                        .name("admin")
+                        .id(1L)
+                        .name("client")
                         .build()
                 )
                 .build();
