@@ -4,6 +4,7 @@ import com.easy.store.backend.context.codes.domain.model.Code;
 import com.easy.store.backend.context.codes.domain.port.CodeRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
+import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,9 @@ public class FindByUserIdCodeUseCase {
 
     private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Code findByUserId(Long userId) throws NoResultsException {
+    public Code findByUserId(Long userId) throws NonExistenceException {
         Code codeDb = codeRepository.findByUserId(userId);
-        if(codeDb == null) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(codeDb == null) throw new NonExistenceException(errorMessages.NO_VALID_CODE);
         return codeDb;
     }
 

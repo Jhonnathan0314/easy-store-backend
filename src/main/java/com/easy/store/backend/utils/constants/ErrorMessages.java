@@ -20,5 +20,7 @@ public class ErrorMessages {
 
     public final String NO_STOCK = "No hay stock suficiente.";
 
+    public final String NO_VALID_CODE = "Código inválido para el proceso.";
+
     public final String GENERIC_ERROR = "Ha ocurrido un error, por favor intentelo de nuevo más tarde.";
 }

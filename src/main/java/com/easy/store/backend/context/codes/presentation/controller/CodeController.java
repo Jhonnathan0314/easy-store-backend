@@ -4,6 +4,7 @@ import com.easy.store.backend.context.codes.application.usecase.*;
 import com.easy.store.backend.context.codes.domain.model.Code;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
+import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class CodeController {
             Code code = findByUserIdCodeUseCase.findByUserId(id);
             response.setData(code);
             return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
+        } catch (NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
@@ -73,7 +74,7 @@ public class CodeController {
             deleteByUserIdCodeUseCase.deleteByUserId(id);
             response.setData(Boolean.TRUE);
             return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
+        } catch (NoResultsException | NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
