@@ -15,6 +15,7 @@ public class CodeMapper implements Mapper<CodeEntity, Code, CodeDTO> {
                 .userId(entity.getUserId())
                 .code(entity.getCode())
                 .action(entity.getAction())
+                .creationDate(entity.getCreationDate())
                 .build();
     }
 
@@ -24,6 +25,7 @@ public class CodeMapper implements Mapper<CodeEntity, Code, CodeDTO> {
                 .userId(model.getUserId())
                 .code(model.getCode())
                 .action(model.getAction())
+                .creationDate(model.getCreationDate())
                 .build();
     }
 
@@ -33,6 +35,7 @@ public class CodeMapper implements Mapper<CodeEntity, Code, CodeDTO> {
                 .userId(model.getUserId())
                 .code(model.getCode())
                 .action(model.getAction())
+                .creationDate(model.getCreationDate())
                 .build();
     }
 
@@ -42,6 +45,7 @@ public class CodeMapper implements Mapper<CodeEntity, Code, CodeDTO> {
                 .userId(dto.getUserId())
                 .code(dto.getCode())
                 .action(dto.getAction())
+                .creationDate(dto.getCreationDate())
                 .build();
     }
 

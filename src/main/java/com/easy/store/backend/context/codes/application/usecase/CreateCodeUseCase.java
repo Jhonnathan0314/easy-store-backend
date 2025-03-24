@@ -7,6 +7,8 @@ import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 @Service
 @RequiredArgsConstructor
 public class CreateCodeUseCase {
@@ -17,6 +19,7 @@ public class CreateCodeUseCase {
 
     public Code create(Code code) throws InvalidBodyException {
         if(!code.isValid(code)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        code.setCreationDate(new Timestamp(System.currentTimeMillis()));
         return codeRepository.create(code);
     }
 

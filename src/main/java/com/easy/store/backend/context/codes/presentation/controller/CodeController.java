@@ -1,9 +1,6 @@
 package com.easy.store.backend.context.codes.presentation.controller;
 
-import com.easy.store.backend.context.codes.application.usecase.CreateCodeUseCase;
-import com.easy.store.backend.context.codes.application.usecase.DeleteByUserIdCodeUseCase;
-import com.easy.store.backend.context.codes.application.usecase.FindAllCodeUseCase;
-import com.easy.store.backend.context.codes.application.usecase.FindByUserIdCodeUseCase;
+import com.easy.store.backend.context.codes.application.usecase.*;
 import com.easy.store.backend.context.codes.domain.model.Code;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
@@ -11,6 +8,7 @@ import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +23,7 @@ public class CodeController {
     private final FindByUserIdCodeUseCase findByUserIdCodeUseCase;
     private final CreateCodeUseCase createCodeUseCase;
     private final DeleteByUserIdCodeUseCase deleteByUserIdCodeUseCase;
+    private final DeleteExpiredCodeUseCase deleteExpiredCodeUseCase;
 
     private final HttpUtils httpUtils = new HttpUtils();
 
@@ -77,6 +76,16 @@ public class CodeController {
         } catch (NoResultsException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @Scheduled(cron = "0 */15 * * * *")
+    private void deleteExpiredCodes() {
+        try {
+            List<Code> codes = findAllCodeUseCase.findAll();
+            if(!codes.isEmpty()) deleteExpiredCodeUseCase.deleteExpired(codes);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
