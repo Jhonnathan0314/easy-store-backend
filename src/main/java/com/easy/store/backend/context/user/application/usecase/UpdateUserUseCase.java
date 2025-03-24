@@ -40,7 +40,7 @@ public class UpdateUserUseCase {
         logger.info("ACCION UDPATE USER -> Validé existencia de la subcategoria");
 
         User userDb = optUser.get();
-        if(userDb.getName().equals(user.getName())) throw new NoChangesException(errorMessages.NO_CHANGES);
+        if(!areDifferences(user, userDb)) throw new NoChangesException(errorMessages.NO_CHANGES);
         logger.info("ACCION UDPATE USER -> Validé que hayan cambios a aplicar");
 
         if(user.getRole() == null) user.setRole(userDb.getRole());
@@ -49,13 +49,20 @@ public class UpdateUserUseCase {
 
         if(user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            user.setPassword(userDb.getPassword());
         }
-
-        user.setPassword(userDb.getPassword());
 
         logger.info("ACCION UDPATE USER -> Actualizando subcategoria");
 
         return userRepository.update(user);
+    }
+
+    private boolean areDifferences(User user1, User user2) {
+        return !user1.getName().equals(user2.getName()) ||
+                !user1.getLastName().equals(user2.getLastName()) ||
+                !user1.getUsername().equals(user2.getUsername()) ||
+                user1.getPassword() != null;
     }
 
 }
