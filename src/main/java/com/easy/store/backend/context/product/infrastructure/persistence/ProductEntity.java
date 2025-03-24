@@ -49,9 +49,6 @@ public class ProductEntity {
     @JoinColumn(name = "subcategory_id")
     private SubcategoryEntity subcategory;
 
-    @Column(name = "category_id")
-    private Long categoryId;
-
     @Column(name = "create_by", updatable = false)
     private Long createBy;
 
