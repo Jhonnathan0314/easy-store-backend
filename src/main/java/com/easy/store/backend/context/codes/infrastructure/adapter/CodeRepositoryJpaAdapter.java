@@ -8,6 +8,8 @@ import com.easy.store.backend.context.codes.infrastructure.persistence.CodeJpaRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class CodeRepositoryJpaAdapter implements CodeRepository {
@@ -15,6 +17,11 @@ public class CodeRepositoryJpaAdapter implements CodeRepository {
     private final CodeJpaRepository codeJpaRepository;
 
     private final CodeMapper codeMapper = new CodeMapper();
+
+    @Override
+    public List<Code> findAll() {
+        return codeMapper.entitiesToModels(codeJpaRepository.findAll());
+    }
 
     @Override
     public Code findByUserId(Long userId) {
