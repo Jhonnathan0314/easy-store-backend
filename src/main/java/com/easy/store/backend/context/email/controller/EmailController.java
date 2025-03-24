@@ -1,6 +1,7 @@
 package com.easy.store.backend.context.email.controller;
 
 import com.easy.store.backend.context.email.service.EmailService;
+import com.easy.store.backend.context.user.application.dto.UserDTO;
 import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,11 @@ public class EmailController {
 
     private final HttpUtils httpUtils = new HttpUtils();
 
-    @GetMapping("/forgot-password/user/{id}")
-    public ResponseEntity<ApiResponse<Boolean>> sendConfirmationCode(@PathVariable Long id) {
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<Boolean>> sendConfirmationCode(@RequestBody UserDTO user) {
         ApiResponse<Boolean> response = new ApiResponse<>();
         try {
-            emailService.sendEmail(id);
+            emailService.sendEmail(user.getUsername());
             response.setData(Boolean.TRUE);
             return ResponseEntity.ok(response);
         }catch (Exception e) {
