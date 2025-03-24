@@ -35,6 +35,7 @@ public class SecurityConfig {
                     authRequest
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/v1/code/**").permitAll()
+                        .requestMatchers("/api/v1/email/forgot-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
