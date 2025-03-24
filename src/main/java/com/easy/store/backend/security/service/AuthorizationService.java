@@ -6,13 +6,18 @@ import com.easy.store.backend.context.account_has_user.application.usecase.Creat
 import com.easy.store.backend.context.account_has_user.application.usecase.FindByUserIdAccountHasUserUseCase;
 import com.easy.store.backend.context.account_has_user.domain.model.AccountHasUser;
 import com.easy.store.backend.context.account_has_user.domain.model.AccountHasUserId;
+import com.easy.store.backend.context.codes.application.usecase.DeleteByUserIdCodeUseCase;
+import com.easy.store.backend.context.codes.application.usecase.FindByUserIdCodeUseCase;
+import com.easy.store.backend.context.codes.domain.model.Code;
 import com.easy.store.backend.context.roles.domain.model.Role;
 import com.easy.store.backend.context.user.application.usecase.CreateUserUseCase;
 import com.easy.store.backend.context.user.application.usecase.FindByUsernameUserUseCase;
+import com.easy.store.backend.context.user.application.usecase.UpdateUserUseCase;
 import com.easy.store.backend.security.jwt.JwtService;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.security.models.AuthResponse;
 import com.easy.store.backend.security.models.LoginRequest;
+import com.easy.store.backend.security.models.ResetPasswordRequest;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +25,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Service
@@ -35,8 +36,11 @@ public class AuthorizationService {
     private final FindByUsernameUserUseCase findByUsernameUserUseCase;
     private final FindByUserIdAccountHasUserUseCase findByUserIdAccountHasUserUseCase;
     private final CreateUserUseCase createUserUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
     private final CreateAccountUseCase createAccountUseCase;
     private final CreateAccountHasUserUseCase createAccountHasUserUseCase;
+    private final FindByUserIdCodeUseCase findByUserIdCodeUseCase;
+    private final DeleteByUserIdCodeUseCase deleteByUserIdCodeUseCase;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -102,6 +106,23 @@ public class AuthorizationService {
         return AuthResponse.builder()
                 .token(jwtService.generateToken(user, extraClaims))
                 .build();
+    }
+
+    public User resetPassword(ResetPasswordRequest request) throws InvalidBodyException, NoResultsException,
+            NoIdReceivedException, NoChangesException, NonExistenceException {
+        if(!request.isValid()) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+
+        User userDb = findByUsernameUserUseCase.findByUsername(request.getUsername()).orElse(null);
+        if (userDb == null) throw new NoResultsException(errorMessages.NO_RESULTS);
+
+        Code codeDb = findByUserIdCodeUseCase.findByUserId(userDb.getId());
+        if(codeDb == null) throw new NonExistenceException(errorMessages.NO_VALID_CODE);
+        if(!Objects.equals(codeDb.getCode(), request.getCode())) throw new NonExistenceException(errorMessages.NO_VALID_CODE);
+
+        deleteByUserIdCodeUseCase.deleteByUserId(userDb.getId());
+
+        userDb.setPassword(request.getPassword());
+        return updateUserUseCase.update(userDb);
     }
 
 }

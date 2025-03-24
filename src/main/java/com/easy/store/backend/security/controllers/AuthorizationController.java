@@ -1,9 +1,12 @@
 package com.easy.store.backend.security.controllers;
 
 import com.easy.store.backend.context.user.application.dto.UserCreateDTO;
+import com.easy.store.backend.context.user.application.dto.UserResponseDTO;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserCreateMapper;
+import com.easy.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
 import com.easy.store.backend.security.models.AuthResponse;
 import com.easy.store.backend.security.models.LoginRequest;
+import com.easy.store.backend.security.models.ResetPasswordRequest;
 import com.easy.store.backend.security.service.AuthorizationService;
 import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.http.HttpUtils;
@@ -19,8 +22,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorizationController {
 
     private final AuthorizationService authService;
+
     private final HttpUtils httpUtils = new HttpUtils();
     private final UserCreateMapper userCreateMapper = new UserCreateMapper();
+    private final UserResponseMapper userResponseMapper = new UserResponseMapper();
 
     @PostMapping(value = "login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody LoginRequest request) {
@@ -42,6 +47,20 @@ public class AuthorizationController {
             return ResponseEntity.ok(response);
         } catch (InvalidBodyException | DuplicatedException | NonExistenceException | NoResultsException |
                  NoIdReceivedException | NoChangesException e) {
+            response.setError(httpUtils.determineErrorMessage(e));
+            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
+        }
+    }
+
+    @PutMapping(value = "reset-password")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> register(@RequestBody ResetPasswordRequest request) {
+        ApiResponse<UserResponseDTO> response = new ApiResponse<>();
+        try {
+            response.setData(userResponseMapper.modelToDto(authService.resetPassword(request)));
+            return ResponseEntity.ok(response);
+        } catch (InvalidBodyException | NoResultsException |
+                 NoIdReceivedException | NoChangesException |
+                 NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
