@@ -53,7 +53,8 @@ public class SecurityConfig {
                 "http://localhost:4000", "http://127.0.0.1:4000",
                 "http://localhost:5173", "http://127.0.0.1:5173",
                 "https://easy-store-frontend-production.up.railway.app",
-                "https://easy-store-frontend.railway.internal"));
+                "https://easy-store-frontend.railway.internal",
+                "https://easy-store.jonatan-projects.com"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Accept", "Content-Type", "Authorization", "Create-By", "Update-By"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
