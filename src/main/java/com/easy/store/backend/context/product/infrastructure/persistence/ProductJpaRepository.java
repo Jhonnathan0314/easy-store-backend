@@ -9,7 +9,6 @@ import java.util.Optional;
 public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long> {
 
     Optional<ProductEntity> findByName(String name);
-    Optional<ProductEntity> findById(Long id);
     List<ProductEntity> findBySubcategoryId(Long subcategoryId);
 
     @Query(nativeQuery = true, value = "select p.id, p.name, p.price, p.quantity, p.qualification, p.description, " +

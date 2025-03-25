@@ -3,11 +3,12 @@ package com.easy.store.backend.context.product.infrastructure.adapter;
 import com.easy.store.backend.context.product.domain.model.Product;
 import com.easy.store.backend.context.product.domain.port.ProductRepository;
 import com.easy.store.backend.context.product.infrastructure.mappers.ProductCreateMapper;
-import com.easy.store.backend.context.product.infrastructure.mappers.ProductMapper;
 import com.easy.store.backend.context.product.infrastructure.mappers.ProductResponseMapper;
 import com.easy.store.backend.context.product.infrastructure.mappers.ProductUpdateMapper;
 import com.easy.store.backend.context.product.infrastructure.persistence.ProductEntity;
 import com.easy.store.backend.context.product.infrastructure.persistence.ProductJpaRepository;
+import com.easy.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
+import com.easy.store.backend.context.subcategory.infrastructure.persistence.SubcategoryJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,8 @@ public class ProductRepositoryJpaAdapter implements ProductRepository {
     private final ProductCreateMapper createMapper = new ProductCreateMapper();
     private final ProductUpdateMapper updateMapper = new ProductUpdateMapper();
     private final ProductResponseMapper responseMapper = new ProductResponseMapper();
+
+    private final SubcategoryJpaRepository subcategoryJpaRepository;
 
     @Override
     public List<Product> findAll() {
@@ -62,12 +65,20 @@ public class ProductRepositoryJpaAdapter implements ProductRepository {
     @Override
     public Product create(Product product) {
         ProductEntity productEntity = productJpaRepository.save(createMapper.modelToEntity(product));
+        SubcategoryEntity subcategoryEntity = subcategoryJpaRepository.findById(productEntity.getSubcategory().getId()).orElse(null);
+        if(subcategoryEntity != null) {
+            productEntity.setSubcategory(subcategoryEntity);
+        }
         return responseMapper.entityToModel(productEntity);
     }
 
     @Override
     public Product update(Product product) {
         ProductEntity productEntity = productJpaRepository.save(updateMapper.modelToEntity(product));
+        SubcategoryEntity subcategoryEntity = subcategoryJpaRepository.findById(productEntity.getSubcategory().getId()).orElse(null);
+        if(subcategoryEntity != null) {
+            productEntity.setSubcategory(subcategoryEntity);
+        }
         return responseMapper.entityToModel(productEntity);
     }
 
