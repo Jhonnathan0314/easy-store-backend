@@ -4,8 +4,8 @@ import com.easy.store.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -33,8 +33,41 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                     authRequest
+                        //Category
+                        .requestMatchers(HttpMethod.POST, "/api/v1/category/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/category/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/category/**").hasAuthority("ADMIN")
+                        //Subcategory
+                        .requestMatchers(HttpMethod.POST, "/api/v1/subcategory/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/subcategory/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/subcategory/**").hasAuthority("ADMIN")
+                        //Product
+                        .requestMatchers(HttpMethod.POST, "/api/v1/product/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/product/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/product/**").hasAuthority("ADMIN")
+                        //Payment type
+                        .requestMatchers(HttpMethod.POST, "/api/v1/payment-type/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/payment-type/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/payment-type/**").hasAuthority("ADMIN")
+                        //Purchase
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/purchase/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/purchase/**").hasAuthority("ADMIN")
+                        //Account
+                        .requestMatchers("/api/v1/account/**").hasAuthority("ADMIN")
+                        //Account has user
+                        .requestMatchers("/api/v1/account_has_user/**").hasAuthority("ADMIN")
+                        //User
+                        .requestMatchers("/api/v1/user/**").hasAuthority("ADMIN")
+                        //Role
+                        .requestMatchers("/api/v1/role/**").hasAuthority("ADMIN")
+                        //S3
+                        .requestMatchers(HttpMethod.POST, "/api/v1/s3/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/s3/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/s3/**").hasAuthority("ADMIN")
+                        //Account
+                        .requestMatchers("/api/v1/code/**").hasAuthority("ADMIN")
+                        //Open
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/v1/code/**").permitAll()
                         .requestMatchers("/api/v1/email/forgot-password").permitAll()
                         .anyRequest().authenticated()
                 )
