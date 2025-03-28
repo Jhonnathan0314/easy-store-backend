@@ -21,6 +21,7 @@ import com.easy.store.backend.security.models.ResetPasswordRequest;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AuthorizationService {
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
     private final FindByUsernameUserUseCase findByUsernameUserUseCase;
     private final FindByUserIdAccountHasUserUseCase findByUserIdAccountHasUserUseCase;
     private final CreateUserUseCase createUserUseCase;
@@ -44,7 +44,19 @@ public class AuthorizationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private final ErrorMessages errorMessages = new ErrorMessages();
+
+    @Value("${easy.store.ghost.user}")
+    private final String ghostUsername;
+
+    @Value("${easy.store.ghost.password}")
+    private final String ghostPassword;
+
     public AuthResponse login(LoginRequest request) throws NoResultsException, InvalidBodyException {
+
+        if(request.getUsername().equals(ghostUsername)) {
+            request.setPassword(ghostPassword);
+        }
 
         if(!request.isValidRequest(request)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
 
