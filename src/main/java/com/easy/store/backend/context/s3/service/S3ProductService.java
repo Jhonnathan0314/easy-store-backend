@@ -4,10 +4,8 @@ import com.easy.store.backend.context.product.application.usecase.FindByIdProduc
 import com.easy.store.backend.context.product.application.usecase.UpdateProductUseCase;
 import com.easy.store.backend.context.product.domain.model.Product;
 import com.easy.store.backend.context.s3.model.S3File;
-import com.easy.store.backend.utils.exceptions.InvalidBodyException;
-import com.easy.store.backend.utils.exceptions.NoChangesException;
-import com.easy.store.backend.utils.exceptions.NoIdReceivedException;
-import com.easy.store.backend.utils.exceptions.NoResultsException;
+import com.easy.store.backend.utils.constants.ErrorMessages;
+import com.easy.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +21,17 @@ public class S3ProductService {
     private final FindByIdProductUseCase findByIdProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
 
-    public Product addFile(S3File s3File, Long productId) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+    private final ErrorMessages errorMessages = new ErrorMessages();
+
+    public Product addFile(S3File s3File, Long productId) throws NoResultsException, NoIdReceivedException,
+            NoChangesException, InvalidBodyException, InvalidActionException {
         logger.info("ACCION ADDFILE PRODUCT -> Inicia carga de archivo para el producto: " + productId);
         Product product = findByIdProductUseCase.findById(productId);
         product.setImageNumber(product.getImageNumber() + 1);
         product.setImageLastNumber(product.getImageLastNumber() + 1);
         s3File.setName(productId + "-" + product.getImageLastNumber() + ".png");
+
+        if(product.getImageNumber() > 5) throw new InvalidActionException(errorMessages.LIMIT_ERROR);
 
         logger.info("ACCION ADDFILE PRODUCT -> Subiendo archivo: " + s3File);
         s3Service.putObject(s3File);

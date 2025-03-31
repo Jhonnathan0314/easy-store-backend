@@ -16,11 +16,10 @@ public class ErrorMessages {
     public final String NO_PURCHASE_RESULTS = "No se encontró la fáctura recibida.";
     public final String NO_PRODUCT_RESULTS = "No se encontró el producto que será asignado.";
 
-    public final String NO_SIZE_EQUALS = "Revise la información enviada, las longitudes de no coinciden.";
-
     public final String NO_STOCK = "No hay stock suficiente.";
 
     public final String NO_VALID_CODE = "Código inválido para el proceso.";
+    public final String LIMIT_ERROR = "No puede superar el límite establecido.";
 
     public final String GENERIC_ERROR = "Ha ocurrido un error, por favor intentelo de nuevo más tarde.";
 }
