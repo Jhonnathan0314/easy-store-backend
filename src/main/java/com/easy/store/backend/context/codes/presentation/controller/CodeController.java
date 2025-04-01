@@ -80,7 +80,8 @@ public class CodeController {
         }
     }
 
-    @Scheduled(cron = "0 */15 * * * *")
+    @Scheduled(cron = "0 59 23 * * *")
+//    @Scheduled(cron = "0 */15 * * * *") se comenta temporalmente para disminuir consumo ya que la app no tiene un numero elevado de usuarios.
     private void deleteExpiredCodes() {
         try {
             List<Code> codes = findAllCodeUseCase.findAll();
