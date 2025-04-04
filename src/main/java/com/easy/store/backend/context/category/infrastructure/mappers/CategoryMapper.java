@@ -5,12 +5,9 @@ import com.easy.store.backend.context.category.application.dto.CategoryDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserMapper;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class CategoryMapper implements Mapper<CategoryEntity, Category, CategoryDTO> {
+public class CategoryMapper extends BaseMapper<CategoryEntity, Category, CategoryDTO> {
 
     private final UserMapper userMapper = new UserMapper();
     private final AccountMapper accountMapper = new AccountMapper();
@@ -75,34 +72,6 @@ public class CategoryMapper implements Mapper<CategoryEntity, Category, Category
                 .user(userMapper.dtoToModel(dto.getUser()))
                 .account(accountMapper.dtoToModel(dto.getAccount()))
                 .build();
-    }
-
-    @Override
-    public List<Category> entitiesToModels(List<CategoryEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CategoryEntity> modelsToEntities(List<Category> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CategoryDTO> modelsToDtos(List<Category> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Category> dtosToModels(List<CategoryDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }

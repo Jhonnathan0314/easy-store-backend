@@ -1,23 +1,15 @@
 package com.easy.store.backend.context.category.infrastructure.mappers;
 
 import com.easy.store.backend.context.account.domain.model.Account;
-import com.easy.store.backend.context.account.infrastructure.mappers.AccountMapper;
 import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
 import com.easy.store.backend.context.category.application.dto.CategoryResponseDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.user.domain.model.User;
-import com.easy.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, CategoryResponseDTO> {
-
-    private final UserResponseMapper userMapper = new UserResponseMapper();
-    private final AccountMapper accountMapper = new AccountMapper();
+public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category, CategoryResponseDTO> {
 
     @Override
     public Category entityToModel(CategoryEntity entity) {
@@ -85,34 +77,6 @@ public class CategoryResponseMapper implements Mapper<CategoryEntity, Category, 
                         .build()
                 )
                 .build();
-    }
-
-    @Override
-    public List<Category> entitiesToModels(List<CategoryEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CategoryEntity> modelsToEntities(List<Category> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CategoryResponseDTO> modelsToDtos(List<Category> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Category> dtosToModels(List<CategoryResponseDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }

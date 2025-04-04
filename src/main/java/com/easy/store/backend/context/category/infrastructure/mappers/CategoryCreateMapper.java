@@ -1,21 +1,15 @@
 package com.easy.store.backend.context.category.infrastructure.mappers;
 
 import com.easy.store.backend.context.account.domain.model.Account;
-import com.easy.store.backend.context.account.infrastructure.mappers.AccountCreateMapper;
 import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
 import com.easy.store.backend.context.category.application.dto.CategoryCreateDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.user.domain.model.User;
-import com.easy.store.backend.context.user.infrastructure.mappers.UserCreateMapper;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, CategoryCreateDTO> {
-
+public class CategoryCreateMapper extends BaseMapper<CategoryEntity, Category, CategoryCreateDTO> {
 
     @Override
     public Category entityToModel(CategoryEntity entity) {
@@ -81,34 +75,6 @@ public class CategoryCreateMapper implements Mapper<CategoryEntity, Category, Ca
                         .build()
                 )
                 .build();
-    }
-
-    @Override
-    public List<Category> entitiesToModels(List<CategoryEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CategoryEntity> modelsToEntities(List<Category> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CategoryCreateDTO> modelsToDtos(List<Category> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Category> dtosToModels(List<CategoryCreateDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }
