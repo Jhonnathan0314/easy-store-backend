@@ -22,10 +22,10 @@ public class PaymentType {
     private Timestamp updateDate;
     private String state;
 
-    public boolean isValid(PaymentType paymentType) {
-        if(paymentType.getName() == null || paymentType.getAccount() == null) return false;
+    public boolean isValid() {
+        if(name == null || account == null) return false;
 
-        return !paymentType.getName().isEmpty();
+        return !name.isEmpty();
     }
 
     @Override

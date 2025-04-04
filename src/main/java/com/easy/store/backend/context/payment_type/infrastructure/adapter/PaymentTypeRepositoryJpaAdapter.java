@@ -36,12 +36,6 @@ public class PaymentTypeRepositoryJpaAdapter implements PaymentTypeRepository {
     }
 
     @Override
-    public Optional<PaymentType> findByNameAndAccountId(String name, Long accountId) {
-        Optional<PaymentTypeEntity> optPaymentTypeEntity = paymentTypeJpaRepository.findByNameAndAccountId(name, accountId);
-        return optPaymentTypeEntity.map(responseMapper::entityToModel);
-    }
-
-    @Override
     public List<PaymentType> findByAccountId(Long accountId) {
         List<PaymentTypeEntity> paymentTypeEntities = paymentTypeJpaRepository.findByAccountId(accountId);
         return responseMapper.entitiesToModels(paymentTypeEntities);

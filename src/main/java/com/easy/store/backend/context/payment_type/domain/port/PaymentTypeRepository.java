@@ -8,7 +8,6 @@ import java.util.Optional;
 public interface PaymentTypeRepository {
     List<PaymentType> findAll();
     Optional<PaymentType> findById(Long id);
-    Optional<PaymentType> findByNameAndAccountId(String name, Long accountId);
     List<PaymentType> findByAccountId(Long accountId);
     PaymentType create(PaymentType category);
     PaymentType update(PaymentType category);

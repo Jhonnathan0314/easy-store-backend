@@ -83,7 +83,7 @@ public class PaymentTypeController {
             paymentType.setCreateBy(createBy);
             response.setData(paymentTypeResponseMapper.modelToDto(createPaymentTypeUseCase.create(paymentTypeCreateMapper.dtoToModel(paymentType))));
             return ResponseEntity.ok(response);
-        } catch (DuplicatedException | InvalidBodyException | NoIdReceivedException | NonExistenceException e) {
+        } catch (InvalidBodyException | NoIdReceivedException | NonExistenceException e) {
             response.setError(httpUtils.determineErrorMessage(e));
             return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
         }
@@ -115,10 +115,10 @@ public class PaymentTypeController {
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<PaymentTypeUpdateDTO>> changeStateById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<PaymentTypeUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<PaymentTypeUpdateDTO> response = new ApiResponse<>();
         try {
-            PaymentType paymentType = changeStateByIdPaymentTypeUseCase.changeStateById(id);
+            PaymentType paymentType = changeStateByIdPaymentTypeUseCase.changeStateById(id, updateBy);
             response.setData(paymentTypeUpdateMapper.modelToDto(paymentType));
             return ResponseEntity.ok(response);
         } catch (NonExistenceException e) {

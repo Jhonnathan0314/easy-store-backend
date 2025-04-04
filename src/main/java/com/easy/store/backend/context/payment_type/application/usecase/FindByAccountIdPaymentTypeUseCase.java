@@ -17,14 +17,13 @@ public class FindByAccountIdPaymentTypeUseCase {
     private final Logger logger = Logger.getLogger(FindByAccountIdPaymentTypeUseCase.class.getName());
 
     private final PaymentTypeRepository paymentTypeRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<PaymentType> findByAccountId(Long accountId) throws NoResultsException {
 
         logger.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Iniciando búsqueda");
 
         List<PaymentType> paymentTypes = paymentTypeRepository.findByAccountId(accountId);
-        if(paymentTypes == null || paymentTypes.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(paymentTypes == null || paymentTypes.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Encontré tipos de pago con éxito");
 
         return paymentTypes;
