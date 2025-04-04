@@ -17,13 +17,12 @@ public class RemoveAllPurchaseHasProductUseCase {
     private final Logger logger = Logger.getLogger(RemoveAllPurchaseHasProductUseCase.class.getName());
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void removeAll(List<PurchaseHasProductId> ids) throws NoIdReceivedException {
 
         logger.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Iniciando eliminado con " + ids.size() + " ids");
 
-        if(ids.isEmpty()) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        if(ids.isEmpty()) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Validé ids recibido");
 
         logger.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Inicia eliminado de objetos");

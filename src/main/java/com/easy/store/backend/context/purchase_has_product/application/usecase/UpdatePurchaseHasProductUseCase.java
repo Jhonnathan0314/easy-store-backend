@@ -25,21 +25,20 @@ public class UpdatePurchaseHasProductUseCase {
     private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final PurchaseRepository purchaseRepository;
     private final ProductRepository productRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException {
 
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Inicia el proceso con body: " + purchaseHasProduct.toString());
 
-        if(!purchaseHasProduct.isValid(purchaseHasProduct)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!purchaseHasProduct.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé cuerpo de la petición");
 
         Optional<Purchase> optPurchase = purchaseRepository.findById(purchaseHasProduct.getId().getPurchaseId());
-        if(optPurchase.isEmpty()) throw new NoResultsException(errorMessages.NO_PURCHASE_RESULTS);
+        if(optPurchase.isEmpty()) throw new NoResultsException(ErrorMessages.NO_PURCHASE_RESULTS);
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia de la compra");
 
         Optional<Product> optProduct = productRepository.findById(purchaseHasProduct.getId().getProductId());
-        if(optProduct.isEmpty()) throw new NoResultsException(errorMessages.NO_PRODUCT_RESULTS);
+        if(optProduct.isEmpty()) throw new NoResultsException(ErrorMessages.NO_PRODUCT_RESULTS);
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia del producto");
 
         PurchaseHasProductId id = PurchaseHasProductId.builder()
@@ -48,13 +47,13 @@ public class UpdatePurchaseHasProductUseCase {
                 .build();
 
         Optional<PurchaseHasProduct> optPurchaseHasProduct = purchaseHasProductRepository.findByPurchaseIdAndProductId(id);
-        if(optPurchaseHasProduct.isEmpty()) throw new NoResultsException(errorMessages.NON_EXISTENT_DATA);
+        if(optPurchaseHasProduct.isEmpty()) throw new NoResultsException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia del objeto purchase_has_product");
 
-        if(!areDifferences(optPurchaseHasProduct.get(), purchaseHasProduct)) throw new NoChangesException(errorMessages.NO_CHANGES);
+        if(!areDifferences(optPurchaseHasProduct.get(), purchaseHasProduct)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
         logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé que hayan cambios a aplicar");
 
-        if(optProduct.get().getQuantity() < purchaseHasProduct.getQuantity()) throw new NonExistenceException(errorMessages.NO_STOCK);
+        if(optProduct.get().getQuantity() < purchaseHasProduct.getQuantity()) throw new NonExistenceException(ErrorMessages.NO_STOCK);
 
         purchaseHasProduct.setPurchase(optPurchase.get());
         purchaseHasProduct.setProduct(optProduct.get());

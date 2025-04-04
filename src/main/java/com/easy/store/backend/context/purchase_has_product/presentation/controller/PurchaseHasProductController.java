@@ -25,9 +25,6 @@ import java.util.List;
 @CrossOrigin("*")
 public class PurchaseHasProductController {
 
-    private final FindByPurchaseIdAndProductIdPurchaseHasProductUseCase findByPurchaseIdAndProductIdPurchaseHasProductUseCase;
-    private final FindByPurchaseIdPurchaseHasProductUseCase findByPurchaseIdPurchaseHasProductUseCase;
-    private final FindByProductIdPurchaseHasProductUseCase findByProductIdPurchaseHasProductUseCase;
     private final AddPurchaseHasProductUseCase addPurchaseHasProductUseCase;
     private final AddAllPurchaseHasProductUseCase addAllPurchaseHasProductUseCase;
     private final UpdatePurchaseHasProductUseCase updatePurchaseHasProductUseCase;
@@ -39,49 +36,6 @@ public class PurchaseHasProductController {
     private final PurchaseHasProductResponseMapper purchaseHasProductResponseMapper = new PurchaseHasProductResponseMapper();
 
     private final HttpUtils httpUtils = new HttpUtils();
-
-    @GetMapping("/purchase/{purchaseId}/product/{productId}")
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> findByPurchaseIdAndProductId(@PathVariable Long purchaseId, @PathVariable Long productId) {
-        ApiResponse<PurchaseHasProductResponseDTO> response = new ApiResponse<>();
-        try {
-            PurchaseHasProductId id = PurchaseHasProductId.builder()
-                    .purchaseId(purchaseId)
-                    .productId(productId)
-                    .build();
-            PurchaseHasProductResponseDTO purchaseHasProduct = purchaseHasProductResponseMapper.modelToDto(findByPurchaseIdAndProductIdPurchaseHasProductUseCase.findByPurchaseIdAndProductId(id));
-            response.setData(purchaseHasProduct);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
-    @GetMapping("/purchase/{purchaseId}")
-    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> findAllByPurchaseId(@PathVariable Long purchaseId) {
-        ApiResponse<List<PurchaseHasProductResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<PurchaseHasProductResponseDTO> purchaseHasProducts = purchaseHasProductResponseMapper.modelsToDtos(findByPurchaseIdPurchaseHasProductUseCase.findByPurchaseId(purchaseId));
-            response.setData(purchaseHasProducts);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
-    @GetMapping("/product/{productId}")
-    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> findAllByProductIdId(@PathVariable Long productId) {
-        ApiResponse<List<PurchaseHasProductResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<PurchaseHasProductResponseDTO> purchaseHasProducts = purchaseHasProductResponseMapper.modelsToDtos(findByProductIdPurchaseHasProductUseCase.findByProductId(productId));
-            response.setData(purchaseHasProducts);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
 
     @PostMapping
     public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@RequestBody PurchaseHasProductAddDTO purchaseHasProduct) {

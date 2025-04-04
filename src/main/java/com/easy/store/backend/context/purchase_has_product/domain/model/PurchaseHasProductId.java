@@ -18,8 +18,8 @@ public class PurchaseHasProductId {
     private Long purchaseId;
     private Long productId;
 
-    public boolean isValid(PurchaseHasProductId accountHasUserId) {
-        return accountHasUserId.getPurchaseId() != null && accountHasUserId.getProductId() != null;
+    public boolean isValid() {
+        return purchaseId != null && productId != null;
     }
 
     @Override

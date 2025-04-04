@@ -10,7 +10,6 @@ public interface PurchaseHasProductRepository {
 
     Optional<PurchaseHasProduct> findByPurchaseIdAndProductId(PurchaseHasProductId id);
     List<PurchaseHasProduct> findByPurchaseId(Long purchaseId);
-    List<PurchaseHasProduct> findByProductId(Long productId);
     PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct);
     List<PurchaseHasProduct> addAll(List<PurchaseHasProduct> purchaseHasProducts);
     PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct);

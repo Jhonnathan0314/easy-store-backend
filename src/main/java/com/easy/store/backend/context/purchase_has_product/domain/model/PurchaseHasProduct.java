@@ -21,11 +21,11 @@ public class PurchaseHasProduct {
     private BigDecimal unitPrice;
     private BigDecimal subtotal;
 
-    public boolean isValid(PurchaseHasProduct purchaseHasProduct) {
-        if(purchaseHasProduct.getQuantity() == null ||
-            purchaseHasProduct.id == null) return false;
+    public boolean isValid() {
+        if(quantity == null ||
+            id == null) return false;
 
-        return !purchaseHasProduct.getQuantity().toString().isEmpty();
+        return !quantity.toString().isEmpty();
     }
 
     @Override

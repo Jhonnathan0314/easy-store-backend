@@ -36,12 +36,6 @@ public class PurchaseHasProductRepositoryJpaAdapter implements PurchaseHasProduc
     }
 
     @Override
-    public List<PurchaseHasProduct> findByProductId(Long productId) {
-        List<PurchaseHasProductEntity> purchaseHasProducts = purchaseHasProductJpaRepository.findByProductId(productId);
-        return responseMapper.entitiesToModels(purchaseHasProducts);
-    }
-
-    @Override
     public PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct) {
         PurchaseHasProductEntity purchaseHasProductEntity = purchaseHasProductJpaRepository.save(addMapper.modelToEntity(purchaseHasProduct));
         return responseMapper.entityToModel(purchaseHasProductEntity);
