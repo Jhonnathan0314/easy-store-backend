@@ -3,12 +3,9 @@ package com.easy.store.backend.context.account.infrastructure.mappers;
 import com.easy.store.backend.context.account.application.dto.AccountCreateDto;
 import com.easy.store.backend.context.account.domain.model.Account;
 import com.easy.store.backend.context.account.infrastructure.persistence.AccountEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class AccountCreateMapper implements Mapper<AccountEntity, Account, AccountCreateDto> {
+public class AccountCreateMapper extends BaseMapper<AccountEntity, Account, AccountCreateDto> {
 
     @Override
     public Account entityToModel(AccountEntity entity) {
@@ -16,6 +13,7 @@ public class AccountCreateMapper implements Mapper<AccountEntity, Account, Accou
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .imageName(entity.getImageName())
+                .state(entity.getState())
                 .build();
     }
 
@@ -25,6 +23,7 @@ public class AccountCreateMapper implements Mapper<AccountEntity, Account, Accou
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
+                .state(model.getState())
                 .build();
     }
 
@@ -46,31 +45,4 @@ public class AccountCreateMapper implements Mapper<AccountEntity, Account, Accou
                 .build();
     }
 
-    @Override
-    public List<Account> entitiesToModels(List<AccountEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<AccountEntity> modelsToEntities(List<Account> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<AccountCreateDto> modelsToDtos(List<Account> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Account> dtosToModels(List<AccountCreateDto> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
-    }
 }
