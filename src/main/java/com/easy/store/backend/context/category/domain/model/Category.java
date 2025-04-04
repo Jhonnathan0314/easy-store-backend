@@ -26,11 +26,11 @@ public class Category {
     private Timestamp updateDate;
     private String state;
 
-    public boolean isValid(Category category) {
-        if(category.getName() == null || category.getDescription() == null ||
+    public boolean isValid() {
+        if(name == null || description == null ||
             user == null || account == null) return false;
 
-        return !category.getName().isEmpty() && !category.getDescription().isEmpty();
+        return !name.isEmpty() && !description.isEmpty();
     }
 
     @Override

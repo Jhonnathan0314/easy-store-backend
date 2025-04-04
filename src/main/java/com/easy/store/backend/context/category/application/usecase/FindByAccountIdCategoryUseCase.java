@@ -17,14 +17,13 @@ public class FindByAccountIdCategoryUseCase {
     private final Logger logger = Logger.getLogger(FindByAccountIdCategoryUseCase.class.getName());
 
     private final CategoryRepository categoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Category> findByAccountId(Long accountId) throws NoResultsException {
 
         logger.info("ACCION FINDBYACCOUNTID CATEGORY -> Iniciando búsqueda");
 
         List<Category> categories = categoryRepository.findByAccountId(accountId);
-        if(categories == null || categories.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(categories == null || categories.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYACCOUNTID CATEGORY -> Encontré categorias con éxito");
 
         return categories;

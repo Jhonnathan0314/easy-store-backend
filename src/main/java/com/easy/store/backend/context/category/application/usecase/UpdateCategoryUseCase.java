@@ -19,7 +19,6 @@ public class UpdateCategoryUseCase {
 
     private final Logger logger = Logger.getLogger(UpdateCategoryUseCase.class.getName());
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
     private final CategoryRepository categoryRepository;
 
     public Category update(Category category) throws
@@ -27,22 +26,22 @@ public class UpdateCategoryUseCase {
 
         logger.info("ACCION UDPATE CATEGORY -> Inicia el proceso");
 
-        if(category.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        if(category.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION UDPATE CATEGORY -> Validé id");
 
-        if(!category.isValid(category)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!category.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION UDPATE CATEGORY -> Validé cuerpo de la petición");
 
         if(category.getUser().getId() == null || category.getAccount().getId() == null)
-            throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+            throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION UDPATE CATEGORY -> Validé ids de usuario y cuenta");
 
         Optional<Category> optCategory = categoryRepository.findById(category.getId());
-        if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optCategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION UDPATE CATEGORY -> Validé existencia de la categoria");
 
         Category categoryDb = optCategory.get();
-        if(!areDifferences(categoryDb, category)) throw new NoChangesException(errorMessages.NO_CHANGES);
+        if(!areDifferences(categoryDb, category)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
         logger.info("ACCION UDPATE CATEGORY -> Validé que hayan cambios a aplicar");
 
         System.out.println("category state: " + category.getState());

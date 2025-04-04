@@ -9,6 +9,5 @@ public interface CategoryJpaRepository extends JpaRepository<CategoryEntity, Lon
 
     Optional<CategoryEntity> findByName(String name);
     List<CategoryEntity> findByAccountId(Long accountId);
-    List<CategoryEntity> findByUserIdAndAccountId(Long userId, Long accountId);
 
 }

@@ -27,7 +27,6 @@ public class CategoryController {
     private final FindAllCategoryUseCase findAllCategoryUseCase;
     private final FindByIdCategoryUseCase findByIdCategoryUseCase;
     private final FindByAccountIdCategoryUseCase findByAccountIdCategoryUseCase;
-    private final FindByUserIdAndAccountIdCategoryUseCase findByUserIdAndAccountIdCategoryUseCase;
     private final CreateCategoryUseCase createCategoryUseCase;
     private final UpdateCategoryUseCase updateCategoryUseCase;
     private final DeleteByIdCategoryUseCase deleteByIdCategoryUseCase;
@@ -77,19 +76,6 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/user/{userId}/account/{accountId}")
-    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findById(@PathVariable Long userId, @PathVariable Long accountId) {
-        ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<Category> categories = findByUserIdAndAccountIdCategoryUseCase.findByUserIdAndAccountId(userId, accountId);
-            response.setData(categoryResponseMapper.modelsToDtos(categories));
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
     @PostMapping
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO category, @RequestHeader("Create-By") Long createBy) {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
@@ -129,10 +115,10 @@ public class CategoryController {
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<CategoryUpdateDTO>> changeStateById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<CategoryUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<CategoryUpdateDTO> response = new ApiResponse<>();
         try {
-            Category category = changeStateByIdCategoryUseCase.changeStateById(id);
+            Category category = changeStateByIdCategoryUseCase.changeStateById(id, updateBy);
             response.setData(categoryUpdateMapper.modelToDto(category));
             return ResponseEntity.ok(response);
         } catch (NonExistenceException e) {
