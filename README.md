@@ -19,6 +19,63 @@ Las características clave de la API incluyen:
 
 La seguridad de las transacciones y los datos de los usuarios es una prioridad, y la API utiliza Spring Security y JWT (JSON Web Tokens) para garantizar que todas las operaciones se realicen de manera segura.
 
+## Estructura de paquetes del proyecto
+
+```
+com.easy.store.backend
+│
+├── config
+│   └── S3Config.java  # Configuración de conexión a S3
+│
+├── utils
+│   ├── constants
+│   ├── exceptions
+│   ├── http
+│   ├── mappers
+│   └── message
+│
+├── security
+│   ├── config         # Configuración de headers, CORS, etc.
+│   ├── controller     # Endpoints de autenticación
+│   ├── jwt            # Generación y filtrado de JWT
+│   ├── models         # Modelos de seguridad
+│   └── service        # Implementación de login y register
+│
+└── context
+    ├── codes
+    ├── roles
+    ├── account
+    ├── user
+    ├── account_has_user
+    ├── category
+    ├── subcategory
+    ├── payment_type
+    ├── product
+    ├── purchase
+    ├── purchase_has_product
+    ├── email
+    │   ├── service
+    │   └── controller
+    └── s3
+    │   ├── model
+    │   ├── service
+    │   └── controller
+    
+A excepción de email y s3, cada contexto contiene la siguiente estructura:
+    ├── application
+    │   ├── usecase
+    │   └── dto
+    ├── domain
+    │   ├── model
+    │   └── ports
+    ├── infrastructure
+    │   ├── adapter
+    │   ├── mappers
+    │   └── persistence
+    └── presentation
+        └── controller
+```
+
 ## Documentación API
 
 Para más detalles sobre cómo consumir la API y utilizar sus diferentes endpoints, refiérase a la documentación de la API proporcionada a continuación:
@@ -47,7 +104,7 @@ Para ejecutar este proyecto es necesario contar con:
 ## Configuración de la Base de Datos
 
 Si no cuenta con una base de datos local, establezca la propiedad 
-```yaml
+```properties
 spring.jpa.hibernate.ddl-auto=create
 ```
 
@@ -70,8 +127,15 @@ Para la ejecución del proyecto, asegúrese de establecer las siguientes variabl
 - `EASY_STORE_DB_PORT`: Puerto de la base de datos.
 - `EASY_STORE_DB_NAME`: Nombre de la base de datos.
 - `SECRET_JWT_KEY`: Clave secreta para JWT.
+- `EASY_STORE_AWS_S3_ACCESS_KEY`: Access key aws con permisos sobre el bucket s3 que almacena las imagenes.
+- `EASY_STORE_AWS_S3_SECRET_ACCESS_KEY`: Secret access key aws.
+- `EASY_STORE_AWS_S3_EASY_STORE`: Nombre del bucket en que se almacenan las imagenes.
+- `EASY_STORE_GHOST_USER`: Username del usuario creado por defecto para usuarios sin cuenta.
+- `EASY_STORE_GHOST_PASSWORD`: Password del usuario creado por defecto para usuarios sin cuenta.
+- `EMAIL_APP_USERNAME`: Email configurado para enviar emails.
+- `EMAIL_APP_PASSWORD`: Contraseña de aplicación del correo configurado.
 
-## Ejecución
+## Cómo ejecutar el proyecto
 
 Para ejecutar el proyecto, use el siguiente comando:
 
@@ -84,3 +148,4 @@ O si tiene Maven instalado de forma independiente:
 ```bash
 mvn spring-boot:run
 ```
+
