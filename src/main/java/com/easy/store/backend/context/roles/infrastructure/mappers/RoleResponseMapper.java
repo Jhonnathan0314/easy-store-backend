@@ -3,12 +3,9 @@ package com.easy.store.backend.context.roles.infrastructure.mappers;
 import com.easy.store.backend.context.roles.application.dto.RoleResponseDTO;
 import com.easy.store.backend.context.roles.domain.model.Role;
 import com.easy.store.backend.context.roles.infrastructure.persistence.RoleEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class RoleResponseMapper implements Mapper<RoleEntity, Role, RoleResponseDTO> {
+public class RoleResponseMapper extends BaseMapper<RoleEntity, Role, RoleResponseDTO> {
 
     @Override
     public Role entityToModel(RoleEntity entity) {
@@ -42,31 +39,4 @@ public class RoleResponseMapper implements Mapper<RoleEntity, Role, RoleResponse
                 .build();
     }
 
-    @Override
-    public List<Role> entitiesToModels(List<RoleEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RoleEntity> modelsToEntities(List<Role> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RoleResponseDTO> modelsToDtos(List<Role> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Role> dtosToModels(List<RoleResponseDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
-    }
 }
