@@ -4,12 +4,9 @@ import com.easy.store.backend.context.product.application.dto.ProductDTO;
 import com.easy.store.backend.context.product.domain.model.Product;
 import com.easy.store.backend.context.product.infrastructure.persistence.ProductEntity;
 import com.easy.store.backend.context.subcategory.infrastructure.mappers.SubcategoryMapper;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO> {
+public class ProductMapper extends BaseMapper<ProductEntity, Product, ProductDTO> {
 
     private final SubcategoryMapper subcategoryMapper = new SubcategoryMapper();
 
@@ -92,34 +89,6 @@ public class ProductMapper implements Mapper<ProductEntity, Product, ProductDTO>
                 .createBy(dto.getCreateBy())
                 .updateBy(dto.getUpdateBy())
                 .build();
-    }
-
-    @Override
-    public List<Product> entitiesToModels(List<ProductEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ProductEntity> modelsToEntities(List<Product> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ProductDTO> modelsToDtos(List<Product> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Product> dtosToModels(List<ProductDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }
