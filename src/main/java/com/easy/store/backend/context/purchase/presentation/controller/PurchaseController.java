@@ -16,10 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,11 +29,6 @@ public class PurchaseController {
     private final FindByAccountIdPurchaseUseCase findByAccountIdPurchaseUseCase;
     private final FindByCategoryIdPurchaseUseCase findByCategoryIdPurchaseUseCase;
     private final FindByUserIdPurchaseUseCase findByUserIdPurchaseUseCase;
-    private final FindByUserIdAndStatePurchaseUseCase findByUserIdAndStatePurchaseUseCase;
-    private final FindByPaymentTypeIdPurchaseUseCase findByPaymentTypeIdPurchaseUseCase;
-    private final FindByDatePurchaseUseCase findByDatePurchaseUseCase;
-    private final FindByDateBetweenPurchaseUseCase findByDateBetweenPurchaseUseCase;
-    private final FindByTotalBetweenPurchaseUseCase findByTotalBetweenPurchaseUseCase;
     private final GeneratePurchaseUseCase generatePurchaseUseCase;
     private final UpdatePurchaseUseCase updatePurchaseUseCase;
     private final DeleteByIdPurchaseUseCase deleteByIdPurchaseUseCase;
@@ -105,82 +96,6 @@ public class PurchaseController {
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         try {
             List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByUserIdPurchaseUseCase.findByUserId(userId));
-            response.setData(purchases);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
-    @GetMapping("/user/{userId}/state/{state}")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByUserId(@PathVariable Long userId, @PathVariable String state) {
-        ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByUserIdAndStatePurchaseUseCase.findByUserIdAndState(userId, state));
-            response.setData(purchases);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
-    @GetMapping("/payment-type/{paymentTypeId}")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByPaymentTypeId(@PathVariable Long paymentTypeId) {
-        ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByPaymentTypeIdPurchaseUseCase.findByPaymentTypeId(paymentTypeId));
-            response.setData(purchases);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
-    @GetMapping("/creation-date")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByDate(@RequestHeader("Creation-Date") String dateStr) {
-        ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
-        try {
-            LocalDate date = LocalDate.parse(dateStr);
-            LocalDateTime dateTime = date.atStartOfDay();
-            Timestamp findDate = Timestamp.valueOf(dateTime);
-            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDatePurchaseUseCase.findByCreationDate(findDate));
-            response.setData(purchases);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
-    @GetMapping("/creation-date/range")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findBetweenRangeDates(@RequestHeader("From-Date") String fromDateStr, @RequestHeader("To-Date") String toDateStr) {
-        ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
-        try {
-            LocalDate dateOne = LocalDate.parse(fromDateStr);
-            LocalDateTime dateTimeOne = dateOne.atStartOfDay();
-            Timestamp fromDate = Timestamp.valueOf(dateTimeOne);
-
-            LocalDate dateTwo = LocalDate.parse(toDateStr);
-            LocalDateTime dateTimeTwo = dateTwo.atStartOfDay();
-            Timestamp toDate = Timestamp.valueOf(dateTimeTwo);
-
-            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByDateBetweenPurchaseUseCase.findByCreationDateBetween(fromDate, toDate));
-            response.setData(purchases);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
-    }
-
-    @GetMapping("/subtotal/range")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findBetweenRangeDates(@RequestHeader("From-Total") BigDecimal fromTotal, @RequestHeader("To-Total") BigDecimal toTotal) {
-        ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByTotalBetweenPurchaseUseCase.findByTotalBetween(fromTotal, toTotal));
             response.setData(purchases);
             return ResponseEntity.ok(response);
         } catch (NoResultsException e) {

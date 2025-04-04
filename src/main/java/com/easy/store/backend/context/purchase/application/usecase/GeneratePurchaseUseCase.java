@@ -28,25 +28,24 @@ public class GeneratePurchaseUseCase {
     private final UserRepository userRepository;
     private final PaymentTypeRepository paymentTypeRepository;
     private final CategoryRepository categoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Purchase generate(Purchase purchase) throws InvalidBodyException, NoResultsException {
 
         logger.info("ACCION GENERATE PRODUCT -> Iniciando proceso con body: " + purchase.toString());
 
-        if(!purchase.isValid(purchase)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!purchase.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION GENERATE PRODUCT -> Validé cuerpo de la petición");
 
         Optional<User> optUser = userRepository.findById(purchase.getUser().getId());
-        if(optUser.isEmpty()) throw new NoResultsException(errorMessages.NO_USER_RESULTS);
+        if(optUser.isEmpty()) throw new NoResultsException(ErrorMessages.NO_USER_RESULTS);
         logger.info("ACCION GENERATE PRODUCT -> Usuario encontrado con éxito");
 
         Optional<PaymentType> optPaymentType = paymentTypeRepository.findById(purchase.getPaymentType().getId());
-        if(optPaymentType.isEmpty()) throw new NoResultsException(errorMessages.NO_PAYMENT_TYPE_RESULTS);
+        if(optPaymentType.isEmpty()) throw new NoResultsException(ErrorMessages.NO_PAYMENT_TYPE_RESULTS);
         logger.info("ACCION GENERATE PRODUCT -> Tipo de pago encontrado con éxito");
 
         Optional<Category> optCategory = categoryRepository.findById(purchase.getCategory().getId());
-        if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
+        if(optCategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_CATEGORY_RESULTS);
         logger.info("ACCION GENERATE PRODUCT -> Categoria encontrada con éxito");
 
         purchase.setTotal(new BigDecimal("0"));

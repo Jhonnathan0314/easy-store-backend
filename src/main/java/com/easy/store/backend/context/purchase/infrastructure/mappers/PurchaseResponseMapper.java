@@ -10,13 +10,11 @@ import com.easy.store.backend.context.purchase.infrastructure.persistence.Purcha
 import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductResponseMapper;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, PurchaseResponseDTO> {
+public class PurchaseResponseMapper extends BaseMapper<PurchaseEntity, Purchase, PurchaseResponseDTO> {
 
     private final PurchaseHasProductResponseMapper hasProductResponseMapper = new PurchaseHasProductResponseMapper();
 
@@ -100,34 +98,6 @@ public class PurchaseResponseMapper implements Mapper<PurchaseEntity, Purchase, 
                 .creationDate(dto.getCreationDate())
                 .products(new ArrayList<>())
                 .build();
-    }
-
-    @Override
-    public List<Purchase> entitiesToModels(List<PurchaseEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseEntity> modelsToEntities(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseResponseDTO> modelsToDtos(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Purchase> dtosToModels(List<PurchaseResponseDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }

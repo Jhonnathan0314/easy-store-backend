@@ -19,14 +19,13 @@ public class FindByCategoryIdPurchaseUseCase {
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseHasProductRepository purchaseHasProductRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Purchase> findByCategoryId(Long categoryId) throws NoResultsException {
 
         logger.info("ACCION FINDBYCATEGORYID PURCHASE -> Iniciando búsqueda con id: " + categoryId);
 
         List<Purchase> purchases = purchaseRepository.findByCategoryId(categoryId);
-        if(purchases == null || purchases.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(purchases == null || purchases.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYCATEGORYID PURCHASE -> Encontré compras con éxito");
 
         for (Purchase purchase : purchases) {

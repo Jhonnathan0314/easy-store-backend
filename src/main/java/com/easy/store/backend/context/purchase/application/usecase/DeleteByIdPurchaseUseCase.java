@@ -22,18 +22,17 @@ public class DeleteByIdPurchaseUseCase {
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseHasProductRepository purchaseHasProductRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void deleteById(Long id) throws NonExistenceException, InvalidActionException {
 
         logger.info("ACCION DELETEBYID PURCHASE -> Iniciando proceso con id: " + id);
 
         Optional<Purchase> purchase = purchaseRepository.findById(id);
-        if(purchase.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        if(purchase.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION DELETEBYID PURCHASE -> Compra encontrada con éxito");
 
         List<PurchaseHasProduct> hasProducts = purchaseHasProductRepository.findByPurchaseId(purchase.get().getId());
-        if(!hasProducts.isEmpty()) throw new InvalidActionException(errorMessages.INVALID_ACTION);
+        if(!hasProducts.isEmpty()) throw new InvalidActionException(ErrorMessages.INVALID_ACTION);
 
         logger.info("ACCION DELETEBYID PURCHASE -> Eliminando compra");
 

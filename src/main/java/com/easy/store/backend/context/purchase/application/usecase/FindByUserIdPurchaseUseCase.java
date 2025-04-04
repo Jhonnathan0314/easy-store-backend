@@ -19,14 +19,13 @@ public class FindByUserIdPurchaseUseCase {
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseHasProductRepository purchaseHasProductRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Purchase> findByUserId(Long userId) throws NoResultsException {
 
         logger.info("ACCION FINDBYUSERID PURCHASE -> Iniciando búsqueda con id: " + userId);
 
         List<Purchase> purchases = purchaseRepository.findByUserId(userId);
-        if(purchases == null || purchases.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(purchases == null || purchases.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYUSERID PURCHASE -> Encontré compras con éxito");
 
         for (Purchase purchase : purchases) {

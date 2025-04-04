@@ -9,12 +9,13 @@ import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PurchaseGenerateMapper implements Mapper<PurchaseEntity, Purchase, PurchaseGenerateDTO> {
+public class PurchaseGenerateMapper extends BaseMapper<PurchaseEntity, Purchase, PurchaseGenerateDTO> {
 
     @Override
     public Purchase entityToModel(PurchaseEntity entity) {
@@ -86,34 +87,6 @@ public class PurchaseGenerateMapper implements Mapper<PurchaseEntity, Purchase, 
                 .createBy(dto.getCreateBy())
                 .state(dto.getState())
                 .build();
-    }
-
-    @Override
-    public List<Purchase> entitiesToModels(List<PurchaseEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseEntity> modelsToEntities(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseGenerateDTO> modelsToDtos(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Purchase> dtosToModels(List<PurchaseGenerateDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }

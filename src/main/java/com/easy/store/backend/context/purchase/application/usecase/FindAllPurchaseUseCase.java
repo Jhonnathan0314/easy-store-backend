@@ -21,14 +21,13 @@ public class FindAllPurchaseUseCase {
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseHasProductRepository purchaseHasProductRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Purchase> findAll() throws NoResultsException {
 
         logger.info("ACCION FINDALL PURCHASE -> Iniciando búsqueda");
 
         List<Purchase> purchases = purchaseRepository.findAll();
-        if(purchases == null || purchases.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(purchases == null || purchases.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDALL PURCHASE -> Encontré compras con éxito");
 
         for (Purchase purchase : purchases) {

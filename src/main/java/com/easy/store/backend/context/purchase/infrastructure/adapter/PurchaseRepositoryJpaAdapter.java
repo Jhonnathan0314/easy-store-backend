@@ -10,8 +10,6 @@ import com.easy.store.backend.context.purchase.infrastructure.persistence.Purcha
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,36 +49,6 @@ public class PurchaseRepositoryJpaAdapter implements PurchaseRepository {
     @Override
     public List<Purchase> findByUserId(Long userId) {
         List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByUserId(userId);
-        return responseMapper.entitiesToModels(purchaseEntities);
-    }
-
-    @Override
-    public List<Purchase> findByUserIdAndState(Long userId, String state) {
-        List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByUserIdAndState(userId, state);
-        return responseMapper.entitiesToModels(purchaseEntities);
-    }
-
-    @Override
-    public List<Purchase> findByPaymentTypeId(Long paymentTypeId) {
-        List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByPaymentTypeId(paymentTypeId);
-        return responseMapper.entitiesToModels(purchaseEntities);
-    }
-
-    @Override
-    public List<Purchase> findByCreationDate(Timestamp creationDate) {
-        List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByCreationDate(creationDate);
-        return responseMapper.entitiesToModels(purchaseEntities);
-    }
-
-    @Override
-    public List<Purchase> findByCreationDateBetween(Timestamp fromDate, Timestamp toDate) {
-        List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByCreationDateBetween(fromDate, toDate);
-        return responseMapper.entitiesToModels(purchaseEntities);
-    }
-
-    @Override
-    public List<Purchase> findByTotalBetween(BigDecimal fromTotal, BigDecimal toTotal) {
-        List<PurchaseEntity> purchaseEntities = purchaseJpaRepository.findByTotalBetween(fromTotal, toTotal);
         return responseMapper.entitiesToModels(purchaseEntities);
     }
 

@@ -9,12 +9,9 @@ import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, PurchaseUpdateDTO> {
+public class PurchaseUpdateMapper extends BaseMapper<PurchaseEntity, Purchase, PurchaseUpdateDTO> {
 
     @Override
     public Purchase entityToModel(PurchaseEntity entity) {
@@ -33,6 +30,7 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
                         .build()
                 )
                 .createBy(entity.getCreateBy())
+                .updateBy(entity.getUpdateBy())
                 .state(entity.getState())
                 .build();
     }
@@ -54,6 +52,7 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
                         .build()
                 )
                 .createBy(model.getCreateBy())
+                .updateBy(model.getUpdateBy())
                 .state(model.getState())
                 .total(model.getTotal())
                 .build();
@@ -63,9 +62,7 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
     public PurchaseUpdateDTO modelToDto(Purchase model) {
         return PurchaseUpdateDTO.builder()
                 .id(model.getId())
-                .userId(model.getUser().getId())
                 .paymentTypeId(model.getPaymentType().getId())
-                .categoryId(model.getCategory().getId())
                 .updateBy(model.getCreateBy())
                 .state(model.getState())
                 .build();
@@ -75,49 +72,13 @@ public class PurchaseUpdateMapper implements Mapper<PurchaseEntity, Purchase, Pu
     public Purchase dtoToModel(PurchaseUpdateDTO dto) {
         return Purchase.builder()
                 .id(dto.getId())
-                .user(User.builder()
-                        .id(dto.getUserId())
-                        .build()
-                )
                 .paymentType(PaymentType.builder()
                         .id(dto.getPaymentTypeId())
-                        .build()
-                )
-                .category(Category.builder()
-                        .id(dto.getCategoryId())
                         .build()
                 )
                 .updateBy(dto.getUpdateBy())
                 .state(dto.getState())
                 .build();
-    }
-
-    @Override
-    public List<Purchase> entitiesToModels(List<PurchaseEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseEntity> modelsToEntities(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseUpdateDTO> modelsToDtos(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Purchase> dtosToModels(List<PurchaseUpdateDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }

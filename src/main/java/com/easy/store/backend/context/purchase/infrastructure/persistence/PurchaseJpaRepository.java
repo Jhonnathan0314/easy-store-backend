@@ -3,8 +3,6 @@ package com.easy.store.backend.context.purchase.infrastructure.persistence;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface PurchaseJpaRepository extends JpaRepository<PurchaseEntity, Long> {
@@ -16,11 +14,5 @@ public interface PurchaseJpaRepository extends JpaRepository<PurchaseEntity, Lon
     List<PurchaseEntity> findByAccountId(Long accountId);
     List<PurchaseEntity> findByCategoryId(Long categoryId);
     List<PurchaseEntity> findByUserId(Long userId);
-    List<PurchaseEntity> findByUserIdAndState(Long userId, String state);
-    List<PurchaseEntity> findByPaymentTypeId(Long paymentTypeId);
-    @Query(value = "select * from purchase where DATE(creation_date) = ?", nativeQuery = true)
-    List<PurchaseEntity> findByCreationDate(Timestamp creationDate);
-    List<PurchaseEntity> findByCreationDateBetween(Timestamp fromDate, Timestamp toDate);
-    List<PurchaseEntity> findByTotalBetween(BigDecimal fromTotal, BigDecimal toTotal);
 
 }

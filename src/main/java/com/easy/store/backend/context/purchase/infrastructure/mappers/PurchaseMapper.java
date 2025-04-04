@@ -6,12 +6,9 @@ import com.easy.store.backend.context.purchase.application.dto.PurchaseDTO;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.infrastructure.persistence.PurchaseEntity;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserMapper;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, PurchaseDTO> {
+public class PurchaseMapper extends BaseMapper<PurchaseEntity, Purchase, PurchaseDTO> {
 
     private final UserMapper userMapper = new UserMapper();
     private final PaymentTypeMapper paymentTypeMapper = new PaymentTypeMapper();
@@ -79,34 +76,6 @@ public class PurchaseMapper implements Mapper<PurchaseEntity, Purchase, Purchase
                 .updateDate(dto.getUpdateDate())
                 .updateBy(dto.getUpdateBy())
                 .build();
-    }
-
-    @Override
-    public List<Purchase> entitiesToModels(List<PurchaseEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseEntity> modelsToEntities(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseDTO> modelsToDtos(List<Purchase> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Purchase> dtosToModels(List<PurchaseDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }

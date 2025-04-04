@@ -29,15 +29,23 @@ public class Purchase {
     private Timestamp updateDate;
     private List<PurchaseHasProduct> products;
 
-    public boolean isValid(Purchase purchase) {
-        if(purchase.getUser() == null ||
-                purchase.getPaymentType() == null ||
-                purchase.getCategory() == null ||
-                purchase.state == null) return false;
+    public boolean isValid() {
+        if(user == null ||
+                paymentType == null ||
+                category == null ||
+                state == null) return false;
 
-        return purchase.getUser().getId() != null &&
-                purchase.getPaymentType().getId() != null &&
-                purchase.getCategory().getId() != null &&
-                !purchase.getState().isEmpty();
+        return user.getId() != null &&
+                paymentType.getId() != null &&
+                category.getId() != null &&
+                !state.isEmpty();
+    }
+
+    public boolean isValidToUpdate() {
+        if(paymentType == null ||
+                state == null) return false;
+
+        return paymentType.getId() != null &&
+                !state.isEmpty();
     }
 }
