@@ -143,10 +143,10 @@ public class ProductController {
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<ProductUpdateDTO>> changeStateById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ProductUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<ProductUpdateDTO> response = new ApiResponse<>();
         try {
-            Product product = changeStateByIdProductUseCase.changeStateById(id);
+            Product product = changeStateByIdProductUseCase.changeStateById(id, updateBy);
             response.setData(productUpdateMapper.modelToDto(product));
             return ResponseEntity.ok(response);
         } catch (NonExistenceException e) {

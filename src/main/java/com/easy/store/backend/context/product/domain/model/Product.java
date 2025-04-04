@@ -29,20 +29,20 @@ public class Product {
     private Timestamp updateDate;
     private String state;
 
-    public boolean isValid(Product product) {
-        if(product.getName() == null ||
-                product.getSubcategory() == null ||
-                product.getPrice() == null ||
-                product.getQuantity() == null ||
-                product.getDescription() == null ||
-                product.getQualification() == null
+    public boolean isValid() {
+        if(name == null ||
+                subcategory == null ||
+                price == null ||
+                quantity == null ||
+                description == null ||
+                qualification == null
         ) return false;
 
-        if (product.getName().isEmpty() || product.getDescription().isEmpty()) return false;
-        if (product.getPrice().compareTo(BigDecimal.ZERO) <= 0) return false;
-        if (product.getQuantity() < 0 || product.getQualification() < 0) return false;
+        if (name.isEmpty() || description.isEmpty()) return false;
+        if (price.compareTo(BigDecimal.ZERO) <= 0) return false;
+        if (quantity < 0 || qualification < 0) return false;
 
-        return product.getSubcategory().getId() != null;
+        return subcategory.getId() != null;
     }
 
     @Override

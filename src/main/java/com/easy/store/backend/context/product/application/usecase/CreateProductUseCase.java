@@ -22,19 +22,18 @@ public class CreateProductUseCase {
 
     private final ProductRepository productRepository;
     private final SubcategoryRepository subcategoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Product create(Product product) throws NoResultsException, InvalidBodyException {
 
         logger.info("ACCION CREATE PRODUCT -> Iniciando proceso con body: " + product.toString());
 
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(product.getSubcategory().getId());
-        if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
+        if(optSubcategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_CATEGORY_RESULTS);
         logger.info("ACCION CREATE PRODUCT -> Subcategoria encontrada con éxito");
 
         product.setSubcategory(optSubcategory.get());
 
-        if(!product.isValid(product)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!product.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION CREATE PRODUCT -> Validé cuerpo de la petición");
 
         if(product.getImageName().isEmpty()) product.setImageName("product.png");

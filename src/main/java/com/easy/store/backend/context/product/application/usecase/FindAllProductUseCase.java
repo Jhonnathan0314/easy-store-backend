@@ -17,14 +17,13 @@ public class FindAllProductUseCase {
     private final Logger logger = Logger.getLogger(FindAllProductUseCase.class.getName());
 
     private final ProductRepository productRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Product> findAll() throws NoResultsException {
 
         logger.info("ACCION FINDALL PRODUCT -> Iniciando búsqueda");
 
         List<Product> products = productRepository.findAll();
-        if(products == null || products.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(products == null || products.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDALL PRODUCT -> Encontré productos con éxito");
 
         return products;

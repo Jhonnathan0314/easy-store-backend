@@ -22,7 +22,6 @@ public class UpdateProductUseCase {
 
     private final Logger logger = Logger.getLogger(UpdateProductUseCase.class.getName());
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
     private final ProductRepository productRepository;
     private final SubcategoryRepository subcategoryRepository;
 
@@ -31,24 +30,24 @@ public class UpdateProductUseCase {
         logger.info("ACCION UDPATE PRODUCT -> Inicia el proceso");
 
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(product.getSubcategory().getId());
-        if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
+        if(optSubcategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_CATEGORY_RESULTS);
         logger.info("ACCION UDPATE PRODUCT -> Categoria encontrada con éxito");
 
         product.setSubcategory(optSubcategory.get());
 
-        if(product.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        if(product.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION UDPATE PRODUCT -> Validé id");
 
-        if(!product.isValid(product)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!product.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION UDPATE PRODUCT -> Validé cuerpo de la petición");
 
         Optional<Product> optProduct = productRepository.findById(product.getId());
-        if(optProduct.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optProduct.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION UDPATE PRODUCT -> Validé existencia del producto");
 
         Product productDb = optProduct.get();
         if(areNoChanges(productDb, product)) {
-            throw new NoChangesException(errorMessages.NO_CHANGES);
+            throw new NoChangesException(ErrorMessages.NO_CHANGES);
         }
         logger.info("ACCION UDPATE PRODUCT -> Validé que hayan cambios a aplicar");
 

@@ -17,14 +17,13 @@ public class FindByNameProductUseCase {
     private final Logger logger = Logger.getLogger(FindByNameProductUseCase.class.getName());
 
     private final ProductRepository productRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Optional<Product> findByName(String name) throws NoResultsException {
 
         logger.info("ACCION FINDBYNAME PRODUCT -> Iniciando búsqueda");
 
         Optional<Product> optionalProduct = productRepository.findByName(name);
-        if(optionalProduct.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optionalProduct.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYNAME PRODUCT -> Encontré producto con éxito");
 
         return productRepository.findByName(name);

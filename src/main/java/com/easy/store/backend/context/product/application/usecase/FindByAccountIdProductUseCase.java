@@ -17,14 +17,13 @@ public class FindByAccountIdProductUseCase {
     private final Logger logger = Logger.getLogger(FindByAccountIdProductUseCase.class.getName());
 
     private final ProductRepository productRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Product> findByAccountId(Long accountId) throws NoResultsException {
 
         logger.info("ACCION FINDBYACCOUNTID PRODUCT -> Iniciando búsqueda con id: " + accountId);
 
         List<Product> products = productRepository.findByAccountId(accountId);
-        if(products == null || products.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(products == null || products.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYACCOUNTID PRODUCT -> Encontré productos con éxito");
 
         return products;
