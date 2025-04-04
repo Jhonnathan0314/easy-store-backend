@@ -17,16 +17,15 @@ public class CreateRoleUseCase {
     private final Logger logger = Logger.getLogger(CreateRoleUseCase.class.getName());
 
     private final RoleRepository roleRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Role create(Role role) throws DuplicatedException, InvalidBodyException {
 
         logger.info("ACCION CREATE ROLE -> Iniciando proceso con body: " + role.toString());
 
-        if(!role.isValid(role)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!role.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION CREATE ROLE -> Validé cuerpo de la petición");
 
-        if(roleRepository.findByName(role.getName()).isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
+        if(roleRepository.findByName(role.getName()).isPresent()) throw new DuplicatedException(ErrorMessages.DUPLICATED);
         logger.info("ACCION CREATE ROLE -> Validé rol no duplicado");
 
         logger.info("ACCION CREATE ROLE -> Creando rol");

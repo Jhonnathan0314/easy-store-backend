@@ -17,14 +17,13 @@ public class FindAllRoleUseCase {
     private final Logger logger = Logger.getLogger(FindAllRoleUseCase.class.getName());
 
     private final RoleRepository roleRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Role> findAll() throws NoResultsException {
 
         logger.info("ACCION FINDALL ROLE -> Iniciando búsqueda");
 
         List<Role> roles = roleRepository.findAll();
-        if(roles == null || roles.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(roles == null || roles.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDALL ROLE -> Encontré roles con éxito");
 
         return roles;

@@ -17,14 +17,13 @@ public class ChangeStateByIdRoleUseCase {
     private final Logger logger = Logger.getLogger(ChangeStateByIdRoleUseCase.class.getName());
 
     private final RoleRepository roleRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Role changeStateById(Long id) throws NonExistenceException {
 
         logger.info("ACCION CHANGESTATEBYID ROLE -> Iniciando proceso con id: " + id);
 
         Optional<Role> optRole = roleRepository.findById(id);
-        if(optRole.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        if(optRole.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION CHANGESTATEBYID ROLE -> Rol encontrado con éxito");
 
         Role role = optRole.get();

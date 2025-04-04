@@ -19,8 +19,8 @@ public class Role {
     private Timestamp updateDate;
     private String state;
 
-    public boolean isValid(Role role) {
-        if(role.getName() == null) return false;
-        return !role.getName().isEmpty();
+    public boolean isValid() {
+        if(name == null) return false;
+        return name.isEmpty();
     }
 }

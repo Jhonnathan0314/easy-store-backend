@@ -17,14 +17,13 @@ public class DeleteByIdRoleUseCase {
     private final Logger logger = Logger.getLogger(DeleteByIdRoleUseCase.class.getName());
 
     private final RoleRepository roleRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void deleteById(Long id) throws NonExistenceException {
 
         logger.info("ACCION DELETEBYID ROLE -> Iniciando proceso con id: " + id);
 
         Optional<Role> role = roleRepository.findById(id);
-        if(role.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        if(role.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION DELETEBYID ROLE -> Rol encontrado con éxito");
 
         logger.info("ACCION DELETEBYID ROLE -> Eliminando rol");

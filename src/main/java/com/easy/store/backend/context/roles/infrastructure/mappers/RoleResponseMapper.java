@@ -12,6 +12,7 @@ public class RoleResponseMapper extends BaseMapper<RoleEntity, Role, RoleRespons
         return Role.builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                .state(entity.getState())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class RoleResponseMapper extends BaseMapper<RoleEntity, Role, RoleRespons
         return RoleEntity.builder()
                 .id(model.getId())
                 .name(model.getName())
+                .state(model.getState())
                 .build();
     }
 

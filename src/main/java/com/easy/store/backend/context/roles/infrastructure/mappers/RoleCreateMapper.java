@@ -11,6 +11,7 @@ public class RoleCreateMapper extends BaseMapper<RoleEntity, Role, RoleCreateDTO
     public Role entityToModel(RoleEntity entity) {
         return Role.builder()
                 .name(entity.getName())
+                .state(entity.getState())
                 .build();
     }
 
@@ -18,6 +19,7 @@ public class RoleCreateMapper extends BaseMapper<RoleEntity, Role, RoleCreateDTO
     public RoleEntity modelToEntity(Role model) {
         return RoleEntity.builder()
                 .name(model.getName())
+                .state(model.getState())
                 .build();
     }
 
