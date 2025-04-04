@@ -33,7 +33,7 @@ public class CreateSubcategoryUseCase {
 
         subcategory.setCategory(optCategory.get());
 
-        if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
+        if(!subcategory.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION CREATE SUBCATEGORY -> Validé cuerpo de la petición");
 
         logger.info("ACCION CREATE SUBCATEGORY -> Creando subcategoria");

@@ -39,7 +39,7 @@ public class UpdateSubcategoryUseCase {
         if(subcategory.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION UDPATE SUBCATEGORY -> Validé id");
 
-        if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
+        if(!subcategory.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION UDPATE SUBCATEGORY -> Validé cuerpo de la petición");
 
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(subcategory.getId());

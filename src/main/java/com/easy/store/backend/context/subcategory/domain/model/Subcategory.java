@@ -22,10 +22,10 @@ public class Subcategory {
     private Timestamp updateDate;
     private String state;
 
-    public boolean isValid(Subcategory subcategory) {
-        if(subcategory.getName() == null || subcategory.getCategory() == null) return false;
+    public boolean isValid() {
+        if(name == null || category == null) return false;
 
-        return !subcategory.getName().isEmpty() &&
-                subcategory.getCategory().getId() != null;
+        return !name.isEmpty() &&
+                category.getId() != null;
     }
 }
