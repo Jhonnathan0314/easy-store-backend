@@ -17,13 +17,12 @@ public class CreateAccountUseCase {
     private final Logger logger = Logger.getLogger(CreateAccountUseCase.class.getName());
 
     private final AccountRepository accountRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Account create(Account account) throws InvalidBodyException {
 
         logger.info("ACCION CREATE ACCOUNT -> Iniciando creación con body: " + account.toString());
 
-        if(!account.isValid(account)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!account.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION CREATE ACCOUNT -> Body validado con éxito");
 
         if(account.getImageName() == null || account.getImageName().isEmpty()) account.setImageName("store.png");

@@ -20,25 +20,24 @@ public class UpdateAccountUseCase {
     private final Logger logger = Logger.getLogger(UpdateAccountUseCase.class.getName());
 
     private final AccountRepository accountRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Account update(Account account) throws InvalidBodyException, NoChangesException,
             NoIdReceivedException, NonExistenceException {
 
         logger.info("ACCION UPDATE ACCOUNT -> Iniciando actualización con body: " + account.toString());
 
-        if(account.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        if(account.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION UPDATE ACCOUNT -> Id validado con éxito");
 
-        if(!account.isValid(account)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!account.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION UPDATE ACCOUNT -> Body validado con éxito");
 
         Optional<Account> accountIdOpt = accountRepository.findById(account.getId());
 
-        if(accountIdOpt.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        if(accountIdOpt.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION UPDATE ACCOUNT -> Validación cuenta existente con éxito");
 
-        if(account.equals(accountIdOpt.get())) throw new NoChangesException(errorMessages.NO_CHANGES);
+        if(account.equals(accountIdOpt.get())) throw new NoChangesException(ErrorMessages.NO_CHANGES);
         logger.info("ACCION UPDATE ACCOUNT -> Validación cambios a aplicar con éxito");
 
         if(account.getImageName() == null || account.getImageName().isEmpty()) account.setImageName("store.png");

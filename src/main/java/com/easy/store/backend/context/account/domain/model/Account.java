@@ -19,11 +19,11 @@ public class Account {
     private String state;
     private String imageName;
 
-    public boolean isValid(Account account) {
-        if(account.getName() == null ||
-            account.getDescription() == null) return false;
+    public boolean isValid() {
+        if(name == null ||
+            description == null) return false;
 
-        return !account.getName().isEmpty() && !account.getDescription().isEmpty();
+        return !name.isEmpty() && !description.isEmpty();
     }
 
     @Override
