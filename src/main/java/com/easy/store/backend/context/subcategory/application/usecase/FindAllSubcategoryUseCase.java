@@ -17,14 +17,13 @@ public class FindAllSubcategoryUseCase {
     private final Logger logger = Logger.getLogger(FindAllSubcategoryUseCase.class.getName());
 
     private final SubcategoryRepository subcategoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<Subcategory> findAll() throws NoResultsException {
 
         logger.info("ACCION FINDALL SUBCATEGORY -> Iniciando búsqueda");
 
         List<Subcategory> subcategories = subcategoryRepository.findAll();
-        if(subcategories == null || subcategories.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(subcategories == null || subcategories.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDALL SUBCATEGORY -> Encontré subcategorias con éxito");
 
         return subcategories;

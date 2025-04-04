@@ -18,6 +18,7 @@ public class SubcategoryResponseMapper extends BaseMapper<SubcategoryEntity, Sub
                         .id(entity.getCategory().getId())
                         .build()
                 )
+                .state(entity.getState())
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class SubcategoryResponseMapper extends BaseMapper<SubcategoryEntity, Sub
                         .id(model.getCategory().getId())
                         .build()
                 )
+                .state(model.getState())
                 .build();
     }
 

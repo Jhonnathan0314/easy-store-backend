@@ -22,19 +22,18 @@ public class CreateSubcategoryUseCase {
 
     private final SubcategoryRepository subcategoryRepository;
     private final CategoryRepository categoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Subcategory create(Subcategory subcategory) throws NoResultsException, InvalidBodyException {
 
         logger.info("ACCION CREATE SUBCATEGORY -> Iniciando proceso con body: " + subcategory.toString());
 
         Optional<Category> optCategory = categoryRepository.findById(subcategory.getCategory().getId());
-        if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
+        if(optCategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_CATEGORY_RESULTS);
         logger.info("ACCION CREATE SUBCATEGORY -> Validé categoria existente");
 
         subcategory.setCategory(optCategory.get());
 
-        if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION CREATE SUBCATEGORY -> Validé cuerpo de la petición");
 
         logger.info("ACCION CREATE SUBCATEGORY -> Creando subcategoria");

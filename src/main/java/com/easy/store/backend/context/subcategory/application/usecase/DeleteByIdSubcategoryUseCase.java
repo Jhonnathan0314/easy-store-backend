@@ -17,14 +17,13 @@ public class DeleteByIdSubcategoryUseCase {
     private final Logger logger = Logger.getLogger(DeleteByIdSubcategoryUseCase.class.getName());
 
     private final SubcategoryRepository subcategoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public void deleteById(Long id) throws NonExistenceException {
 
         logger.info("ACCION DELETEBYID SUBCATEGORY -> Iniciando proceso con id: " + id);
 
         Optional<Subcategory> subcategory = subcategoryRepository.findById(id);
-        if(subcategory.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        if(subcategory.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION DELETEBYID SUBCATEGORY -> Subcategoria encontrada con éxito");
 
         logger.info("ACCION DELETEBYID SUBCATEGORY -> Eliminando subcategoria");

@@ -129,10 +129,10 @@ public class SubcategoryController {
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<SubcategoryUpdateDTO>> changeStateById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<SubcategoryUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) {
         ApiResponse<SubcategoryUpdateDTO> response = new ApiResponse<>();
         try {
-            Subcategory subcategory = changeStateByIdSubcategoryUseCase.changeStateById(id);
+            Subcategory subcategory = changeStateByIdSubcategoryUseCase.changeStateById(id, updateBy);
             response.setData(subcategoryUpdateMapper.modelToDto(subcategory));
             return ResponseEntity.ok(response);
         } catch (NonExistenceException e) {

@@ -17,14 +17,13 @@ public class FindByNameSubcategoryUseCase {
     private final Logger logger = Logger.getLogger(FindByNameSubcategoryUseCase.class.getName());
 
     private final SubcategoryRepository subcategoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Optional<Subcategory> findByName(String name) throws NoResultsException {
 
         logger.info("ACCION FINDBYNAME SUBCATEGORY -> Iniciando búsqueda");
 
         Optional<Subcategory> optionalSubcategory = subcategoryRepository.findByName(name);;
-        if(optionalSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optionalSubcategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYNAME SUBCATEGORY -> Encontré categoria con éxito");
 
         return optionalSubcategory;

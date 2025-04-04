@@ -24,7 +24,6 @@ public class UpdateSubcategoryUseCase {
 
     private final SubcategoryRepository subcategoryRepository;
     private final CategoryRepository categoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Subcategory update(Subcategory subcategory) throws
             NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
@@ -32,24 +31,24 @@ public class UpdateSubcategoryUseCase {
         logger.info("ACCION UDPATE SUBCATEGORY -> Inicia el proceso con body: " + subcategory.toString());
 
         Optional<Category> optCategory = categoryRepository.findById(subcategory.getCategory().getId());
-        if(optCategory.isEmpty()) throw new NoResultsException(errorMessages.NO_CATEGORY_RESULTS);
+        if(optCategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_CATEGORY_RESULTS);
         logger.info("ACCION UDPATE SUBCATEGORY -> Validé categoria existente");
 
         subcategory.setCategory(optCategory.get());
 
-        if(subcategory.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        if(subcategory.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION UDPATE SUBCATEGORY -> Validé id");
 
-        if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!subcategory.isValid(subcategory)) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION UDPATE SUBCATEGORY -> Validé cuerpo de la petición");
 
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(subcategory.getId());
-        if(optSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optSubcategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION UDPATE SUBCATEGORY -> Validé existencia de la subcategoria");
 
         Subcategory subcategoryDb = optSubcategory.get();
         if(!areDifferences(subcategoryDb, subcategory)) {
-            throw new NoChangesException(errorMessages.NO_CHANGES);
+            throw new NoChangesException(ErrorMessages.NO_CHANGES);
         }
         logger.info("ACCION UDPATE SUBCATEGORY -> Validé que hayan cambios a aplicar");
 

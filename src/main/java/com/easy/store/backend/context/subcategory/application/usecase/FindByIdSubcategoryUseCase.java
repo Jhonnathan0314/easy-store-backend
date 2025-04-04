@@ -17,14 +17,13 @@ public class FindByIdSubcategoryUseCase {
     private final Logger logger = Logger.getLogger(FindByIdSubcategoryUseCase.class.getName());
 
     private final SubcategoryRepository subcategoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public Subcategory findById(Long id) throws NoResultsException {
 
         logger.info("ACCION FINDBYID SUBCATEGORY -> Iniciando búsqueda con id: " + id);
 
         Optional<Subcategory> optionalSubcategory = subcategoryRepository.findById(id);
-        if(optionalSubcategory.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optionalSubcategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYID SUBCATEGORY -> Encontré subcategoria con éxito");
 
         return optionalSubcategory.get();

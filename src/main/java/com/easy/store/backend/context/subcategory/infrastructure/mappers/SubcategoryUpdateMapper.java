@@ -23,6 +23,7 @@ public class SubcategoryUpdateMapper extends BaseMapper<SubcategoryEntity, Subca
                         .id(entity.getCategory().getId())
                         .build()
                 )
+                .state(entity.getState())
                 .build();
     }
 
@@ -40,6 +41,7 @@ public class SubcategoryUpdateMapper extends BaseMapper<SubcategoryEntity, Subca
                         .id(model.getCategory().getId())
                         .build()
                 )
+                .state(model.getState())
                 .build();
     }
 

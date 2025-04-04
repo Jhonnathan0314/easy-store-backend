@@ -17,18 +17,18 @@ public class ChangeStateByIdSubcategoryUseCase {
     private final Logger logger = Logger.getLogger(ChangeStateByIdSubcategoryUseCase.class.getName());
 
     private final SubcategoryRepository subcategoryRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
-    public Subcategory changeStateById(Long id) throws NonExistenceException {
+    public Subcategory changeStateById(Long id, Long updateBy) throws NonExistenceException {
 
         logger.info("ACCION CHANGESTATEBYID SUBCATEGORY -> Iniciando proceso con id: " + id);
 
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(id);
-        if(optSubcategory.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION CHANGESTATEBYID SUBCATEGORY -> Subcategoria encontrada con éxito");
+        if(optSubcategory.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
+        logger.info("ACCION CHANGESTATEBYID SUBCATEGORY -> Subcategoria encontrada con éxito" + optSubcategory.get().getState());
 
         Subcategory subcategory = optSubcategory.get();
         subcategory.setState(subcategory.getState().equals("active") ? "inactive" : "active");
+        subcategory.setUpdateBy(updateBy);
 
         logger.info("ACCION CHANGESTATEBYID SUBCATEGORY -> Actualizando estado");
         return subcategoryRepository.update(subcategory);
