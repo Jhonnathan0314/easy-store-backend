@@ -6,12 +6,9 @@ import com.easy.store.backend.context.purchase_has_product.application.dto.Purch
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProduct;
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.infrastructure.persistence.PurchaseHasProductEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class PurchaseHasProductAddMapper implements Mapper<PurchaseHasProductEntity, PurchaseHasProduct, PurchaseHasProductAddDTO> {
+public class PurchaseHasProductAddMapper extends BaseMapper<PurchaseHasProductEntity, PurchaseHasProduct, PurchaseHasProductAddDTO> {
 
     private final ProductUpdateMapper productMapper = new ProductUpdateMapper();
     private final PurchaseUpdateMapper purchaseMapper = new PurchaseUpdateMapper();
@@ -66,34 +63,6 @@ public class PurchaseHasProductAddMapper implements Mapper<PurchaseHasProductEnt
                 )
                 .quantity(dto.getQuantity())
                 .build();
-    }
-
-    @Override
-    public List<PurchaseHasProduct> entitiesToModels(List<PurchaseHasProductEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseHasProductEntity> modelsToEntities(List<PurchaseHasProduct> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseHasProductAddDTO> modelsToDtos(List<PurchaseHasProduct> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PurchaseHasProduct> dtosToModels(List<PurchaseHasProductAddDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }
