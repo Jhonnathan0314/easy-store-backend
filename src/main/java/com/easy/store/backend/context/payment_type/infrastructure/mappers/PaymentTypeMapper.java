@@ -4,12 +4,13 @@ import com.easy.store.backend.context.account.infrastructure.mappers.AccountMapp
 import com.easy.store.backend.context.payment_type.application.dto.PaymentTypeDTO;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 import com.easy.store.backend.utils.mappers.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PaymentTypeMapper implements Mapper<PaymentTypeEntity, PaymentType, PaymentTypeDTO> {
+public class PaymentTypeMapper extends BaseMapper<PaymentTypeEntity, PaymentType, PaymentTypeDTO> {
 
     private AccountMapper accountMapper = new AccountMapper();
 
@@ -61,34 +62,6 @@ public class PaymentTypeMapper implements Mapper<PaymentTypeEntity, PaymentType,
                 .updateBy(dto.getUpdateBy())
                 .account(accountMapper.dtoToModel(dto.getAccount()))
                 .build();
-    }
-
-    @Override
-    public List<PaymentType> entitiesToModels(List<PaymentTypeEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PaymentTypeEntity> modelsToEntities(List<PaymentType> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PaymentTypeDTO> modelsToDtos(List<PaymentType> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PaymentType> dtosToModels(List<PaymentTypeDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
     }
 
 }
