@@ -111,8 +111,10 @@ spring.jpa.hibernate.ddl-auto=create
 en el `application.properties`. Además, añada las siguientes líneas en su archivo `data.sql`:
 
 ```sql
-INSERT INTO role (name, state, creation_date, update_date) VALUES ('client', 'active', NOW(), NOW());
-INSERT INTO role (name, state, creation_date, update_date) VALUES ('admin', 'active', NOW(), NOW());
+INSERT INTO role (id, name, state, creation_date, update_date) VALUES (1, 'client', 'active', NOW(), NOW());
+INSERT INTO role (id, name, state, creation_date, update_date) VALUES (2, 'owner', 'active', NOW(), NOW());
+INSERT INTO role (id, name, state, creation_date, update_date) VALUES (3, 'admin', 'active', NOW(), NOW());
+INSERT INTO role (id, name, state, creation_date, update_date) VALUES (4, 'ghost', 'active', NOW(), NOW());
 ```
 
 Esto creará automáticamente las tablas necesarias y los roles iniciales en la base de datos.
