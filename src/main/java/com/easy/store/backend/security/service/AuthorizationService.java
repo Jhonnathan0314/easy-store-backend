@@ -47,8 +47,6 @@ public class AuthorizationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
-
     @Value("${easy.store.ghost.user}")
     private final String ghostUsername;
 
@@ -64,18 +62,18 @@ public class AuthorizationService {
         }
 
         logger.info("ACCION LOGIN -> Validando body");
-        if(!request.isValidRequest(request)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!request.isValidRequest(request)) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         logger.info("ACCION LOGIN -> Validando usuario por username: " + request.getUsername());
         Optional<User> userDb = findByUsernameUserUseCase.findByUsername(request.getUsername());
-        if(userDb.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(userDb.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
 
         logger.info("ACCION LOGIN -> Validando account has user");
         List<AccountHasUser> hasUserDb = findByUserIdAccountHasUserUseCase.findByUserId(userDb.get().getId());
 
-        if(hasUserDb.isEmpty()) throw new NoResultsException(errorMessages.NON_EXISTENT_DATA);
+        if(hasUserDb.isEmpty()) throw new NoResultsException(ErrorMessages.NON_EXISTENT_DATA);
 
         Map<String, String> extraClaims = new HashMap<>();
         extraClaims.put("user_role", userDb.get().getRole().getName());
@@ -137,14 +135,14 @@ public class AuthorizationService {
 
     public User resetPassword(ResetPasswordRequest request) throws InvalidBodyException, NoResultsException,
             NoIdReceivedException, NoChangesException, NonExistenceException {
-        if(!request.isValid()) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!request.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
 
         User userDb = findByUsernameUserUseCase.findByUsername(request.getUsername()).orElse(null);
-        if (userDb == null) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if (userDb == null) throw new NoResultsException(ErrorMessages.NO_RESULTS);
 
         Code codeDb = findByUserIdCodeUseCase.findByUserId(userDb.getId());
-        if(codeDb == null) throw new NonExistenceException(errorMessages.NO_VALID_CODE);
-        if(!Objects.equals(codeDb.getCode(), request.getCode())) throw new NonExistenceException(errorMessages.NO_VALID_CODE);
+        if(codeDb == null) throw new NonExistenceException(ErrorMessages.NO_VALID_CODE);
+        if(!Objects.equals(codeDb.getCode(), request.getCode())) throw new NonExistenceException(ErrorMessages.NO_VALID_CODE);
 
         deleteByUserIdCodeUseCase.deleteByUserId(userDb.getId());
 
