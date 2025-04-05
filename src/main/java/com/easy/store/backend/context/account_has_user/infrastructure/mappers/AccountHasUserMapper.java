@@ -5,12 +5,9 @@ import com.easy.store.backend.context.account_has_user.application.dto.AccountHa
 import com.easy.store.backend.context.account_has_user.domain.model.AccountHasUser;
 import com.easy.store.backend.context.account_has_user.infrastructure.persistence.AccountHasUserEntity;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserMapper;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class AccountHasUserMapper implements Mapper<AccountHasUserEntity, AccountHasUser, AccountHasUserDto> {
+public class AccountHasUserMapper extends BaseMapper<AccountHasUserEntity, AccountHasUser, AccountHasUserDto> {
 
     private final AccountMapper accountMapper = new AccountMapper();
     private final UserMapper userMapper = new UserMapper();
@@ -55,31 +52,4 @@ public class AccountHasUserMapper implements Mapper<AccountHasUserEntity, Accoun
                 .build();
     }
 
-    @Override
-    public List<AccountHasUser> entitiesToModels(List<AccountHasUserEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<AccountHasUserEntity> modelsToEntities(List<AccountHasUser> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<AccountHasUserDto> modelsToDtos(List<AccountHasUser> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<AccountHasUser> dtosToModels(List<AccountHasUserDto> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
-    }
 }
