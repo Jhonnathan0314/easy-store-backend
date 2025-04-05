@@ -15,10 +15,8 @@ public class CreateCodeUseCase {
 
     private final CodeRepository codeRepository;
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
-
     public Code create(Code code) throws InvalidBodyException {
-        if(!code.isValid(code)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!code.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         code.setCreationDate(new Timestamp(System.currentTimeMillis()));
         return codeRepository.create(code);
     }

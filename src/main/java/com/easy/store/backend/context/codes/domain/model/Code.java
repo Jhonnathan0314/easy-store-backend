@@ -18,8 +18,8 @@ public class Code {
     private String action;
     private Timestamp creationDate;
 
-    public boolean isValid(Code code) {
-        if(code.userId == null && code.code == null && code.action == null) return false;
+    public boolean isValid() {
+        if(userId == null && code == null && action == null) return false;
         return !action.isEmpty();
     }
 

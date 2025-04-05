@@ -15,11 +15,9 @@ public class DeleteByUserIdCodeUseCase {
     private final CodeRepository codeRepository;
     private final FindByUserIdCodeUseCase findByUserIdCodeUseCase;
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
-
     public void deleteByUserId(Long userId) throws NoResultsException, NonExistenceException {
         Code codeDb = findByUserIdCodeUseCase.findByUserId(userId);
-        if(codeDb == null) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(codeDb == null) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         codeRepository.deleteByUserId(userId);
     }
 

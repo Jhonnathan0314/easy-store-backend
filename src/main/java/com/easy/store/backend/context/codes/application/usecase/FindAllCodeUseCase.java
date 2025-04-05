@@ -15,11 +15,9 @@ public class FindAllCodeUseCase {
 
     private final CodeRepository codeRepository;
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
-
     public List<Code> findAll() throws NoResultsException {
         List<Code> codesDb = codeRepository.findAll();
-        if(codesDb.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(codesDb.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         return codesDb;
     }
 

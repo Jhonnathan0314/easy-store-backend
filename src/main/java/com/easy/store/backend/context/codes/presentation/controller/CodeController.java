@@ -86,9 +86,7 @@ public class CodeController {
         try {
             List<Code> codes = findAllCodeUseCase.findAll();
             if(!codes.isEmpty()) deleteExpiredCodeUseCase.deleteExpired(codes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) { }
     }
 
 }
