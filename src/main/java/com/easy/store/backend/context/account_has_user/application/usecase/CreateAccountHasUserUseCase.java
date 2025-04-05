@@ -25,30 +25,29 @@ public class CreateAccountHasUserUseCase {
     private final AccountHasUserRepository accountHasUserRepository;
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public AccountHasUser create(AccountHasUser accountHasUser) throws NonExistenceException, DuplicatedException,
             InvalidBodyException {
 
         logger.info("ACCION CREATE ACCOUNT_HAS_USER -> Iniciando creación con body: " + accountHasUser.toString());
 
-        if(!accountHasUser.isValid(accountHasUser)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!accountHasUser.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION CREATE ACCOUNT_HAS_USER -> Body validado con éxito");
 
         Optional<Account> accountOpt = accountRepository.findById(accountHasUser.getId().getAccountId());
-        if(accountOpt.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        if(accountOpt.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION UPDATE ACCOUNT_HAS_USER -> Validación cuenta existente con éxito");
 
         accountHasUser.setAccountId(accountOpt.get());
 
         Optional<User> userOpt = userRepository.findById(accountHasUser.getId().getUserId());
-        if(userOpt.isEmpty()) throw new NonExistenceException(errorMessages.NON_EXISTENT_DATA);
+        if(userOpt.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         logger.info("ACCION UPDATE ACCOUNT_HAS_USER -> Validación usuario existente con éxito");
 
         accountHasUser.setUserId(userOpt.get());
 
         Optional<AccountHasUser> accountHasUserOpt = accountHasUserRepository.findById(accountHasUser.getId());
-        if(accountHasUserOpt.isPresent()) throw new DuplicatedException(errorMessages.DUPLICATED);
+        if(accountHasUserOpt.isPresent()) throw new DuplicatedException(ErrorMessages.DUPLICATED);
         logger.info("ACCION CREATE ACCOUNT_HAS_USER -> Validación no duplicado exitosa");
 
         logger.info("ACCION CREATE ACCOUNT_HAS_USER -> Creando account_has_user");

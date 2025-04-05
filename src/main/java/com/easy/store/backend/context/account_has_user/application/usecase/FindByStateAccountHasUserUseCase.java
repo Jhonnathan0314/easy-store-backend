@@ -17,14 +17,13 @@ public class FindByStateAccountHasUserUseCase {
     private final Logger logger = Logger.getLogger(FindByStateAccountHasUserUseCase.class.getName());
 
     private final AccountHasUserRepository accountHasUserRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<AccountHasUser> findByState(String state) throws NoResultsException {
 
         logger.info("ACCION FINDBYSTATE ACCOUNT_HAS_USER -> Iniciando búsqueda con state: " + state);
 
         List<AccountHasUser> accountHasUsers = accountHasUserRepository.findByState(state);
-        if(accountHasUsers.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(accountHasUsers.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYSTATE ACCOUNT_HAS_USER -> Encontré cuenta tiene usuario con éxito");
 
         return accountHasUsers;

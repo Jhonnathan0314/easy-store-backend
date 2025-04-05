@@ -19,8 +19,8 @@ public class AccountHasUserId implements Serializable {
     private Long userId;
     private Long accountId;
 
-    public boolean isValid(AccountHasUserId accountHasUserId) {
-        return accountHasUserId.getUserId() != null && accountHasUserId.getAccountId() != null;
+    public boolean isValid() {
+        return userId != null && accountId != null;
     }
 
     @Override

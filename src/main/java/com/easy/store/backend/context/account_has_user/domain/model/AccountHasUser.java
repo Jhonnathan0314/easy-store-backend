@@ -18,8 +18,8 @@ public class AccountHasUser {
     private User userId;
     private String state;
 
-    public boolean isValid(AccountHasUser accountHasUser) {
-        return accountHasUser.getId().isValid(accountHasUser.getId());
+    public boolean isValid() {
+        return id.isValid();
     }
 
     @Override

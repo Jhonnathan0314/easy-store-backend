@@ -18,6 +18,7 @@ public class AccountHasUserCreateMapper extends BaseMapper<AccountHasUserEntity,
                 .id(entity.getId())
                 .accountId(accountMapper.entityToModel(entity.getAccountId()))
                 .userId(userMapper.entityToModel(entity.getUserId()))
+                .state(entity.getState())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public class AccountHasUserCreateMapper extends BaseMapper<AccountHasUserEntity,
                 .id(model.getId())
                 .accountId(accountMapper.modelToEntity(model.getAccountId()))
                 .userId(userMapper.modelToEntity(model.getUserId()))
+                .state(model.getState())
                 .build();
     }
 
