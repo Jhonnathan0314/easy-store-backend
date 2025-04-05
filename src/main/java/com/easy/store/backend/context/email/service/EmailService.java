@@ -22,14 +22,12 @@ public class EmailService {
     private final FindByUsernameUserUseCase findByUsernameUserUseCase;
     private final CreateCodeUseCase createCodeUseCase;
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
-
     public void sendEmail(String username) throws Exception {
 
-        if(username == null || username.isEmpty()) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(username == null || username.isEmpty()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
 
         User userDb = findByUsernameUserUseCase.findByUsername(username).orElse(null);
-        if(userDb == null) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(userDb == null) throw new NoResultsException(ErrorMessages.NO_RESULTS);
 
         Code code = createCodeUseCase.create(Code.builder()
                 .userId(userDb.getId())
@@ -37,7 +35,7 @@ public class EmailService {
                 .action("forgot-password")
                 .build());
 
-        if(code == null) throw new Exception(errorMessages.GENERIC_ERROR);
+        if(code == null) throw new Exception(ErrorMessages.GENERIC_ERROR);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("easy.pc.mail.info@gmail.com");
