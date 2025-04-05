@@ -21,8 +21,6 @@ public class S3ProductService {
     private final FindByIdProductUseCase findByIdProductUseCase;
     private final UpdateProductUseCase updateProductUseCase;
 
-    private final ErrorMessages errorMessages = new ErrorMessages();
-
     public Product addFile(S3File s3File, Long productId) throws NoResultsException, NoIdReceivedException,
             NoChangesException, InvalidBodyException, InvalidActionException {
         logger.info("ACCION ADDFILE PRODUCT -> Inicia carga de archivo para el producto: " + productId);
@@ -31,7 +29,7 @@ public class S3ProductService {
         product.setImageLastNumber(product.getImageLastNumber() + 1);
         s3File.setName(productId + "-" + product.getImageLastNumber() + ".png");
 
-        if(product.getImageNumber() > 5) throw new InvalidActionException(errorMessages.LIMIT_ERROR);
+        if(product.getImageNumber() > 5) throw new InvalidActionException(ErrorMessages.LIMIT_ERROR);
 
         logger.info("ACCION ADDFILE PRODUCT -> Subiendo archivo: " + s3File);
         s3Service.putObject(s3File);
