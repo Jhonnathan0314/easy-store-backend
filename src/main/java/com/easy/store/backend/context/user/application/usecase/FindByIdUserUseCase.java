@@ -17,14 +17,13 @@ public class FindByIdUserUseCase {
     private final Logger logger = Logger.getLogger(FindByIdUserUseCase.class.getName());
 
     private final UserRepository userRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public User findById(Long id) throws NoResultsException {
 
         logger.info("ACCION FINDBYID USER -> Iniciando búsqueda con id: " + id);
 
         Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optionalUser.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYID USER -> Encontré usuario con éxito");
 
         return optionalUser.get();

@@ -18,14 +18,13 @@ public class FindByAccountIdUserUseCase {
     private final Logger logger = Logger.getLogger(FindByAccountIdUserUseCase.class.getName());
 
     private final UserRepository userRepository;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public List<User> findByAccountId(Long accountId) throws NoResultsException {
 
         logger.info("ACCION FINDBYACCOUNTID USER -> Iniciando búsqueda con id: " + accountId);
 
         List<User> users = userRepository.findByAccountId(accountId);
-        if(users.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(users.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION FINDBYACCOUNTID USER -> Encontré usuarios con éxito");
 
         return users;

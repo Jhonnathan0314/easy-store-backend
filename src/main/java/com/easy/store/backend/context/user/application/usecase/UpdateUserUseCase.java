@@ -22,25 +22,24 @@ public class UpdateUserUseCase {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ErrorMessages errorMessages = new ErrorMessages();
 
     public User update(User user) throws
             NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
         logger.info("ACCION UDPATE USER -> Inicia el proceso con body: " + user.toString());
 
-        if(user.getId() == null) throw new NoIdReceivedException(errorMessages.NO_ID_RECEIVED);
+        if(user.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
         logger.info("ACCION UDPATE USER -> Validé id");
 
-        if(!user.isValid(user)) throw new InvalidBodyException(errorMessages.INVALID_BODY);
+        if(!user.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         logger.info("ACCION UDPATE USER -> Validé cuerpo de la petición");
 
         Optional<User> optUser = userRepository.findById(user.getId());
-        if(optUser.isEmpty()) throw new NoResultsException(errorMessages.NO_RESULTS);
+        if(optUser.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
         logger.info("ACCION UDPATE USER -> Validé existencia de la subcategoria");
 
         User userDb = optUser.get();
-        if(!areDifferences(user, userDb)) throw new NoChangesException(errorMessages.NO_CHANGES);
+        if(!areDifferences(user, userDb)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
         logger.info("ACCION UDPATE USER -> Validé que hayan cambios a aplicar");
 
         if(user.getRole() == null) user.setRole(userDb.getRole());

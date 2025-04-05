@@ -28,14 +28,14 @@ public class User implements UserDetails {
     private String state;
     private Role role;
 
-    public boolean isValid(User user) {
-        if(user.getUsername() == null ||
-            user.getName() == null ||
-            user.getLastName() == null) return false;
+    public boolean isValid() {
+        if(username == null ||
+            name == null ||
+            lastName == null) return false;
 
-        return !user.getUsername().isEmpty() &&
-                !user.getName().isEmpty() &&
-                !user.getLastName().isEmpty();
+        return !username.isEmpty() &&
+                !name.isEmpty() &&
+                !lastName.isEmpty();
     }
 
     @Override
