@@ -4,12 +4,9 @@ import com.easy.store.backend.context.roles.infrastructure.mappers.RoleResponseM
 import com.easy.store.backend.context.user.application.dto.UserResponseDTO;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class UserResponseMapper implements Mapper<UserEntity, User, UserResponseDTO> {
+public class UserResponseMapper extends BaseMapper<UserEntity, User, UserResponseDTO> {
 
     private final RoleResponseMapper roleResponseMapper = new RoleResponseMapper();
 
@@ -21,6 +18,7 @@ public class UserResponseMapper implements Mapper<UserEntity, User, UserResponse
                 .name(entity.getName())
                 .lastName(entity.getLastName())
                 .role(roleResponseMapper.entityToModel(entity.getRole()))
+                .state(entity.getState())
                 .build();
     }
 
@@ -32,6 +30,7 @@ public class UserResponseMapper implements Mapper<UserEntity, User, UserResponse
                 .name(model.getName())
                 .lastName(model.getLastName())
                 .role(roleResponseMapper.modelToEntity(model.getRole()))
+                .state(model.getState())
                 .build();
     }
 
@@ -57,31 +56,4 @@ public class UserResponseMapper implements Mapper<UserEntity, User, UserResponse
                 .build();
     }
 
-    @Override
-    public List<User> entitiesToModels(List<UserEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<UserEntity> modelsToEntities(List<User> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<UserResponseDTO> modelsToDtos(List<User> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<User> dtosToModels(List<UserResponseDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
-    }
 }

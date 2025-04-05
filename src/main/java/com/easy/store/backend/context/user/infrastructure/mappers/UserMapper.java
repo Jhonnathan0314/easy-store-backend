@@ -4,12 +4,9 @@ import com.easy.store.backend.context.roles.infrastructure.mappers.RoleMapper;
 import com.easy.store.backend.context.user.application.dto.UserDTO;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
-import com.easy.store.backend.utils.mappers.Mapper;
+import com.easy.store.backend.utils.mappers.BaseMapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class UserMapper implements Mapper<UserEntity, User, UserDTO> {
+public class UserMapper extends BaseMapper<UserEntity, User, UserDTO> {
 
     private final RoleMapper roleMapper = new RoleMapper();
 
@@ -67,31 +64,4 @@ public class UserMapper implements Mapper<UserEntity, User, UserDTO> {
                 .build();
     }
 
-    @Override
-    public List<User> entitiesToModels(List<UserEntity> entities) {
-        return entities.stream()
-                .map(this::entityToModel)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<UserEntity> modelsToEntities(List<User> models) {
-        return models.stream()
-                .map(this::modelToEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<UserDTO> modelsToDtos(List<User> models) {
-        return models.stream()
-                .map(this::modelToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<User> dtosToModels(List<UserDTO> dtos) {
-        return dtos.stream()
-                .map(this::dtoToModel)
-                .collect(Collectors.toList());
-    }
 }
