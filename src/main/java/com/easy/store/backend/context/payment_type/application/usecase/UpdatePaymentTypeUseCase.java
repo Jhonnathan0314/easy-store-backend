@@ -8,40 +8,40 @@ import com.easy.store.backend.utils.exceptions.NoChangesException;
 import com.easy.store.backend.utils.exceptions.NoIdReceivedException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdatePaymentTypeUseCase {
-
-    private final Logger logger = Logger.getLogger(UpdatePaymentTypeUseCase.class.getName());
 
     private final PaymentTypeRepository paymentTypeRepository;
 
     public PaymentType update(PaymentType paymentType) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
-        logger.info("ACCION UDPATE PAYMENT_TYPE -> Inicia el proceso");
+        log.info("ACCION UDPATE PAYMENT_TYPE -> Inicia el proceso");
 
         if(paymentType.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
-        logger.info("ACCION UDPATE PAYMENT_TYPE -> Validé id");
+        log.info("ACCION UDPATE PAYMENT_TYPE -> Validé id");
 
         if(!paymentType.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
-        logger.info("ACCION UDPATE PAYMENT_TYPE -> Validé cuerpo de la petición");
+        log.info("ACCION UDPATE PAYMENT_TYPE -> Validé cuerpo de la petición");
 
         Optional<PaymentType> optPaymentType = paymentTypeRepository.findById(paymentType.getId());
         if(optPaymentType.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
-        logger.info("ACCION UDPATE PAYMENT_TYPE -> Validé existencia del tipo de pago");
+        log.info("ACCION UDPATE PAYMENT_TYPE -> Validé existencia del tipo de pago");
 
         PaymentType paymentTypeDb = optPaymentType.get();
         if(!areDifferences(paymentTypeDb, paymentType)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
-        logger.info("ACCION UDPATE PAYMENT_TYPE -> Validé que hayan cambios a aplicar");
+        log.info("ACCION UDPATE PAYMENT_TYPE -> Validé que hayan cambios a aplicar");
 
         paymentType.setState(paymentTypeDb.getState());
 
-        logger.info("ACCION UDPATE PAYMENT_TYPE -> Actualizando tipo de pago");
+        log.info("ACCION UDPATE PAYMENT_TYPE -> Actualizando tipo de pago");
 
         return paymentTypeRepository.update(paymentType);
     }

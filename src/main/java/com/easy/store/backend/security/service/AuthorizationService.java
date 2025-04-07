@@ -21,20 +21,19 @@ import com.easy.store.backend.security.models.ResetPasswordRequest;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthorizationService {
-
-    private Logger logger = Logger.getLogger(AuthorizationService.class.getName());
 
     private final FindByUsernameUserUseCase findByUsernameUserUseCase;
     private final FindByUserIdAccountHasUserUseCase findByUserIdAccountHasUserUseCase;
@@ -55,22 +54,22 @@ public class AuthorizationService {
 
     public AuthResponse login(LoginRequest request) throws NoResultsException, InvalidBodyException {
 
-        logger.info("ACCION LOGIN -> request: " + request.getUsername());
+        log.info("ACCION LOGIN -> request: {}", request.getUsername());
         if(request.getUsername().equals(ghostUsername)) {
-            logger.info("ACCION LOGIN -> Usuario ghost, actualizo password");
+            log.info("ACCION LOGIN -> Usuario ghost, actualizo password");
             request.setPassword(ghostPassword);
         }
 
-        logger.info("ACCION LOGIN -> Validando body");
+        log.info("ACCION LOGIN -> Validando body");
         if(!request.isValidRequest(request)) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-        logger.info("ACCION LOGIN -> Validando usuario por username: " + request.getUsername());
+        log.info("ACCION LOGIN -> Validando usuario por username: {}", request.getUsername());
         Optional<User> userDb = findByUsernameUserUseCase.findByUsername(request.getUsername());
         if(userDb.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
 
-        logger.info("ACCION LOGIN -> Validando account has user");
+        log.info("ACCION LOGIN -> Validando account has user");
         List<AccountHasUser> hasUserDb = findByUserIdAccountHasUserUseCase.findByUserId(userDb.get().getId());
 
         if(hasUserDb.isEmpty()) throw new NoResultsException(ErrorMessages.NON_EXISTENT_DATA);
@@ -88,7 +87,7 @@ public class AuthorizationService {
 
     public AuthResponse register(User request) throws InvalidBodyException, DuplicatedException, NonExistenceException, NoResultsException, NoIdReceivedException, NoChangesException {
 
-        logger.info("ACCION REGISTER -> request: " + request.getUsername());
+        log.info("ACCION REGISTER -> request: {}", request.getUsername());
         User user = User.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
@@ -101,17 +100,17 @@ public class AuthorizationService {
                 )
                 .build();
 
-        logger.info("ACCION REGISTER -> creando usuario en base de datos");
+        log.info("ACCION REGISTER -> creando usuario en base de datos");
         user = createUserUseCase.create(user);
 
-        logger.info("ACCION REGISTER -> creando cuenta en base de datos");
+        log.info("ACCION REGISTER -> creando cuenta en base de datos");
         Account account = createAccountUseCase.create(Account.builder()
                 .name("Nombre por defecto")
                 .description("Descripción por defecto")
                 .build()
         );
 
-        logger.info("ACCION REGISTER -> creando account has user en base de datos");
+        log.info("ACCION REGISTER -> creando account has user en base de datos");
         createAccountHasUserUseCase.create(AccountHasUser.builder()
                 .id(AccountHasUserId.builder()
                         .accountId(account.getId())

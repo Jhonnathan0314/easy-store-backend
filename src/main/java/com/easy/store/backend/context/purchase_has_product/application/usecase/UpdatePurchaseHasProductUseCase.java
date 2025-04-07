@@ -10,17 +10,17 @@ import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseH
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdatePurchaseHasProductUseCase {
-
-    private final Logger logger = Logger.getLogger(UpdatePurchaseHasProductUseCase.class.getName());
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
     private final PurchaseRepository purchaseRepository;
@@ -28,18 +28,18 @@ public class UpdatePurchaseHasProductUseCase {
 
     public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException {
 
-        logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Inicia el proceso con body: " + purchaseHasProduct.toString());
+        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Inicia el proceso con body: {}", purchaseHasProduct.toString());
 
         if(!purchaseHasProduct.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
-        logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé cuerpo de la petición");
+        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé cuerpo de la petición");
 
         Optional<Purchase> optPurchase = purchaseRepository.findById(purchaseHasProduct.getId().getPurchaseId());
         if(optPurchase.isEmpty()) throw new NoResultsException(ErrorMessages.NO_PURCHASE_RESULTS);
-        logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia de la compra");
+        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia de la compra");
 
         Optional<Product> optProduct = productRepository.findById(purchaseHasProduct.getId().getProductId());
         if(optProduct.isEmpty()) throw new NoResultsException(ErrorMessages.NO_PRODUCT_RESULTS);
-        logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia del producto");
+        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia del producto");
 
         PurchaseHasProductId id = PurchaseHasProductId.builder()
                 .purchaseId(optPurchase.get().getId())
@@ -48,10 +48,10 @@ public class UpdatePurchaseHasProductUseCase {
 
         Optional<PurchaseHasProduct> optPurchaseHasProduct = purchaseHasProductRepository.findByPurchaseIdAndProductId(id);
         if(optPurchaseHasProduct.isEmpty()) throw new NoResultsException(ErrorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia del objeto purchase_has_product");
+        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé existencia del objeto purchase_has_product");
 
         if(!areDifferences(optPurchaseHasProduct.get(), purchaseHasProduct)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
-        logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé que hayan cambios a aplicar");
+        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé que hayan cambios a aplicar");
 
         if(optProduct.get().getQuantity() < purchaseHasProduct.getQuantity()) throw new NonExistenceException(ErrorMessages.NO_STOCK);
 
@@ -61,7 +61,7 @@ public class UpdatePurchaseHasProductUseCase {
         purchaseHasProduct.setUnitPrice(optProduct.get().getPrice());
         purchaseHasProduct.setSubtotal(optProduct.get().getPrice().multiply(BigDecimal.valueOf(purchaseHasProduct.getQuantity())));
 
-        logger.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Actualizando objeto purchase_has_product");
+        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Actualizando objeto purchase_has_product");
 
         return purchaseHasProductRepository.add(purchaseHasProduct);
     }

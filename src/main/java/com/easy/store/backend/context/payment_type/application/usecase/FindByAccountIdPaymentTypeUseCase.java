@@ -5,26 +5,26 @@ import com.easy.store.backend.context.payment_type.domain.port.PaymentTypeReposi
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FindByAccountIdPaymentTypeUseCase {
-
-    private final Logger logger = Logger.getLogger(FindByAccountIdPaymentTypeUseCase.class.getName());
 
     private final PaymentTypeRepository paymentTypeRepository;
 
     public List<PaymentType> findByAccountId(Long accountId) throws NoResultsException {
 
-        logger.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Iniciando búsqueda");
+        log.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Iniciando búsqueda");
 
         List<PaymentType> paymentTypes = paymentTypeRepository.findByAccountId(accountId);
         if(paymentTypes == null || paymentTypes.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
-        logger.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Encontré tipos de pago con éxito");
+        log.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Encontré tipos de pago con éxito");
 
         return paymentTypes;
     }

@@ -6,27 +6,27 @@ import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseH
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FindByUserIdPurchaseUseCase {
-
-    private final Logger logger = Logger.getLogger(FindByUserIdPurchaseUseCase.class.getName());
 
     private final PurchaseRepository purchaseRepository;
     private final PurchaseHasProductRepository purchaseHasProductRepository;
 
     public List<Purchase> findByUserId(Long userId) throws NoResultsException {
 
-        logger.info("ACCION FINDBYUSERID PURCHASE -> Iniciando búsqueda con id: " + userId);
+        log.info("ACCION FINDBYUSERID PURCHASE -> Iniciando búsqueda con id: {}", userId);
 
         List<Purchase> purchases = purchaseRepository.findByUserId(userId);
         if(purchases == null || purchases.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
-        logger.info("ACCION FINDBYUSERID PURCHASE -> Encontré compras con éxito");
+        log.info("ACCION FINDBYUSERID PURCHASE -> Encontré compras con éxito");
 
         for (Purchase purchase : purchases) {
             purchase.setProducts(purchaseHasProductRepository.findByPurchaseId(purchase.getId()));

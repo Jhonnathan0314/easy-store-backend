@@ -8,41 +8,41 @@ import com.easy.store.backend.utils.exceptions.NoChangesException;
 import com.easy.store.backend.utils.exceptions.NoIdReceivedException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdateRoleUseCase {
-
-    private final Logger logger = Logger.getLogger(UpdateRoleUseCase.class.getName());
 
     private final RoleRepository roleRepository;
 
     public Role update(Role role) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
-        logger.info("ACCION UDPATE ROLE -> Inicia el proceso");
+        log.info("ACCION UDPATE ROLE -> Inicia el proceso");
 
         if(role.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
-        logger.info("ACCION UDPATE ROLE -> Validé id");
+        log.info("ACCION UDPATE ROLE -> Validé id");
 
         if(!role.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
-        logger.info("ACCION UDPATE ROLE -> Validé cuerpo de la petición");
+        log.info("ACCION UDPATE ROLE -> Validé cuerpo de la petición");
 
         Optional<Role> optRole = roleRepository.findById(role.getId());
         if(optRole.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
-        logger.info("ACCION UDPATE ROLE -> Validé existencia del rol");
+        log.info("ACCION UDPATE ROLE -> Validé existencia del rol");
 
         Role roleDb = optRole.get();
         if(roleDb.getName().equals(role.getName())) throw new NoChangesException(ErrorMessages.NO_CHANGES);
-        logger.info("ACCION UDPATE ROLE -> Validé que hayan cambios a aplicar");
+        log.info("ACCION UDPATE ROLE -> Validé que hayan cambios a aplicar");
 
         role.setState(roleDb.getState());
         role.setCreationDate(roleDb.getCreationDate());
 
-        logger.info("ACCION UDPATE ROLE -> Actualizando rol");
+        log.info("ACCION UDPATE ROLE -> Actualizando rol");
 
         return roleRepository.update(role);
     }

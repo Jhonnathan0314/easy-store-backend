@@ -8,41 +8,41 @@ import com.easy.store.backend.utils.exceptions.NoChangesException;
 import com.easy.store.backend.utils.exceptions.NoIdReceivedException;
 import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdateAccountUseCase {
-
-    private final Logger logger = Logger.getLogger(UpdateAccountUseCase.class.getName());
 
     private final AccountRepository accountRepository;
 
     public Account update(Account account) throws InvalidBodyException, NoChangesException,
             NoIdReceivedException, NonExistenceException {
 
-        logger.info("ACCION UPDATE ACCOUNT -> Iniciando actualización con body: " + account.toString());
+        log.info("ACCION UPDATE ACCOUNT -> Iniciando actualización con body: {}", account.toString());
 
         if(account.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
-        logger.info("ACCION UPDATE ACCOUNT -> Id validado con éxito");
+        log.info("ACCION UPDATE ACCOUNT -> Id validado con éxito");
 
         if(!account.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
-        logger.info("ACCION UPDATE ACCOUNT -> Body validado con éxito");
+        log.info("ACCION UPDATE ACCOUNT -> Body validado con éxito");
 
         Optional<Account> accountIdOpt = accountRepository.findById(account.getId());
 
         if(accountIdOpt.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION UPDATE ACCOUNT -> Validación cuenta existente con éxito");
+        log.info("ACCION UPDATE ACCOUNT -> Validación cuenta existente con éxito");
 
         if(account.equals(accountIdOpt.get())) throw new NoChangesException(ErrorMessages.NO_CHANGES);
-        logger.info("ACCION UPDATE ACCOUNT -> Validación cambios a aplicar con éxito");
+        log.info("ACCION UPDATE ACCOUNT -> Validación cambios a aplicar con éxito");
 
         if(account.getImageName() == null || account.getImageName().isEmpty()) account.setImageName("store.png");
 
-        logger.info("ACCION UPDATE ACCOUNT -> Actualizando cuenta");
+        log.info("ACCION UPDATE ACCOUNT -> Actualizando cuenta");
 
         return accountRepository.update(account);
     }

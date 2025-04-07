@@ -6,28 +6,28 @@ import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseH
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RemoveByIdPurchaseHasProductUseCase {
-
-    private final Logger logger = Logger.getLogger(RemoveByIdPurchaseHasProductUseCase.class.getName());
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
 
     public void removeByPurchaseIdAndProductId(PurchaseHasProductId id) throws NonExistenceException {
 
-        logger.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Iniciando eliminado con id: " + id.toString());
+        log.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Iniciando eliminado con id: {}", id.toString());
 
         Optional<PurchaseHasProduct> optPurchaseHasProduct = purchaseHasProductRepository.findByPurchaseIdAndProductId(id);
         if(optPurchaseHasProduct.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Validé existencia con éxito");
+        log.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Validé existencia con éxito");
 
-        logger.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Inicia eliminado");
+        log.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Inicia eliminado");
 
         purchaseHasProductRepository.removeByPurchaseIdAndProductId(id);
     }

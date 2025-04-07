@@ -5,28 +5,28 @@ import com.easy.store.backend.context.category.domain.port.CategoryRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DeleteByIdCategoryUseCase {
-
-    private final Logger logger = Logger.getLogger(DeleteByIdCategoryUseCase.class.getName());
 
     private final CategoryRepository categoryRepository;
 
     public void deleteById(Long id) throws NonExistenceException {
 
-        logger.info("ACCION DELETEBYID CATEGORY -> Iniciando proceso con id: " + id);
+        log.info("ACCION DELETEBYID CATEGORY -> Iniciando proceso con id: {}", id);
 
         Optional<Category> category = categoryRepository.findById(id);
         if(category.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION DELETEBYID CATEGORY -> Categoria encontrada con éxito");
+        log.info("ACCION DELETEBYID CATEGORY -> Categoria encontrada con éxito");
 
-        logger.info("ACCION DELETEBYID CATEGORY -> Eliminando categoria");
+        log.info("ACCION DELETEBYID CATEGORY -> Eliminando categoria");
 
         categoryRepository.deleteById(id);
     }

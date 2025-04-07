@@ -5,27 +5,27 @@ import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseH
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.NoIdReceivedException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RemoveAllPurchaseHasProductUseCase {
-
-    private final Logger logger = Logger.getLogger(RemoveAllPurchaseHasProductUseCase.class.getName());
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
 
     public void removeAll(List<PurchaseHasProductId> ids) throws NoIdReceivedException {
 
-        logger.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Iniciando eliminado con " + ids.size() + " ids");
+        log.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Iniciando eliminado con {} ids", ids.size());
 
         if(ids.isEmpty()) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
-        logger.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Validé ids recibido");
+        log.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Validé ids recibido");
 
-        logger.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Inicia eliminado de objetos");
+        log.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Inicia eliminado de objetos");
 
         purchaseHasProductRepository.removeAll(ids);
     }

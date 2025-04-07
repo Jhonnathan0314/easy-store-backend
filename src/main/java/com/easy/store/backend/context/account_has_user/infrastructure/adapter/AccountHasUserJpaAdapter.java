@@ -12,13 +12,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
+
 
 @Repository
 @RequiredArgsConstructor
 public class AccountHasUserJpaAdapter implements AccountHasUserRepository {
-
-    private final Logger logger = Logger.getLogger(AccountHasUserJpaAdapter.class.getName());
 
     private final AccountHasUserJpaRepository accountHasUserJpaRepository;
 

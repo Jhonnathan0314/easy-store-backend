@@ -5,32 +5,32 @@ import com.easy.store.backend.context.payment_type.domain.port.PaymentTypeReposi
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChangeStateByIdPaymentTypeUseCase {
-
-    private final Logger logger = Logger.getLogger(ChangeStateByIdPaymentTypeUseCase.class.getName());
 
     private final PaymentTypeRepository paymentTypeRepository;
 
     public PaymentType changeStateById(Long id, Long updateBy) throws NonExistenceException {
 
-        logger.info("ACCION CHANGESTATEBYID PAYMENT_TYPE -> Iniciando proceso con id: " + id);
+        log.info("ACCION CHANGESTATEBYID PAYMENT_TYPE -> Iniciando proceso con id: {}", id);
 
         Optional<PaymentType> optPaymentType = paymentTypeRepository.findById(id);
         if(optPaymentType.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
-        logger.info("ACCION CHANGESTATEBYID PAYMENT_TYPE -> Tipo de pago encontrado con éxito");
+        log.info("ACCION CHANGESTATEBYID PAYMENT_TYPE -> Tipo de pago encontrado con éxito");
 
         PaymentType paymentType = optPaymentType.get();
         paymentType.setState(paymentType.getState().equals("active") ? "inactive" : "active");
         paymentType.setUpdateBy(updateBy);
 
-        logger.info("ACCION CHANGESTATEBYID PAYMENT_TYPE -> Actualizando estado");
+        log.info("ACCION CHANGESTATEBYID PAYMENT_TYPE -> Actualizando estado");
         return paymentTypeRepository.update(paymentType);
     }
 

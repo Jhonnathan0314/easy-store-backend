@@ -10,50 +10,50 @@ import com.easy.store.backend.utils.exceptions.NoChangesException;
 import com.easy.store.backend.utils.exceptions.NoIdReceivedException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Logger;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UpdateProductUseCase {
-
-    private final Logger logger = Logger.getLogger(UpdateProductUseCase.class.getName());
 
     private final ProductRepository productRepository;
     private final SubcategoryRepository subcategoryRepository;
 
     public Product update(Product product) throws NoIdReceivedException, NoResultsException, NoChangesException, InvalidBodyException {
 
-        logger.info("ACCION UDPATE PRODUCT -> Inicia el proceso");
+        log.info("ACCION UDPATE PRODUCT -> Inicia el proceso");
 
         Optional<Subcategory> optSubcategory = subcategoryRepository.findById(product.getSubcategory().getId());
         if(optSubcategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_CATEGORY_RESULTS);
-        logger.info("ACCION UDPATE PRODUCT -> Categoria encontrada con éxito");
+        log.info("ACCION UDPATE PRODUCT -> Categoria encontrada con éxito");
 
         product.setSubcategory(optSubcategory.get());
 
         if(product.getId() == null) throw new NoIdReceivedException(ErrorMessages.NO_ID_RECEIVED);
-        logger.info("ACCION UDPATE PRODUCT -> Validé id");
+        log.info("ACCION UDPATE PRODUCT -> Validé id");
 
         if(!product.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
-        logger.info("ACCION UDPATE PRODUCT -> Validé cuerpo de la petición");
+        log.info("ACCION UDPATE PRODUCT -> Validé cuerpo de la petición");
 
         Optional<Product> optProduct = productRepository.findById(product.getId());
         if(optProduct.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
-        logger.info("ACCION UDPATE PRODUCT -> Validé existencia del producto");
+        log.info("ACCION UDPATE PRODUCT -> Validé existencia del producto");
 
         Product productDb = optProduct.get();
         if(areNoChanges(productDb, product)) {
             throw new NoChangesException(ErrorMessages.NO_CHANGES);
         }
-        logger.info("ACCION UDPATE PRODUCT -> Validé que hayan cambios a aplicar");
+        log.info("ACCION UDPATE PRODUCT -> Validé que hayan cambios a aplicar");
 
         product.setState(productDb.getState());
 
-        logger.info("ACCION UDPATE PRODUCT -> Actualizando producto");
+        log.info("ACCION UDPATE PRODUCT -> Actualizando producto");
 
         return productRepository.update(product);
     }
