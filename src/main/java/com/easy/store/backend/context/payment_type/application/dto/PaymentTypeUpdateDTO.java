@@ -13,5 +13,4 @@ public class PaymentTypeUpdateDTO {
     private Long id;
     private String name;
     private Long updateBy;
-    private Long accountId;
 }

@@ -47,8 +47,7 @@ public class UpdatePaymentTypeUseCase {
     }
 
     private boolean areDifferences(PaymentType paymentTypeDb, PaymentType paymentType) {
-        return !paymentTypeDb.getName().equals(paymentType.getName()) ||
-                !paymentTypeDb.getAccount().getId().equals(paymentType.getAccount().getId());
+        return !paymentTypeDb.getName().equals(paymentType.getName());
     }
 
 }

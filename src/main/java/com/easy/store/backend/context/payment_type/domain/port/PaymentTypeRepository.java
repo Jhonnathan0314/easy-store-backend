@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface PaymentTypeRepository {
     List<PaymentType> findAll();
+    List<PaymentType> findAllActive();
     Optional<PaymentType> findById(Long id);
-    List<PaymentType> findByAccountId(Long accountId);
     PaymentType create(PaymentType category);
     PaymentType update(PaymentType category);
     void deleteById(Long id);

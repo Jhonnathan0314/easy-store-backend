@@ -3,7 +3,6 @@ package com.easy.store.backend.context.payment_type.infrastructure.adapter;
 import com.easy.store.backend.context.payment_type.domain.model.PaymentType;
 import com.easy.store.backend.context.payment_type.domain.port.PaymentTypeRepository;
 import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeCreateMapper;
-import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeMapper;
 import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeResponseMapper;
 import com.easy.store.backend.context.payment_type.infrastructure.mappers.PaymentTypeUpdateMapper;
 import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
@@ -30,15 +29,15 @@ public class PaymentTypeRepositoryJpaAdapter implements PaymentTypeRepository {
     }
 
     @Override
-    public Optional<PaymentType> findById(Long id) {
-        Optional<PaymentTypeEntity> optPaymentTypeEntity = paymentTypeJpaRepository.findById(id);
-        return optPaymentTypeEntity.map(responseMapper::entityToModel);
+    public List<PaymentType> findAllActive() {
+        List<PaymentTypeEntity> paymentTypeEntities = paymentTypeJpaRepository.findAllActive();
+        return responseMapper.entitiesToModels(paymentTypeEntities);
     }
 
     @Override
-    public List<PaymentType> findByAccountId(Long accountId) {
-        List<PaymentTypeEntity> paymentTypeEntities = paymentTypeJpaRepository.findByAccountId(accountId);
-        return responseMapper.entitiesToModels(paymentTypeEntities);
+    public Optional<PaymentType> findById(Long id) {
+        Optional<PaymentTypeEntity> optPaymentTypeEntity = paymentTypeJpaRepository.findById(id);
+        return optPaymentTypeEntity.map(responseMapper::entityToModel);
     }
 
     @Override

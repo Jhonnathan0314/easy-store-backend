@@ -1,6 +1,5 @@
 package com.easy.store.backend.context.payment_type.domain.model;
 
-import com.easy.store.backend.context.account.domain.model.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,6 @@ import java.sql.Timestamp;
 public class PaymentType {
     private Long id;
     private String name;
-    private Account account;
     private Long createBy;
     private Long updateBy;
     private Timestamp creationDate;
@@ -23,7 +21,7 @@ public class PaymentType {
     private String state;
 
     public boolean isValid() {
-        if(name == null || account == null) return false;
+        if(name == null) return false;
 
         return !name.isEmpty();
     }
@@ -33,7 +31,6 @@ public class PaymentType {
         return "PaymentType{" +
                 "id=" + id +
                 ", name=" + name +
-                ", account=" + account +
                 ", createBy=" + createBy +
                 ", updateBy=" + updateBy +
                 ", creationDate=" + creationDate +

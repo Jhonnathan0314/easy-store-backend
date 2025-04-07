@@ -14,17 +14,17 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FindByAccountIdPaymentTypeUseCase {
+public class FindAllActivePaymentTypeUseCase {
 
     private final PaymentTypeRepository paymentTypeRepository;
 
-    public List<PaymentType> findByAccountId(Long accountId) throws NoResultsException {
+    public List<PaymentType> findAllActive() throws NoResultsException {
 
-        log.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Iniciando búsqueda");
+        log.info("ACCION FINDALLACTIVE PAYMENT_TYPE -> Iniciando búsqueda");
 
-        List<PaymentType> paymentTypes = paymentTypeRepository.findByAccountId(accountId);
+        List<PaymentType> paymentTypes = paymentTypeRepository.findAllActive();
         if(paymentTypes == null || paymentTypes.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
-        log.info("ACCION FINDBYACCOUNTID PAYMENT_TYPE -> Encontré tipos de pago con éxito");
+        log.info("ACCION FINDALLACTIVE PAYMENT_TYPE -> Encontré tipos de pago con éxito");
 
         return paymentTypes;
     }

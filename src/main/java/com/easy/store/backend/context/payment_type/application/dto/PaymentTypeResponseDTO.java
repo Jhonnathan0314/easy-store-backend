@@ -8,5 +8,5 @@ import lombok.*;
 public class PaymentTypeResponseDTO {
     private Long id;
     private String name;
-    private Long accountId;
+    private String state;
 }
