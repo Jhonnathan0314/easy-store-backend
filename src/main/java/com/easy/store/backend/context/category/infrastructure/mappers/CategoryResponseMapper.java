@@ -5,11 +5,16 @@ import com.easy.store.backend.context.account.infrastructure.persistence.Account
 import com.easy.store.backend.context.category.application.dto.CategoryResponseDTO;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
+import com.easy.store.backend.context.category_has_payment_type.infrastructure.mapper.CategoryHasPaymentTypeResponseMapper;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
 import com.easy.store.backend.utils.mappers.BaseMapper;
 
+import java.util.ArrayList;
+
 public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category, CategoryResponseDTO> {
+
+    private final CategoryHasPaymentTypeResponseMapper categoryHasPaymentTypeResponseMapper = new CategoryHasPaymentTypeResponseMapper();
 
     @Override
     public Category entityToModel(CategoryEntity entity) {
@@ -26,6 +31,7 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
                         .id(entity.getAccount().getId())
                         .build()
                 )
+                .paymentTypes(new ArrayList<>())
                 .state(entity.getState())
                 .build();
     }
@@ -58,6 +64,8 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
                 .imageName(model.getImageName())
                 .userId(model.getUser().getId())
                 .accountId(model.getAccount().getId())
+                .paymentTypes(new ArrayList<>())
+                .paymentTypes(categoryHasPaymentTypeResponseMapper.modelsToDtos(model.getPaymentTypes()))
                 .build();
     }
 
@@ -76,6 +84,7 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
                         .id(dto.getAccountId())
                         .build()
                 )
+                .paymentTypes(categoryHasPaymentTypeResponseMapper.dtosToModels(dto.getPaymentTypes()))
                 .build();
     }
 

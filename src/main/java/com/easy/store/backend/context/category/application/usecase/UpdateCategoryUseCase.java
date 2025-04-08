@@ -44,8 +44,6 @@ public class UpdateCategoryUseCase {
         if(!areDifferences(categoryDb, category)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
         log.info("ACCION UDPATE CATEGORY -> Validé que hayan cambios a aplicar");
 
-        System.out.println("category state: " + category.getState());
-        System.out.println("categoryDb state: " + categoryDb.getState());
         category.setState(categoryDb.getState());
 
         log.info("ACCION UDPATE CATEGORY -> Actualizando categoria");

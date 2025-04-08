@@ -17,23 +17,23 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FindActiveByCategoryIdCategoryHasPaymentTypeUseCase {
+public class FindByCategoryIdCategoryHasPaymentTypeUseCase {
 
     private final CategoryHasPaymentTypeRepository categoryHasPaymentTypeRepository;
     private final CategoryRepository categoryRepository;
 
-    public List<CategoryHasPaymentType> findActiveByCategoryId(Long categoryId) throws NoResultsException {
+    public List<CategoryHasPaymentType> findByCategoryId(Long categoryId) throws NoResultsException {
 
-        log.info("ACCION FINDACTIVEBYCATEGORYID CATEGORY HAS PAYMENT TYPE -> Iniciando busqueda");
+        log.info("ACCION FINDBYCATEGORYID CATEGORY HAS PAYMENT TYPE -> Iniciando busqueda");
 
         Optional<Category> optCategory = categoryRepository.findById(categoryId);
         if(optCategory.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
-        log.info("ACCION FINDACTIVEBYCATEGORYID CATEGORY HAS PAYMENT TYPE -> Validé categoria existente");
+        log.info("ACCION FINDBYCATEGORYID CATEGORY HAS PAYMENT TYPE -> Validé categoria existente");
 
-        List<CategoryHasPaymentType> categoryPaymentTypes = categoryHasPaymentTypeRepository.findActiveByCategoryId(categoryId);
+        List<CategoryHasPaymentType> categoryPaymentTypes = categoryHasPaymentTypeRepository.findByCategoryId(categoryId);
         if(categoryPaymentTypes.isEmpty()) throw new NoResultsException(ErrorMessages.NO_RESULTS);
 
-        log.info("ACCION FINDACTIVEBYCATEGORYID CATEGORY HAS PAYMENT TYPE -> Encontré con éxito");
+        log.info("ACCION FINDBYCATEGORYID CATEGORY HAS PAYMENT TYPE -> Encontré con éxito");
 
         return categoryPaymentTypes;
     }

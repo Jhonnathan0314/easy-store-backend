@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface CategoryHasPaymentTypeRepository {
 
     List<CategoryHasPaymentType> findAll();
-    List<CategoryHasPaymentType> findActiveByCategoryId(Long categoryId);
+    List<CategoryHasPaymentType> findByCategoryId(Long categoryId);
     Optional<CategoryHasPaymentType> findById(CategoryHasPaymentTypeId id);
     CategoryHasPaymentType create(CategoryHasPaymentType categoryHasPaymentType);
     CategoryHasPaymentType update(CategoryHasPaymentType categoryHasPaymentType);

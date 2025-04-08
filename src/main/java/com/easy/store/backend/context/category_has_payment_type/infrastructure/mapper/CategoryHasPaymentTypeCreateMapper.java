@@ -1,8 +1,10 @@
 package com.easy.store.backend.context.category_has_payment_type.infrastructure.mapper;
 
+import com.easy.store.backend.context.category.infrastructure.persistence.CategoryEntity;
 import com.easy.store.backend.context.category_has_payment_type.application.dto.CategoryHasPaymentTypeCreateDto;
 import com.easy.store.backend.context.category_has_payment_type.domain.model.CategoryHasPaymentType;
 import com.easy.store.backend.context.category_has_payment_type.infrastructure.persistence.CategoryHasPaymentTypeEntity;
+import com.easy.store.backend.context.payment_type.infrastructure.persistence.PaymentTypeEntity;
 import com.easy.store.backend.utils.mappers.BaseMapper;
 
 public class CategoryHasPaymentTypeCreateMapper extends BaseMapper<CategoryHasPaymentTypeEntity, CategoryHasPaymentType, CategoryHasPaymentTypeCreateDto> {
@@ -24,6 +26,14 @@ public class CategoryHasPaymentTypeCreateMapper extends BaseMapper<CategoryHasPa
     public CategoryHasPaymentTypeEntity modelToEntity(CategoryHasPaymentType model) {
         return CategoryHasPaymentTypeEntity.builder()
                 .id(model.getId())
+                .category(CategoryEntity.builder()
+                        .id(model.getId().getCategoryId())
+                        .build()
+                )
+                .paymentType(PaymentTypeEntity.builder()
+                        .id(model.getId().getPaymentTypeId())
+                        .build()
+                )
                 .phone(model.getPhone())
                 .email(model.getEmail())
                 .accountNumber(model.getAccountNumber())

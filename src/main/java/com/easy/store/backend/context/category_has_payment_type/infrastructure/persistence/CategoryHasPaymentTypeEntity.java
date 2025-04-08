@@ -49,4 +49,9 @@ public class CategoryHasPaymentTypeEntity {
     @Column(name = "state")
     private String state;
 
+    @PrePersist
+    protected void onCreate() {
+        this.state = "active";
+    }
+
 }

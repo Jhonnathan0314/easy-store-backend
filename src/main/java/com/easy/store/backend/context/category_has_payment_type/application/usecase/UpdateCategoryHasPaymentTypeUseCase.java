@@ -53,6 +53,8 @@ public class UpdateCategoryHasPaymentTypeUseCase {
         if(!areDifferences(categoryHasPaymentTypeDb, categoryHasPaymentType)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
         log.info("ACCION UPDATE CATEGORY HAS PAYMENT TYPE -> Validé que hay diferencias");
 
+        categoryHasPaymentType.setState(categoryHasPaymentTypeDb.getState());
+
         log.info("ACCION UPDATE CATEGORY HAS PAYMENT TYPE -> Actualizando objeto");
 
         return categoryHasPaymentTypeRepository.update(categoryHasPaymentType);

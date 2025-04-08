@@ -1,6 +1,7 @@
 package com.easy.store.backend.context.category.domain.model;
 
 import com.easy.store.backend.context.account.domain.model.Account;
+import com.easy.store.backend.context.category_has_payment_type.domain.model.CategoryHasPaymentType;
 import com.easy.store.backend.context.user.domain.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,6 +27,7 @@ public class Category {
     private Timestamp creationDate;
     private Timestamp updateDate;
     private String state;
+    private List<CategoryHasPaymentType> paymentTypes;
 
     public boolean isValid() {
         if(name == null || description == null ||
