@@ -9,14 +9,12 @@ import com.easy.store.backend.context.purchase_has_product.infrastructure.mapper
 import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductResponseMapper;
 import com.easy.store.backend.context.purchase_has_product.infrastructure.mappers.PurchaseHasProductUpdateMapper;
 import com.easy.store.backend.utils.exceptions.*;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -35,70 +33,43 @@ public class PurchaseHasProductController {
     private final PurchaseHasProductUpdateMapper purchaseHasProductUpdateMapper = new PurchaseHasProductUpdateMapper();
     private final PurchaseHasProductResponseMapper purchaseHasProductResponseMapper = new PurchaseHasProductResponseMapper();
 
-    private final HttpUtils httpUtils = new HttpUtils();
-
     @PostMapping
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@RequestBody PurchaseHasProductAddDTO purchaseHasProduct) {
+    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@RequestBody PurchaseHasProductAddDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NonExistenceException {
         ApiResponse<PurchaseHasProductResponseDTO> response = new ApiResponse<>();
-        try {
-            response.setData(purchaseHasProductResponseMapper.modelToDto(addPurchaseHasProductUseCase.add(purchaseHasProductAddMapper.dtoToModel(purchaseHasProduct))));
-            return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException | NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(purchaseHasProductResponseMapper.modelToDto(addPurchaseHasProductUseCase.add(purchaseHasProductAddMapper.dtoToModel(purchaseHasProduct))));
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/add/all")
-    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> addAll(@RequestBody List<PurchaseHasProductAddDTO> purchaseHasProducts) {
+    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> addAll(@RequestBody List<PurchaseHasProductAddDTO> purchaseHasProducts) throws NoResultsException, InvalidBodyException {
         ApiResponse<List<PurchaseHasProductResponseDTO>> response = new ApiResponse<>();
-        try {
-            response.setData(purchaseHasProductResponseMapper.modelsToDtos(addAllPurchaseHasProductUseCase.addAll(purchaseHasProductAddMapper.dtosToModels(purchaseHasProducts))));
-            return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(purchaseHasProductResponseMapper.modelsToDtos(addAllPurchaseHasProductUseCase.addAll(purchaseHasProductAddMapper.dtosToModels(purchaseHasProducts))));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> update(@RequestBody PurchaseHasProductUpdateDTO purchaseHasProduct) {
+    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> update(@RequestBody PurchaseHasProductUpdateDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException {
         ApiResponse<PurchaseHasProductResponseDTO> response = new ApiResponse<>();
-        try {
-            response.setData(purchaseHasProductResponseMapper.modelToDto(updatePurchaseHasProductUseCase.update(purchaseHasProductUpdateMapper.dtoToModel(purchaseHasProduct))));
-            return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException | NoChangesException | NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(purchaseHasProductResponseMapper.modelToDto(updatePurchaseHasProductUseCase.update(purchaseHasProductUpdateMapper.dtoToModel(purchaseHasProduct))));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/purchase/{purchaseId}/product/{productId}")
-    public ResponseEntity<ApiResponse<Object>> deleteByPurchaseIdAndProductId(@PathVariable Long purchaseId, @PathVariable Long productId) {
+    public ResponseEntity<ApiResponse<Object>> deleteByPurchaseIdAndProductId(@PathVariable Long purchaseId, @PathVariable Long productId) throws NonExistenceException {
         ApiResponse<Object> response = new ApiResponse<>();
-        try {
-            PurchaseHasProductId id = PurchaseHasProductId.builder()
-                    .purchaseId(purchaseId)
-                    .productId(productId)
-                    .build();
-            removeByIdPurchaseHasProductUseCase.removeByPurchaseIdAndProductId(id);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        PurchaseHasProductId id = PurchaseHasProductId.builder()
+                .purchaseId(purchaseId)
+                .productId(productId)
+                .build();
+        removeByIdPurchaseHasProductUseCase.removeByPurchaseIdAndProductId(id);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/remove/all")
-    public ResponseEntity<ApiResponse<Object>> deleteByPurchaseIdAndProductId(@RequestBody List<PurchaseHasProductId> ids) {
+    public ResponseEntity<ApiResponse<Object>> deleteByPurchaseIdAndProductId(@RequestBody List<PurchaseHasProductId> ids) throws NoIdReceivedException {
         ApiResponse<Object> response = new ApiResponse<>();
-        try {
-            removeAllPurchaseHasProductUseCase.removeAll(ids);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NoIdReceivedException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        removeAllPurchaseHasProductUseCase.removeAll(ids);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
 }

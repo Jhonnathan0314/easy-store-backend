@@ -9,7 +9,6 @@ import com.easy.store.backend.context.category.infrastructure.mappers.CategoryCr
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryResponseMapper;
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryUpdateMapper;
 import com.easy.store.backend.utils.exceptions.*;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,96 +34,60 @@ public class CategoryController {
     private final CategoryCreateMapper categoryCreateMapper = new CategoryCreateMapper();
     private final CategoryUpdateMapper categoryUpdateMapper = new CategoryUpdateMapper();
     private final CategoryResponseMapper categoryResponseMapper = new CategoryResponseMapper();
-    private final HttpUtils httpUtils = new HttpUtils();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findAll() {
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findAll() throws NoResultsException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategoryUseCase.findAll());
-            response.setData(categories);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategoryUseCase.findAll());
+        response.setData(categories);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> findById(@PathVariable Long id) throws NoResultsException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
-        try {
-            Category category = findByIdCategoryUseCase.findById(id);
-            response.setData(categoryResponseMapper.modelToDto(category));
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        Category category = findByIdCategoryUseCase.findById(id);
+        response.setData(categoryResponseMapper.modelToDto(category));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findByAccountId(@PathVariable Long accountId) {
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findByAccountId(@PathVariable Long accountId) throws NoResultsException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<Category> categories = findByAccountIdCategoryUseCase.findByAccountId(accountId);
-            response.setData(categoryResponseMapper.modelsToDtos(categories));
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<Category> categories = findByAccountIdCategoryUseCase.findByAccountId(accountId);
+        response.setData(categoryResponseMapper.modelsToDtos(categories));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO category, @RequestHeader("Create-By") Long createBy) {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO category, @RequestHeader("Create-By") Long createBy) throws NoIdReceivedException, InvalidBodyException, DuplicatedException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
-        try {
-            category.setCreateBy(createBy);
-            response.setData(categoryResponseMapper.modelToDto(createCategoryUseCase.create(categoryCreateMapper.dtoToModel(category))));
-            return ResponseEntity.ok(response);
-        } catch (DuplicatedException | NoIdReceivedException | InvalidBodyException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        category.setCreateBy(createBy);
+        response.setData(categoryResponseMapper.modelToDto(createCategoryUseCase.create(categoryCreateMapper.dtoToModel(category))));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(@RequestBody CategoryUpdateDTO category, @RequestHeader("Update-By") Long updateBy) {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(@RequestBody CategoryUpdateDTO category, @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
-        try {
-            category.setUpdateBy(updateBy);
-            response.setData(categoryResponseMapper.modelToDto(updateCategoryUseCase.update(categoryUpdateMapper.dtoToModel(category))));
-            return ResponseEntity.ok(response);
-        } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        category.setUpdateBy(updateBy);
+        response.setData(categoryResponseMapper.modelToDto(updateCategoryUseCase.update(categoryUpdateMapper.dtoToModel(category))));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) throws NonExistenceException {
         ApiResponse<Object> response = new ApiResponse<>();
-        try {
-            deleteByIdCategoryUseCase.deleteById(id);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        deleteByIdCategoryUseCase.deleteById(id);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<CategoryUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) {
+    public ResponseEntity<ApiResponse<CategoryUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) throws NonExistenceException {
         ApiResponse<CategoryUpdateDTO> response = new ApiResponse<>();
-        try {
-            Category category = changeStateByIdCategoryUseCase.changeStateById(id, updateBy);
-            response.setData(categoryUpdateMapper.modelToDto(category));
-            return ResponseEntity.ok(response);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        Category category = changeStateByIdCategoryUseCase.changeStateById(id, updateBy);
+        response.setData(categoryUpdateMapper.modelToDto(category));
+        return ResponseEntity.ok(response);
     }
 
 }

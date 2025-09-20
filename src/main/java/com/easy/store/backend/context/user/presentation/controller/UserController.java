@@ -9,7 +9,6 @@ import com.easy.store.backend.context.user.infrastructure.mappers.UserCreateMapp
 import com.easy.store.backend.context.user.infrastructure.mappers.UserResponseMapper;
 import com.easy.store.backend.context.user.infrastructure.mappers.UserUpdateMapper;
 import com.easy.store.backend.utils.exceptions.*;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,93 +34,57 @@ public class UserController {
     private final UserCreateMapper userCreateMapper = new UserCreateMapper();
     private final UserUpdateMapper userUpdateMapper = new UserUpdateMapper();
     private final UserResponseMapper userResponseMapper = new UserResponseMapper();
-    private final HttpUtils httpUtils = new HttpUtils();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> findAll() {
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> findAll() throws NoResultsException {
         ApiResponse<List<UserResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<UserResponseDTO> users = userResponseMapper.modelsToDtos(findAllUserUseCase.findAll());
-            response.setData(users);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<UserResponseDTO> users = userResponseMapper.modelsToDtos(findAllUserUseCase.findAll());
+        response.setData(users);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> findById(@PathVariable Long id) throws NoResultsException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
-        try {
-            User user = findByIdUserUseCase.findById(id);
-            response.setData(userResponseMapper.modelToDto(user));
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        User user = findByIdUserUseCase.findById(id);
+        response.setData(userResponseMapper.modelToDto(user));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> findByAccountId(@PathVariable Long accountId) {
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> findByAccountId(@PathVariable Long accountId) throws NoResultsException {
         ApiResponse<List<UserResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<UserResponseDTO> users = userResponseMapper.modelsToDtos(findByAccountIdUserUseCase.findByAccountId(accountId));
-            response.setData(users);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<UserResponseDTO> users = userResponseMapper.modelsToDtos(findByAccountIdUserUseCase.findByAccountId(accountId));
+        response.setData(users);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> create(@RequestBody UserCreateDTO user) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> create(@RequestBody UserCreateDTO user) throws InvalidBodyException, DuplicatedException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
-        try {
-            response.setData(userResponseMapper.modelToDto(createUserUseCase.create(userCreateMapper.dtoToModel(user))));
-            return ResponseEntity.ok(response);
-        } catch (DuplicatedException | InvalidBodyException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(userResponseMapper.modelToDto(createUserUseCase.create(userCreateMapper.dtoToModel(user))));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> update(@RequestBody UserUpdateDTO user) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> update(@RequestBody UserUpdateDTO user) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
-        try {
-            response.setData(userResponseMapper.modelToDto(updateUserUseCase.update(userUpdateMapper.dtoToModel(user))));
-            return ResponseEntity.ok(response);
-        } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(userResponseMapper.modelToDto(updateUserUseCase.update(userUpdateMapper.dtoToModel(user))));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) throws NonExistenceException {
         ApiResponse<Object> response = new ApiResponse<>();
-        try {
-            deleteByIdUserUseCase.deleteById(id);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        deleteByIdUserUseCase.deleteById(id);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> changeStateById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> changeStateById(@PathVariable Long id) throws NonExistenceException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
-        try {
-            User user = changeStateByIdUserUseCase.changeStateById(id);
-            response.setData(userResponseMapper.modelToDto(user));
-            return ResponseEntity.ok(response);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        User user = changeStateByIdUserUseCase.changeStateById(id);
+        response.setData(userResponseMapper.modelToDto(user));
+        return ResponseEntity.ok(response);
     }
 }

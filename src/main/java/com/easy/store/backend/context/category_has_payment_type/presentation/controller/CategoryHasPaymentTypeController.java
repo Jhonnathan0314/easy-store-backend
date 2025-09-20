@@ -10,7 +10,6 @@ import com.easy.store.backend.context.category_has_payment_type.infrastructure.m
 import com.easy.store.backend.context.category_has_payment_type.infrastructure.mapper.CategoryHasPaymentTypeResponseMapper;
 import com.easy.store.backend.context.category_has_payment_type.infrastructure.mapper.CategoryHasPaymentTypeUpdateMapper;
 import com.easy.store.backend.utils.exceptions.*;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,90 +34,58 @@ public class CategoryHasPaymentTypeController {
     private final CategoryHasPaymentTypeCreateMapper createMapper = new CategoryHasPaymentTypeCreateMapper();
     private final CategoryHasPaymentTypeUpdateMapper updateMapper = new CategoryHasPaymentTypeUpdateMapper();
 
-    private final HttpUtils httpUtils = new HttpUtils();
-
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CategoryHasPaymentTypeResponseDto>>> findAll() {
+    public ResponseEntity<ApiResponse<List<CategoryHasPaymentTypeResponseDto>>> findAll() throws NoResultsException {
         ApiResponse<List<CategoryHasPaymentTypeResponseDto>> response = new ApiResponse<>();
-        try {
-           List<CategoryHasPaymentTypeResponseDto> dtos = responseMapper.modelsToDtos(findAllCategoryHasPaymentTypeUseCase.findAll());
-           response.setData(dtos);
-           return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<CategoryHasPaymentTypeResponseDto> dtos = responseMapper.modelsToDtos(findAllCategoryHasPaymentTypeUseCase.findAll());
+        response.setData(dtos);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/active/category/{categoryId}")
-    public ResponseEntity<ApiResponse<List<CategoryHasPaymentTypeResponseDto>>> findActiveByCategoryId(@PathVariable Long categoryId) {
+    public ResponseEntity<ApiResponse<List<CategoryHasPaymentTypeResponseDto>>> findActiveByCategoryId(@PathVariable Long categoryId) throws NoResultsException {
         ApiResponse<List<CategoryHasPaymentTypeResponseDto>> response = new ApiResponse<>();
-        try {
-            List<CategoryHasPaymentTypeResponseDto> dtos = responseMapper.modelsToDtos(findByCategoryIdCategoryHasPaymentTypeUseCase.findByCategoryId(categoryId));
-            response.setData(dtos);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<CategoryHasPaymentTypeResponseDto> dtos = responseMapper.modelsToDtos(findByCategoryIdCategoryHasPaymentTypeUseCase.findByCategoryId(categoryId));
+        response.setData(dtos);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/category/{categoryId}/payment-type/{paymentTypeId}")
-    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> findById(@PathVariable Long categoryId, @PathVariable Long paymentTypeId) {
+    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> findById(@PathVariable Long categoryId, @PathVariable Long paymentTypeId) throws NoResultsException {
         ApiResponse<CategoryHasPaymentTypeResponseDto> response = new ApiResponse<>();
-        try {
-            CategoryHasPaymentTypeId id = CategoryHasPaymentTypeId.builder()
-                    .categoryId(categoryId)
-                    .paymentTypeId(paymentTypeId)
-                    .build();
-            CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(findByIdCategoryHasPaymentTypeUseCase.findById(id));
-            response.setData(dto);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        CategoryHasPaymentTypeId id = CategoryHasPaymentTypeId.builder()
+                .categoryId(categoryId)
+                .paymentTypeId(paymentTypeId)
+                .build();
+        CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(findByIdCategoryHasPaymentTypeUseCase.findById(id));
+        response.setData(dto);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> create(@RequestBody CategoryHasPaymentTypeCreateDto createDto) {
+    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> create(@RequestBody CategoryHasPaymentTypeCreateDto createDto) throws NoResultsException, NoIdReceivedException, InvalidBodyException {
         ApiResponse<CategoryHasPaymentTypeResponseDto> response = new ApiResponse<>();
-        try {
-            CategoryHasPaymentType model = createMapper.dtoToModel(createDto);
-            CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(createCategoryHasPaymentTypeUseCase.create(model));
-            response.setData(dto);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException | NoIdReceivedException | InvalidBodyException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        CategoryHasPaymentType model = createMapper.dtoToModel(createDto);
+        CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(createCategoryHasPaymentTypeUseCase.create(model));
+        response.setData(dto);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> update(@RequestBody CategoryHasPaymentTypeUpdateDto updateDto) {
+    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> update(@RequestBody CategoryHasPaymentTypeUpdateDto updateDto) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException {
         ApiResponse<CategoryHasPaymentTypeResponseDto> response = new ApiResponse<>();
-        try {
-            CategoryHasPaymentType model = updateMapper.dtoToModel(updateDto);
-            CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(updateCategoryHasPaymentTypeUseCase.update(model));
-            response.setData(dto);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException | NoIdReceivedException | InvalidBodyException | NoChangesException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        CategoryHasPaymentType model = updateMapper.dtoToModel(updateDto);
+        CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(updateCategoryHasPaymentTypeUseCase.update(model));
+        response.setData(dto);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/state")
-    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> changeStateById(@RequestBody CategoryHasPaymentTypeId id) {
+    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> changeStateById(@RequestBody CategoryHasPaymentTypeId id) throws NonExistenceException {
         ApiResponse<CategoryHasPaymentTypeResponseDto> response = new ApiResponse<>();
-        try {
-            CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(changeStateByIdCategoryHasPaymentTypeUseCase.changeStateByIdCategoryHasPaymentTypeUseCase(id));
-            response.setData(dto);
-            return ResponseEntity.ok(response);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(changeStateByIdCategoryHasPaymentTypeUseCase.changeStateByIdCategoryHasPaymentTypeUseCase(id));
+        response.setData(dto);
+        return ResponseEntity.ok(response);
     }
 
 }

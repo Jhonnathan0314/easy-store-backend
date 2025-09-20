@@ -9,7 +9,6 @@ import com.easy.store.backend.context.account.infrastructure.mappers.AccountCrea
 import com.easy.store.backend.context.account.infrastructure.mappers.AccountMapper;
 import com.easy.store.backend.context.account.infrastructure.mappers.AccountUpdateMapper;
 import com.easy.store.backend.utils.exceptions.*;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,70 +34,43 @@ public class AccountController {
     private final AccountCreateMapper accountCreateMapper = new AccountCreateMapper();
     private final AccountUpdateMapper accountUpdateMapper = new AccountUpdateMapper();
 
-    private final HttpUtils httpUtils = new HttpUtils();
-
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AccountDto>>> findAll() {
+    public ResponseEntity<ApiResponse<List<AccountDto>>> findAll() throws NoResultsException {
         ApiResponse<List<AccountDto>> response = new ApiResponse<>();
-        try {
-            List<Account> accounts = findAllAccountUseCase.findAll();
-            response.setData(accountMapper.modelsToDtos(accounts));
-            return ResponseEntity.ok(response);
-        }catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<Account> accounts = findAllAccountUseCase.findAll();
+        response.setData(accountMapper.modelsToDtos(accounts));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<AccountDto>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<AccountDto>> findById(@PathVariable Long id) throws NoResultsException {
         ApiResponse<AccountDto> response = new ApiResponse<>();
-        try {
-            Account account = findByIdAccountUseCase.findById(id);
-            response.setData(accountMapper.modelToDto(account));
-            return ResponseEntity.ok(response);
-        }catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        Account account = findByIdAccountUseCase.findById(id);
+        response.setData(accountMapper.modelToDto(account));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AccountDto>> create(@RequestBody AccountCreateDto dto) {
+    public ResponseEntity<ApiResponse<AccountDto>> create(@RequestBody AccountCreateDto dto) throws InvalidBodyException {
         ApiResponse<AccountDto> response = new ApiResponse<>();
-        try {
-            Account account = createAccountUseCase.create(accountCreateMapper.dtoToModel(dto));
-            response.setData(accountMapper.modelToDto(account));
-            return ResponseEntity.ok(response);
-        }catch (InvalidBodyException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        Account account = createAccountUseCase.create(accountCreateMapper.dtoToModel(dto));
+        response.setData(accountMapper.modelToDto(account));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<AccountDto>> update(@RequestBody AccountUpdateDto dto) {
+    public ResponseEntity<ApiResponse<AccountDto>> update(@RequestBody AccountUpdateDto dto) throws NoIdReceivedException, InvalidBodyException, NoChangesException, NonExistenceException {
         ApiResponse<AccountDto> response = new ApiResponse<>();
-        try {
-            Account account = updateAccountUseCase.update(accountUpdateMapper.dtoToModel(dto));
-            response.setData(accountMapper.modelToDto(account));
-            return ResponseEntity.ok(response);
-        }catch (NoIdReceivedException | InvalidBodyException | NonExistenceException | NoChangesException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        Account account = updateAccountUseCase.update(accountUpdateMapper.dtoToModel(dto));
+        response.setData(accountMapper.modelToDto(account));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) throws NonExistenceException {
         ApiResponse<Object> response = new ApiResponse<>();
-        try {
-            deleteByIdAccountUseCase.deleteById(id);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        }catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        deleteByIdAccountUseCase.deleteById(id);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
 }

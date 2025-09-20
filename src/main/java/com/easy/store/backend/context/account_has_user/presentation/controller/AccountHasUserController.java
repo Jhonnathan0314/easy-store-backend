@@ -11,7 +11,6 @@ import com.easy.store.backend.utils.exceptions.DuplicatedException;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import com.easy.store.backend.utils.exceptions.NonExistenceException;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,91 +36,59 @@ public class AccountHasUserController {
     private final AccountHasUserCreateMapper accountHasUserCreateMapper = new AccountHasUserCreateMapper();
     private final AccountHasUserResponseMapper accountHasUserResponseMapper = new AccountHasUserResponseMapper();
 
-    private final HttpUtils httpUtils = new HttpUtils();
-
     @GetMapping("/account/{id}")
-    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByIdAccount(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByIdAccount(@PathVariable Long id) throws NoResultsException {
         ApiResponse<List<AccountHasUserResponseDto>> response = new ApiResponse<>();
-        try {
-            List<AccountHasUser> users = findByAccountIdAccountHasUserUseCase.findByAccountId(id);
-            response.setData(accountHasUserResponseMapper.modelsToDtos(users));
-            return ResponseEntity.ok(response);
-        }catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<AccountHasUser> users = findByAccountIdAccountHasUserUseCase.findByAccountId(id);
+        response.setData(accountHasUserResponseMapper.modelsToDtos(users));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByIdUser(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByIdUser(@PathVariable Long id) throws NoResultsException {
         ApiResponse<List<AccountHasUserResponseDto>> response = new ApiResponse<>();
-        try {
-            List<AccountHasUser> users = findByUserIdAccountHasUserUseCase.findByUserId(id);
-            response.setData(accountHasUserResponseMapper.modelsToDtos(users));
-            return ResponseEntity.ok(response);
-        }catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<AccountHasUser> users = findByUserIdAccountHasUserUseCase.findByUserId(id);
+        response.setData(accountHasUserResponseMapper.modelsToDtos(users));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/account/{idAccount}/user/{idUser}")
-    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> findById(@PathVariable Long idAccount, @PathVariable Long idUser) {
+    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> findById(@PathVariable Long idAccount, @PathVariable Long idUser) throws NoResultsException {
         ApiResponse<AccountHasUserResponseDto> response = new ApiResponse<>();
-        try {
-            AccountHasUserId id = AccountHasUserId.builder()
-                    .accountId(idAccount)
-                    .userId(idUser)
-                    .build();
-            AccountHasUser user = findByIdAccountHasUserUseCase.findById(id);
-            response.setData(accountHasUserResponseMapper.modelToDto(user));
-            return ResponseEntity.ok(response);
-        }catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        AccountHasUserId id = AccountHasUserId.builder()
+                .accountId(idAccount)
+                .userId(idUser)
+                .build();
+        AccountHasUser user = findByIdAccountHasUserUseCase.findById(id);
+        response.setData(accountHasUserResponseMapper.modelToDto(user));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/state/{state}")
-    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByState(@PathVariable String state) {
+    public ResponseEntity<ApiResponse<List<AccountHasUserResponseDto>>> findByState(@PathVariable String state) throws NoResultsException {
         ApiResponse<List<AccountHasUserResponseDto>> response = new ApiResponse<>();
-        try {
-            List<AccountHasUser> model = findByStateAccountHasUserUseCase.findByState(state);
-            response.setData(accountHasUserResponseMapper.modelsToDtos(model));
-            return ResponseEntity.ok(response);
-        }catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<AccountHasUser> model = findByStateAccountHasUserUseCase.findByState(state);
+        response.setData(accountHasUserResponseMapper.modelsToDtos(model));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> create(@RequestBody AccountHasUserCreateDto dto) {
+    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> create(@RequestBody AccountHasUserCreateDto dto) throws InvalidBodyException, DuplicatedException, NonExistenceException {
         ApiResponse<AccountHasUserResponseDto> response = new ApiResponse<>();
-        try {
-            AccountHasUser model = createAccountHasUserUseCase.create(accountHasUserCreateMapper.dtoToModel(dto));
-            response.setData(accountHasUserResponseMapper.modelToDto(model));
-            return ResponseEntity.ok(response);
-        }catch (NonExistenceException | DuplicatedException | InvalidBodyException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        AccountHasUser model = createAccountHasUserUseCase.create(accountHasUserCreateMapper.dtoToModel(dto));
+        response.setData(accountHasUserResponseMapper.modelToDto(model));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/account/{idAccount}/user/{idUser}")
-    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long idAccount, @PathVariable Long idUser) {
+    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long idAccount, @PathVariable Long idUser) throws NonExistenceException {
         ApiResponse<Object> response = new ApiResponse<>();
-        try {
-            AccountHasUserId id = AccountHasUserId.builder()
-                    .accountId(idAccount)
-                    .userId(idUser)
-                    .build();
-            deleteByIdAccountHasUserUseCase.deleteById(id);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        }catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        AccountHasUserId id = AccountHasUserId.builder()
+                .accountId(idAccount)
+                .userId(idUser)
+                .build();
+        deleteByIdAccountHasUserUseCase.deleteById(id);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
 }

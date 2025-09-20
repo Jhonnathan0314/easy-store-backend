@@ -9,7 +9,6 @@ import com.easy.store.backend.security.models.LoginRequest;
 import com.easy.store.backend.security.models.ResetPasswordRequest;
 import com.easy.store.backend.security.service.AuthorizationService;
 import com.easy.store.backend.utils.exceptions.*;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,47 +22,28 @@ public class AuthorizationController {
 
     private final AuthorizationService authService;
 
-    private final HttpUtils httpUtils = new HttpUtils();
     private final UserCreateMapper userCreateMapper = new UserCreateMapper();
     private final UserResponseMapper userResponseMapper = new UserResponseMapper();
 
     @PostMapping(value = "login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody LoginRequest request) throws NoResultsException, InvalidBodyException {
         ApiResponse<AuthResponse> response = new ApiResponse<>();
-        try {
-            response.setData(authService.login(request));
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException | InvalidBodyException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(authService.login(request));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "register")
-    public ResponseEntity<ApiResponse<AuthResponse>> register(@RequestBody UserCreateDTO request) {
+    public ResponseEntity<ApiResponse<AuthResponse>> register(@RequestBody UserCreateDTO request) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException, DuplicatedException, NonExistenceException {
         ApiResponse<AuthResponse> response = new ApiResponse<>();
-        try {
-            response.setData(authService.register(userCreateMapper.dtoToModel(request)));
-            return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | DuplicatedException | NonExistenceException | NoResultsException |
-                 NoIdReceivedException | NoChangesException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(authService.register(userCreateMapper.dtoToModel(request)));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping(value = "reset-password")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> register(@RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> register(@RequestBody ResetPasswordRequest request) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException, NonExistenceException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
-        try {
-            response.setData(userResponseMapper.modelToDto(authService.resetPassword(request)));
-            return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException |
-                 NoIdReceivedException | NoChangesException |
-                 NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        response.setData(userResponseMapper.modelToDto(authService.resetPassword(request)));
+        return ResponseEntity.ok(response);
     }
 
 }

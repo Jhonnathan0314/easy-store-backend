@@ -9,7 +9,6 @@ import com.easy.store.backend.context.subcategory.infrastructure.mappers.Subcate
 import com.easy.store.backend.context.subcategory.infrastructure.mappers.SubcategoryResponseMapper;
 import com.easy.store.backend.context.subcategory.infrastructure.mappers.SubcategoryUpdateMapper;
 import com.easy.store.backend.utils.exceptions.*;
-import com.easy.store.backend.utils.http.HttpUtils;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,109 +35,68 @@ public class SubcategoryController {
     private final SubcategoryCreateMapper subcategoryCreateMapper = new SubcategoryCreateMapper();
     private final SubcategoryUpdateMapper subcategoryUpdateMapper = new SubcategoryUpdateMapper();
     private final SubcategoryResponseMapper subcategoryResponseMapper = new SubcategoryResponseMapper();
-    private final HttpUtils httpUtils = new HttpUtils();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findAll() {
+    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findAll() throws NoResultsException {
         ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findAllSubcategoryUseCase.findAll());
-            response.setData(subcategories);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findAllSubcategoryUseCase.findAll());
+        response.setData(subcategories);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> findById(@PathVariable Long id) throws NoResultsException {
         ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
-        try {
-            Subcategory subcategory = findByIdSubcategoryUseCase.findById(id);
-            response.setData(subcategoryResponseMapper.modelToDto(subcategory));
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        Subcategory subcategory = findByIdSubcategoryUseCase.findById(id);
+        response.setData(subcategoryResponseMapper.modelToDto(subcategory));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/account/{idAccount}")
-    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByAccountId(@PathVariable Long idAccount) {
+    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByAccountId(@PathVariable Long idAccount) throws NoResultsException {
         ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findByAccountIdSubcategoryUseCase.findByAccountId(idAccount));
-            response.setData(subcategories);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findByAccountIdSubcategoryUseCase.findByAccountId(idAccount));
+        response.setData(subcategories);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/category/{idCategory}")
-    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByCategoryId(@PathVariable Long idCategory) {
+    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByCategoryId(@PathVariable Long idCategory) throws NoResultsException {
         ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
-        try {
-            List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findByCategoryIdSubcategoryUseCase.findByCategoryId(idCategory));
-            response.setData(subcategories);
-            return ResponseEntity.ok(response);
-        } catch (NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findByCategoryIdSubcategoryUseCase.findByCategoryId(idCategory));
+        response.setData(subcategories);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> create(@RequestBody SubcategoryCreateDTO subcategory, @RequestHeader("Create-By") Long createBy) {
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> create(@RequestBody SubcategoryCreateDTO subcategory, @RequestHeader("Create-By") Long createBy) throws NoResultsException, InvalidBodyException {
         ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
-        try {
-            subcategory.setCreateBy(createBy);
-            response.setData(subcategoryResponseMapper.modelToDto(createSubcategoryUseCase.create(subcategoryCreateMapper.dtoToModel(subcategory))));
-            return ResponseEntity.ok(response);
-        } catch (InvalidBodyException | NoResultsException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        subcategory.setCreateBy(createBy);
+        response.setData(subcategoryResponseMapper.modelToDto(createSubcategoryUseCase.create(subcategoryCreateMapper.dtoToModel(subcategory))));
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping()
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> update(@RequestBody SubcategoryUpdateDTO subcategory, @RequestHeader("Update-By") Long updateBy) {
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> update(@RequestBody SubcategoryUpdateDTO subcategory, @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
-        try {
-            subcategory.setUpdateBy(updateBy);
-            response.setData(subcategoryResponseMapper.modelToDto(updateSubcategoryUseCase.update(subcategoryUpdateMapper.dtoToModel(subcategory))));
-            return ResponseEntity.ok(response);
-        } catch (NoIdReceivedException | InvalidBodyException | NoResultsException | NoChangesException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        subcategory.setUpdateBy(updateBy);
+        response.setData(subcategoryResponseMapper.modelToDto(updateSubcategoryUseCase.update(subcategoryUpdateMapper.dtoToModel(subcategory))));
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) throws NonExistenceException {
         ApiResponse<Object> response = new ApiResponse<>();
-        try {
-            deleteByIdSubcategoryUseCase.deleteById(id);
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        deleteByIdSubcategoryUseCase.deleteById(id);
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<SubcategoryUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) {
+    public ResponseEntity<ApiResponse<SubcategoryUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) throws NonExistenceException {
         ApiResponse<SubcategoryUpdateDTO> response = new ApiResponse<>();
-        try {
-            Subcategory subcategory = changeStateByIdSubcategoryUseCase.changeStateById(id, updateBy);
-            response.setData(subcategoryUpdateMapper.modelToDto(subcategory));
-            return ResponseEntity.ok(response);
-        } catch (NonExistenceException e) {
-            response.setError(httpUtils.determineErrorMessage(e));
-            return new ResponseEntity<>(response, httpUtils.determineHttpStatus(e));
-        }
+        Subcategory subcategory = changeStateByIdSubcategoryUseCase.changeStateById(id, updateBy);
+        response.setData(subcategoryUpdateMapper.modelToDto(subcategory));
+        return ResponseEntity.ok(response);
     }
 
 }
