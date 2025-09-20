@@ -1,6 +1,8 @@
 package com.easy.store.backend.context.s3.service;
 
 import com.easy.store.backend.context.s3.model.S3File;
+import com.easy.store.backend.utils.constants.ErrorMessages;
+import com.easy.store.backend.utils.exceptions.FileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class S3Service {
     private final S3Client s3Client;
     private final String bucketName;
 
-    public S3File getObject(Long accountId, String context, String objectName) throws IOException {
+    public S3File getObject(Long accountId, String context, String objectName) throws FileException {
         String key = "account/" + accountId + "/" + context + "/" + objectName;
 
         log.info("ACCION GETOBJECT -> Iniciando búsqueda con key: {}", key);
@@ -35,8 +37,14 @@ public class S3Service {
         ResponseInputStream<GetObjectResponse> responseInputStream = s3Client.getObject(request);
 
         String extension = getExtension(objectName);
-        byte[] bytes = responseInputStream.readAllBytes();
-        String base64Content = Base64.getEncoder().encodeToString(bytes);
+        String base64Content = "";
+        try {
+            byte[] bytes = responseInputStream.readAllBytes();
+            base64Content = Base64.getEncoder().encodeToString(bytes);
+        }catch (IOException e){
+            log.error("ACCION GETOBJECT -> Error al leer el archivo: {}", e.getMessage());
+            throw new FileException(ErrorMessages.FILE_ERROR);
+        }
 
         log.info("ACCION GETOBJECT -> Retornando archivo");
         return S3File.builder()

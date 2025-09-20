@@ -23,8 +23,11 @@ public class ControllerException {
         return generateApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler(value = InvalidActionException.class)
-    public ResponseEntity<ApiResponse<ErrorMessage>> handleConflictExceptions(final InvalidActionException ex) {
+    @ExceptionHandler({
+            InvalidActionException.class,
+            FileException.class
+    })
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleConflictExceptions(final RuntimeException ex) {
         return generateApiResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 

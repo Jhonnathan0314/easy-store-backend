@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/api/v1/s3")
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class S3Controller {
     public ResponseEntity<ApiResponse<S3File>> getObjectName(
             @PathVariable("accountId") Long accountId,
             @PathVariable String context,
-            @PathVariable String objectName) throws IOException {
+            @PathVariable String objectName) throws FileException {
         ApiResponse<S3File> response = new ApiResponse<>();
         S3File file = s3Service.getObject(accountId, context, objectName);
         response.setData(file);
