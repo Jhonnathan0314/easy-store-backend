@@ -3,6 +3,7 @@ package com.easy.store.backend.context.category.application.usecase;
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.domain.port.CategoryRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
+import com.easy.store.backend.utils.constants.FileConstants;
 import com.easy.store.backend.utils.exceptions.DuplicatedException;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import com.easy.store.backend.utils.exceptions.NoIdReceivedException;
@@ -31,6 +32,8 @@ public class CreateCategoryUseCase {
 
         if(categoryRepository.findByName(category.getName()).isPresent()) throw new DuplicatedException(ErrorMessages.DUPLICATED);
         log.info("ACCION CREATE CATEGORY -> Validé categoria no duplicada");
+
+        category.setImageName(FileConstants.DEFAULT_CATEGORY_IMG);
 
         log.info("ACCION CREATE CATEGORY -> Creando categoria");
 
