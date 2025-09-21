@@ -38,29 +38,36 @@ public class CategoryController {
     private final CategoryResponseMapper categoryResponseMapper = new CategoryResponseMapper();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findAll() throws NoResultsException {
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findAll(
+            @RequestParam(required = false) Boolean image
+    ) throws NoResultsException, FileException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategory.findAll());
+        boolean loadImage = Boolean.TRUE.equals(image);
+        List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategory.findAll(loadImage));
         response.setData(categories);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> findById(
-            @PathVariable Long id
-    ) throws NoResultsException {
+            @PathVariable Long id,
+            @RequestParam(required = false) Boolean image
+    ) throws NoResultsException, FileException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
-        Category category = findByIdCategory.findById(id);
+        boolean loadImage = Boolean.TRUE.equals(image);
+        Category category = findByIdCategory.findById(id, loadImage);
         response.setData(categoryResponseMapper.modelToDto(category));
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/account/{accountId}")
     public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findByAccountId(
-            @PathVariable Long accountId
-    ) throws NoResultsException {
+            @PathVariable Long accountId,
+            @RequestParam(required = false) Boolean image
+    ) throws NoResultsException, FileException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        List<Category> categories = findByAccountIdCategory.findByAccountId(accountId);
+        boolean loadImage = Boolean.TRUE.equals(image);
+        List<Category> categories = findByAccountIdCategory.findByAccountId(accountId, loadImage);
         response.setData(categoryResponseMapper.modelsToDtos(categories));
         return ResponseEntity.ok(response);
     }
