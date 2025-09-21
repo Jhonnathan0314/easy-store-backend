@@ -83,10 +83,10 @@ public class PaymentTypeController {
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<PaymentTypeUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) throws NonExistenceException {
-        ApiResponse<PaymentTypeUpdateDTO> response = new ApiResponse<>();
+    public ResponseEntity<ApiResponse<PaymentTypeResponseDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) throws NonExistenceException {
+        ApiResponse<PaymentTypeResponseDTO> response = new ApiResponse<>();
         PaymentType paymentType = changeStateByIdPaymentTypeUseCase.changeStateById(id, updateBy);
-        response.setData(paymentTypeUpdateMapper.modelToDto(paymentType));
+        response.setData(paymentTypeResponseMapper.modelToDto(paymentType));
         return ResponseEntity.ok(response);
     }
 
