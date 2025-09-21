@@ -57,7 +57,7 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
 
     @Override
     public CategoryResponseDTO modelToDto(Category model) {
-        return CategoryResponseDTO.builder()
+        CategoryResponseDTO dto = CategoryResponseDTO.builder()
                 .id(model.getId())
                 .name(model.getName())
                 .description(model.getDescription())
@@ -67,11 +67,13 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
                 .paymentTypes(new ArrayList<>())
                 .paymentTypes(categoryHasPaymentTypeResponseMapper.modelsToDtos(model.getPaymentTypes()))
                 .build();
+        if(model.getImage() != null) dto.setImage(model.getImage());
+        return dto;
     }
 
     @Override
     public Category dtoToModel(CategoryResponseDTO dto) {
-        return Category.builder()
+        Category model = Category.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -86,6 +88,8 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
                 )
                 .paymentTypes(categoryHasPaymentTypeResponseMapper.dtosToModels(dto.getPaymentTypes()))
                 .build();
+        if(dto.getImage() != null) model.setImage(dto.getImage());
+        return model;
     }
 
 }

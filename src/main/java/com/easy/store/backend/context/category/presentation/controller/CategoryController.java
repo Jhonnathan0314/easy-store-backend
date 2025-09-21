@@ -8,6 +8,7 @@ import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryCreateMapper;
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryResponseMapper;
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryUpdateMapper;
+import com.easy.store.backend.context.s3.model.S3File;
 import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,14 @@ import java.util.List;
 @CrossOrigin("*")
 public class CategoryController {
 
-    private final FindAllCategoryUseCase findAllCategoryUseCase;
-    private final FindByIdCategoryUseCase findByIdCategoryUseCase;
-    private final FindByAccountIdCategoryUseCase findByAccountIdCategoryUseCase;
-    private final CreateCategoryUseCase createCategoryUseCase;
-    private final UpdateCategoryUseCase updateCategoryUseCase;
-    private final DeleteByIdCategoryUseCase deleteByIdCategoryUseCase;
-    private final ChangeStateByIdCategoryUseCase changeStateByIdCategoryUseCase;
+    private final FindAllCategoryUseCase findAllCategory;
+    private final FindByIdCategoryUseCase findByIdCategory;
+    private final FindByAccountIdCategoryUseCase findByAccountIdCategory;
+    private final CreateCategoryUseCase createCategory;
+    private final UpdateCategoryUseCase updateCategory;
+    private final UpdateImgCategoryUseCase updateImgCategory;
+    private final DeleteByIdCategoryUseCase deleteByIdCategory;
+    private final ChangeStateByIdCategoryUseCase changeStateByIdCategory;
 
     private final CategoryCreateMapper categoryCreateMapper = new CategoryCreateMapper();
     private final CategoryUpdateMapper categoryUpdateMapper = new CategoryUpdateMapper();
@@ -38,56 +40,82 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findAll() throws NoResultsException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategoryUseCase.findAll());
+        List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategory.findAll());
         response.setData(categories);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> findById(@PathVariable Long id) throws NoResultsException {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> findById(
+            @PathVariable Long id
+    ) throws NoResultsException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
-        Category category = findByIdCategoryUseCase.findById(id);
+        Category category = findByIdCategory.findById(id);
         response.setData(categoryResponseMapper.modelToDto(category));
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findByAccountId(@PathVariable Long accountId) throws NoResultsException {
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findByAccountId(
+            @PathVariable Long accountId
+    ) throws NoResultsException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        List<Category> categories = findByAccountIdCategoryUseCase.findByAccountId(accountId);
+        List<Category> categories = findByAccountIdCategory.findByAccountId(accountId);
         response.setData(categoryResponseMapper.modelsToDtos(categories));
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(@RequestBody CategoryCreateDTO category, @RequestHeader("Create-By") Long createBy) throws NoIdReceivedException, InvalidBodyException, DuplicatedException {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(
+            @RequestBody CategoryCreateDTO category,
+            @RequestHeader("Create-By") Long createBy
+    ) throws NoIdReceivedException, InvalidBodyException, DuplicatedException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
         category.setCreateBy(createBy);
-        response.setData(categoryResponseMapper.modelToDto(createCategoryUseCase.create(categoryCreateMapper.dtoToModel(category))));
-        return ResponseEntity.ok(response);
+        Category categoryModel = createCategory.create(categoryCreateMapper.dtoToModel(category));
+        response.setData(categoryResponseMapper.modelToDto(categoryModel));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(@RequestBody CategoryUpdateDTO category, @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(
+            @RequestBody CategoryUpdateDTO category,
+            @RequestHeader("Update-By") Long updateBy
+    ) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
         category.setUpdateBy(updateBy);
-        response.setData(categoryResponseMapper.modelToDto(updateCategoryUseCase.update(categoryUpdateMapper.dtoToModel(category))));
+        Category updatedCategoryModel = updateCategory.update(categoryUpdateMapper.dtoToModel(category));
+        response.setData(categoryResponseMapper.modelToDto(updatedCategoryModel));
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/img")
+    public ResponseEntity<ApiResponse<CategoryResponseDTO>> updateCategoryImg(
+            @PathVariable Long id,
+            @RequestBody S3File img,
+            @RequestHeader("Update-By") Long updateBy
+    ) throws NoChangesException, NonExistenceException {
+        ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
+        Category categoryModel = updateImgCategory.updateCategoryImg(id, img, updateBy);
+        response.setData(categoryResponseMapper.modelToDto(categoryModel));
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ApiResponse<Object>> deleteById(@PathVariable Long id) throws NonExistenceException {
-        ApiResponse<Object> response = new ApiResponse<>();
-        deleteByIdCategoryUseCase.deleteById(id);
-        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+    public ResponseEntity<ApiResponse<Object>> deleteById(
+            @PathVariable Long id
+    ) throws NonExistenceException {
+        deleteByIdCategory.deleteById(id);
+        return new ResponseEntity<>(new ApiResponse<>(), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/change-state/{id}")
-    public ResponseEntity<ApiResponse<CategoryUpdateDTO>> changeStateById(@PathVariable Long id, @RequestHeader("Update-By") Long updateBy) throws NonExistenceException {
-        ApiResponse<CategoryUpdateDTO> response = new ApiResponse<>();
-        Category category = changeStateByIdCategoryUseCase.changeStateById(id, updateBy);
-        response.setData(categoryUpdateMapper.modelToDto(category));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<Object>> changeStateById(
+            @PathVariable Long id,
+            @RequestHeader("Update-By") Long updateBy
+    ) throws NonExistenceException {
+        changeStateByIdCategory.changeStateById(id, updateBy);
+        return new ResponseEntity<>(new ApiResponse<>(), HttpStatus.NO_CONTENT);
     }
 
 }

@@ -2,6 +2,7 @@ package com.easy.store.backend.context.category.domain.model;
 
 import com.easy.store.backend.context.account.domain.model.Account;
 import com.easy.store.backend.context.category_has_payment_type.domain.model.CategoryHasPaymentType;
+import com.easy.store.backend.context.s3.model.S3File;
 import com.easy.store.backend.context.user.domain.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class Category {
     private String name;
     private String description;
     private String imageName;
+    private S3File image;
     private Long createBy;
     private Long updateBy;
     private User user;
