@@ -19,7 +19,7 @@ public class ControllerException {
             NoIdReceivedException.class,
             NonExistenceException.class
     })
-    public ResponseEntity<ApiResponse<ErrorMessage>> handleBadRequestExceptions(final RuntimeException ex) {
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleBadRequestExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
@@ -27,12 +27,12 @@ public class ControllerException {
             InvalidActionException.class,
             FileException.class
     })
-    public ResponseEntity<ApiResponse<ErrorMessage>> handleConflictExceptions(final RuntimeException ex) {
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleConflictExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(value = NoResultsException.class)
-    public ResponseEntity<ApiResponse<ErrorMessage>> handleNotFoundExceptions(final NoResultsException ex) {
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleNotFoundExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
