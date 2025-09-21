@@ -48,14 +48,16 @@ public class UpdateImgCategoryUseCase {
             category.setImageName(FileConstants.DEFAULT_CATEGORY_IMG);
         }
         if(createImg) {
-            img.setName(FileConstants.CATEGORY_IMG_ASSIGNED_NAME);
+            img.setName(category.getId() + ".png");
             img.setAccountId(accountId);
             img.setContext(FileConstants.CATEGORY_CONTEXT);
             s3Service.putObject(img);
             category.setImageName(img.getName());
             category.setImage(img);
         }
-        return categoryRepository.update(category);
+        Category categoryUpdated = categoryRepository.update(category);
+        categoryUpdated.setImage(img);
+        return categoryUpdated;
     }
 
     private boolean isEmptyImg(S3File img) {
