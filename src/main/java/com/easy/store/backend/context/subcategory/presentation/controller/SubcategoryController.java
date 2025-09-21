@@ -23,10 +23,7 @@ import java.util.List;
 @CrossOrigin("*")
 public class SubcategoryController {
 
-    private final FindAllSubcategoryUseCase findAllSubcategoryUseCase;
-    private final FindByIdSubcategoryUseCase findByIdSubcategoryUseCase;
     private final FindByAccountIdSubcategoryUseCase findByAccountIdSubcategoryUseCase;
-    private final FindByCategoryIdSubcategoryUseCase findByCategoryIdSubcategoryUseCase;
     private final CreateSubcategoryUseCase createSubcategoryUseCase;
     private final UpdateSubcategoryUseCase updateSubcategoryUseCase;
     private final DeleteByIdSubcategoryUseCase deleteByIdSubcategoryUseCase;
@@ -36,34 +33,10 @@ public class SubcategoryController {
     private final SubcategoryUpdateMapper subcategoryUpdateMapper = new SubcategoryUpdateMapper();
     private final SubcategoryResponseMapper subcategoryResponseMapper = new SubcategoryResponseMapper();
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findAll() throws NoResultsException {
-        ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
-        List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findAllSubcategoryUseCase.findAll());
-        response.setData(subcategories);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> findById(@PathVariable Long id) throws NoResultsException {
-        ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
-        Subcategory subcategory = findByIdSubcategoryUseCase.findById(id);
-        response.setData(subcategoryResponseMapper.modelToDto(subcategory));
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/account/{idAccount}")
     public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByAccountId(@PathVariable Long idAccount) throws NoResultsException {
         ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
         List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findByAccountIdSubcategoryUseCase.findByAccountId(idAccount));
-        response.setData(subcategories);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/category/{idCategory}")
-    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByCategoryId(@PathVariable Long idCategory) throws NoResultsException {
-        ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
-        List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findByCategoryIdSubcategoryUseCase.findByCategoryId(idCategory));
         response.setData(subcategories);
         return ResponseEntity.ok(response);
     }
