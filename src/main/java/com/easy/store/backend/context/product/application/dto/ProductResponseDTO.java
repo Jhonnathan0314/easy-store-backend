@@ -1,12 +1,14 @@
 package com.easy.store.backend.context.product.application.dto;
 
+import com.easy.store.backend.context.s3.model.S3File;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Getter
+@Data
 @Builder
 @AllArgsConstructor
 public class ProductResponseDTO {
@@ -14,6 +16,7 @@ public class ProductResponseDTO {
     private String name;
     private String description;
     private String imageName;
+    private List<S3File> images;
     private Integer imageNumber;
     private Integer imageLastNumber;
     private BigDecimal price;

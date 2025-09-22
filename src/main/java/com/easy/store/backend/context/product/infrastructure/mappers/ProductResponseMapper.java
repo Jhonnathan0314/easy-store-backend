@@ -52,7 +52,7 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
 
     @Override
     public ProductResponseDTO modelToDto(Product model) {
-        return ProductResponseDTO.builder()
+        ProductResponseDTO dto = ProductResponseDTO.builder()
                 .id(model.getId())
                 .name(model.getName())
                 .description(model.getDescription())
@@ -65,11 +65,13 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
                 .subcategoryId(model.getSubcategory().getId())
                 .categoryId(model.getCategoryId())
                 .build();
+        if(model.getImages() != null) dto.setImages(model.getImages());
+        return dto;
     }
 
     @Override
     public Product dtoToModel(ProductResponseDTO dto) {
-        return Product.builder()
+        Product model = Product.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -85,6 +87,8 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
                 )
                 .categoryId(dto.getCategoryId())
                 .build();
+        if(dto.getImages() != null) model.setImages(dto.getImages());
+        return model;
     }
 
 }
