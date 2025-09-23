@@ -37,24 +37,28 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                     authRequest
                         //Category
-                        .requestMatchers(HttpMethod.POST, "/api/v1/category/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/category/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/category/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/category/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/category/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/category/**").hasAnyAuthority("ADMIN", "OWNER")
                         //Subcategory
-                        .requestMatchers(HttpMethod.POST, "/api/v1/subcategory/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/subcategory/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/subcategory/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/subcategory/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/subcategory/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/subcategory/**").hasAnyAuthority("ADMIN", "OWNER")
                         //Product
-                        .requestMatchers(HttpMethod.POST, "/api/v1/product/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/product/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/product/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/product/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/product/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/product/**").hasAnyAuthority("ADMIN", "OWNER")
                         //Payment type
                         .requestMatchers(HttpMethod.POST, "/api/v1/payment-type/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/payment-type/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/payment-type/**").hasAuthority("ADMIN")
+                        //Category has Payment type
+                        .requestMatchers(HttpMethod.POST, "/api/v1/category-has-payment-type/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/category-has-payment-type/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/category-has-payment-type/**").hasAnyAuthority("ADMIN", "OWNER")
                         //Purchase
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/purchase/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/purchase/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/purchase/**").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/purchase/**").hasAnyAuthority("ADMIN", "OWNER")
                         //Account
                         .requestMatchers("/api/v1/account/**").hasAuthority("ADMIN")
                         //Account has user
@@ -63,10 +67,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/user/**").hasAuthority("ADMIN")
                         //Role
                         .requestMatchers("/api/v1/role/**").hasAuthority("ADMIN")
-                        //S3
-                        .requestMatchers(HttpMethod.POST, "/api/v1/s3/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/s3/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/s3/**").hasAuthority("ADMIN")
                         //Account
                         .requestMatchers("/api/v1/code/**").hasAuthority("ADMIN")
                         //Open
