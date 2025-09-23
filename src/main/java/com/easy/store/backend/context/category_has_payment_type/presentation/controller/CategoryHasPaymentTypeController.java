@@ -24,6 +24,7 @@ import java.util.List;
 public class CategoryHasPaymentTypeController {
 
     private final FindAllCategoryHasPaymentTypeUseCase findAllCategoryHasPaymentTypeUseCase;
+    private final FindByAccountIdCategoryHasPaymentTypeUseCase findByAccountIdCategoryHasPaymentTypeUseCase;
     private final FindByCategoryIdCategoryHasPaymentTypeUseCase findByCategoryIdCategoryHasPaymentTypeUseCase;
     private final FindByIdCategoryHasPaymentTypeUseCase findByIdCategoryHasPaymentTypeUseCase;
     private final CreateCategoryHasPaymentTypeUseCase createCategoryHasPaymentTypeUseCase;
@@ -38,6 +39,14 @@ public class CategoryHasPaymentTypeController {
     public ResponseEntity<ApiResponse<List<CategoryHasPaymentTypeResponseDto>>> findAll() throws NoResultsException {
         ApiResponse<List<CategoryHasPaymentTypeResponseDto>> response = new ApiResponse<>();
         List<CategoryHasPaymentTypeResponseDto> dtos = responseMapper.modelsToDtos(findAllCategoryHasPaymentTypeUseCase.findAll());
+        response.setData(dtos);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/active/account/{accountId}")
+    public ResponseEntity<ApiResponse<List<CategoryHasPaymentTypeResponseDto>>> findActiveByAccountId(@PathVariable Long accountId) throws NoResultsException {
+        ApiResponse<List<CategoryHasPaymentTypeResponseDto>> response = new ApiResponse<>();
+        List<CategoryHasPaymentTypeResponseDto> dtos = responseMapper.modelsToDtos(findByAccountIdCategoryHasPaymentTypeUseCase.findByAccountId(accountId));
         response.setData(dtos);
         return ResponseEntity.ok(response);
     }

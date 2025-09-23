@@ -31,6 +31,12 @@ public class CategoryHasPaymentTypeRepositoryJpaAdapter implements CategoryHasPa
     }
 
     @Override
+    public List<CategoryHasPaymentType> findByAccountId(Long accountId) {
+        List<CategoryHasPaymentTypeEntity> entities = categoryHasPaymentTypeJpaRepository.findByAccountId(accountId);
+        return responseMapper.entitiesToModels(entities);
+    }
+
+    @Override
     public List<CategoryHasPaymentType> findByCategoryId(Long categoryId) {
         List<CategoryHasPaymentTypeEntity> entities = categoryHasPaymentTypeJpaRepository.findByCategoryId(categoryId);
         return responseMapper.entitiesToModels(entities);
