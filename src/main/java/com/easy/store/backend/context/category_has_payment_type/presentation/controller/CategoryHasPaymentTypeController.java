@@ -24,6 +24,7 @@ public class CategoryHasPaymentTypeController {
     private final CreateCategoryHasPaymentTypeUseCase createCategoryHasPaymentTypeUseCase;
     private final UpdateCategoryHasPaymentTypeUseCase updateCategoryHasPaymentTypeUseCase;
     private final ChangeStateByIdCategoryHasPaymentTypeUseCase changeStateByIdCategoryHasPaymentTypeUseCase;
+    private final DeleteCategoryHasPaymentTypeUseCase deleteCategoryHasPaymentTypeUseCase;
 
     private final CategoryHasPaymentTypeResponseMapper responseMapper = new CategoryHasPaymentTypeResponseMapper();
     private final CategoryHasPaymentTypeCreateMapper createMapper = new CategoryHasPaymentTypeCreateMapper();
@@ -52,6 +53,17 @@ public class CategoryHasPaymentTypeController {
         ApiResponse<CategoryHasPaymentTypeResponseDto> response = new ApiResponse<>();
         CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(changeStateByIdCategoryHasPaymentTypeUseCase.changeStateByIdCategoryHasPaymentTypeUseCase(id));
         response.setData(dto);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/category/{categoryId}/payment-type/{paymentTypeId}")
+    public ResponseEntity<ApiResponse<Object>> deleteById(
+            @PathVariable Long categoryId,
+            @PathVariable Long paymentTypeId
+    ) throws NonExistenceException {
+        ApiResponse<Object> response = new ApiResponse<>();
+        deleteCategoryHasPaymentTypeUseCase.deleteById(categoryId, paymentTypeId);
+        response.setData(null);
         return ResponseEntity.ok(response);
     }
 

@@ -14,5 +14,6 @@ public interface CategoryHasPaymentTypeRepository {
     Optional<CategoryHasPaymentType> findById(CategoryHasPaymentTypeId id);
     CategoryHasPaymentType create(CategoryHasPaymentType categoryHasPaymentType);
     CategoryHasPaymentType update(CategoryHasPaymentType categoryHasPaymentType);
+    void deleteById(CategoryHasPaymentTypeId id);
 
 }

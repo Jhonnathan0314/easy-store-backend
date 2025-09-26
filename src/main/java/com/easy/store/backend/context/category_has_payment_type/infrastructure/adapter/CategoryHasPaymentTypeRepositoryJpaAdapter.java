@@ -60,4 +60,9 @@ public class CategoryHasPaymentTypeRepositoryJpaAdapter implements CategoryHasPa
         return responseMapper.entityToModel(categoryHasPaymentTypeJpaRepository.save(entity));
     }
 
+    @Override
+    public void deleteById(CategoryHasPaymentTypeId id) {
+        categoryHasPaymentTypeJpaRepository.deleteById(id);
+    }
+
 }
