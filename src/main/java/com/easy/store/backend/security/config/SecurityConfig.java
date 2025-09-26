@@ -64,7 +64,7 @@ public class SecurityConfig {
                         //Account has user
                         .requestMatchers("/api/v1/account_has_user/**").hasAuthority("ADMIN")
                         //User
-                        .requestMatchers("/api/v1/user/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/user/**").hasAnyAuthority("ADMIN", "OWNER")
                         //Role
                         .requestMatchers("/api/v1/role/**").hasAuthority("ADMIN")
                         //Account
