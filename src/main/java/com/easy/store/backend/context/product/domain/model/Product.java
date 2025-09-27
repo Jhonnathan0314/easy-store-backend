@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Product {
     private Long id;
+    private String code;
     private String name;
     private String description;
     private String imageName;
@@ -52,6 +53,7 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "id=" + id +
+                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", imageName='" + imageName + '\'' +

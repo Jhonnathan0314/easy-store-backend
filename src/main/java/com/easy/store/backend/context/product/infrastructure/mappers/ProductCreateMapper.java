@@ -12,6 +12,7 @@ public class ProductCreateMapper extends BaseMapper<ProductEntity, Product, Prod
     @Override
     public Product entityToModel(ProductEntity entity) {
         return Product.builder()
+                .code(entity.getCode())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .imageName(entity.getImageName())
@@ -31,6 +32,7 @@ public class ProductCreateMapper extends BaseMapper<ProductEntity, Product, Prod
     @Override
     public ProductEntity modelToEntity(Product model) {
         return ProductEntity.builder()
+                .code(model.getCode())
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
@@ -50,6 +52,7 @@ public class ProductCreateMapper extends BaseMapper<ProductEntity, Product, Prod
     @Override
     public ProductCreateDTO modelToDto(Product model) {
         return ProductCreateDTO.builder()
+                .code(model.getCode())
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
@@ -66,6 +69,7 @@ public class ProductCreateMapper extends BaseMapper<ProductEntity, Product, Prod
     @Override
     public Product dtoToModel(ProductCreateDTO dto) {
         return Product.builder()
+                .code(dto.getCode())
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .imageName(dto.getImageName())

@@ -60,6 +60,7 @@ public class UpdateProductUseCase {
 
     private boolean areNoChanges(Product productDb, Product product) {
         return Objects.equals(productDb.getSubcategory().getId(), product.getSubcategory().getId()) &&
+                productDb.getCode().equals(product.getCode()) &&
                 productDb.getName().equals(product.getName()) &&
                 productDb.getDescription().equals(product.getDescription()) &&
                 productDb.getImageName().equals(product.getImageName()) &&

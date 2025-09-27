@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductUpdateDTO {
     private Long id;
+    private String code;
     private String name;
     private String description;
     private String imageName;

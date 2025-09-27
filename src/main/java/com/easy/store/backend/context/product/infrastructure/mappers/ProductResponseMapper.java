@@ -13,6 +13,7 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
     public Product entityToModel(ProductEntity entity) {
         return Product.builder()
                 .id(entity.getId())
+                .code(entity.getCode())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .imageName(entity.getImageName())
@@ -34,6 +35,7 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
     public ProductEntity modelToEntity(Product model) {
         return ProductEntity.builder()
                 .id(model.getId())
+                .code(model.getCode())
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
@@ -54,6 +56,7 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
     public ProductResponseDTO modelToDto(Product model) {
         ProductResponseDTO dto = ProductResponseDTO.builder()
                 .id(model.getId())
+                .code(model.getCode())
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
@@ -73,6 +76,7 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
     public Product dtoToModel(ProductResponseDTO dto) {
         Product model = Product.builder()
                 .id(dto.getId())
+                .code(dto.getCode())
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .imageName(dto.getImageName())
