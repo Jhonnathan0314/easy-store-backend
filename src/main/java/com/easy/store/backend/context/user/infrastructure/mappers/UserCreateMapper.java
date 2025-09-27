@@ -47,13 +47,14 @@ public class UserCreateMapper extends BaseMapper<UserEntity, User, UserCreateDTO
 
     @Override
     public User dtoToModel(UserCreateDTO dto) {
-        return User.builder()
+        User model = User.builder()
                 .username(dto.getUsername())
                 .name(dto.getName())
                 .lastName(dto.getLastName())
                 .password(dto.getPassword())
-                .role(roleMapper.dtoToModel(dto.getRole()))
                 .build();
+        if(dto.getRole() != null) model.setRole(roleMapper.dtoToModel(dto.getRole()));
+        return model;
     }
 
 }
