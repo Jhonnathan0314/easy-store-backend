@@ -53,7 +53,15 @@ public class AddAllPurchaseHasProductUseCase {
 
         log.info("ACCION ADDALL PURCHASE_HAS_PRODUCT -> Agregando productos a la compra");
 
-        return purchaseHasProductRepository.addAll(purchaseHasProducts);
+        List<PurchaseHasProduct> saved = purchaseHasProductRepository.addAll(purchaseHasProducts);
+
+        purchaseHasProducts.stream()
+                .map(php -> php.getId().getPurchaseId())
+                .distinct()
+                .forEach(purchaseRepository::recalculateTotal);
+        log.info("ACCION ADDALL PURCHASE_HAS_PRODUCT -> Total de las compras recalculado");
+
+        return saved;
     }
 
 }

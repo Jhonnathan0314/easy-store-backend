@@ -13,5 +13,6 @@ public interface PurchaseRepository {
     List<Purchase> findByUserId(Long userId);
     Purchase generate(Purchase purchase);
     Purchase update(Purchase purchase);
+    Purchase recalculateTotal(Long purchaseId);
     void deleteById(Long id);
 }

@@ -63,7 +63,12 @@ public class AddPurchaseHasProductUseCase {
 
         log.info("ACCION ADD PURCHASE_HAS_PRODUCT -> Agregando producto a la compra");
 
-        return purchaseHasProductRepository.add(purchaseHasProduct);
+        PurchaseHasProduct saved = purchaseHasProductRepository.add(purchaseHasProduct);
+
+        purchaseRepository.recalculateTotal(optPurchase.get().getId());
+        log.info("ACCION ADD PURCHASE_HAS_PRODUCT -> Total de la compra recalculado");
+
+        return saved;
     }
 
 }

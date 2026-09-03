@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -58,7 +59,9 @@ public class PurchaseEntity {
     private Long updateBy;
 
     @PrePersist
-    protected void onCreate() { total = new BigDecimal(0); }
+    protected void onCreate() {
+        if (total == null) total = BigDecimal.ZERO;
+    }
 
     @Override
     public String toString() {

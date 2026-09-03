@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.purchase_has_product.application.usecase;
 
+import com.easy.store.backend.context.purchase.domain.port.PurchaseRepository;
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProduct;
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseHasProductRepository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class RemoveByIdPurchaseHasProductUseCase {
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
+    private final PurchaseRepository purchaseRepository;
 
     public void removeByPurchaseIdAndProductId(PurchaseHasProductId id) throws NonExistenceException {
 
@@ -30,6 +32,9 @@ public class RemoveByIdPurchaseHasProductUseCase {
         log.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Inicia eliminado");
 
         purchaseHasProductRepository.removeByPurchaseIdAndProductId(id);
+
+        purchaseRepository.recalculateTotal(id.getPurchaseId());
+        log.info("ACCION REMOVEBYPURCHASEIDANDPRODUCTID PURCHASE_HAS_PRODUCT -> Total de la compra recalculado");
     }
 
 }

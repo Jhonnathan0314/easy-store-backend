@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.purchase_has_product.application.usecase;
 
+import com.easy.store.backend.context.purchase.domain.port.PurchaseRepository;
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseHasProductRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
@@ -17,6 +18,7 @@ import java.util.List;
 public class RemoveAllPurchaseHasProductUseCase {
 
     private final PurchaseHasProductRepository purchaseHasProductRepository;
+    private final PurchaseRepository purchaseRepository;
 
     public void removeAll(List<PurchaseHasProductId> ids) throws NoIdReceivedException {
 
@@ -28,6 +30,12 @@ public class RemoveAllPurchaseHasProductUseCase {
         log.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Inicia eliminado de objetos");
 
         purchaseHasProductRepository.removeAll(ids);
+
+        ids.stream()
+                .map(PurchaseHasProductId::getPurchaseId)
+                .distinct()
+                .forEach(purchaseRepository::recalculateTotal);
+        log.info("ACCION REMOVEALL PURCHASE_HAS_PRODUCT -> Total de las compras recalculado");
     }
 
 }

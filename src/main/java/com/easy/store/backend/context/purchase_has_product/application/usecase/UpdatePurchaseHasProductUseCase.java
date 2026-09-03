@@ -61,9 +61,14 @@ public class UpdatePurchaseHasProductUseCase {
         purchaseHasProduct.setUnitPrice(optProduct.get().getPrice());
         purchaseHasProduct.setSubtotal(optProduct.get().getPrice().multiply(BigDecimal.valueOf(purchaseHasProduct.getQuantity())));
 
-        log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Actualizando objeto purchase_has_product");
+        log.info("ACCION UPDATE PURCHASE_HAS_PRODUCT -> Actualizando objeto purchase_has_product");
 
-        return purchaseHasProductRepository.add(purchaseHasProduct);
+        PurchaseHasProduct saved = purchaseHasProductRepository.add(purchaseHasProduct);
+
+        purchaseRepository.recalculateTotal(optPurchase.get().getId());
+        log.info("ACCION UPDATE PURCHASE_HAS_PRODUCT -> Total de la compra recalculado");
+
+        return saved;
     }
 
     private boolean areDifferences(PurchaseHasProduct purchaseHasProductDb, PurchaseHasProduct purchaseHasProduct) {
