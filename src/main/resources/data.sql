@@ -1,4 +1,0 @@
---INSERT INTO role (id, name, state, creation_date, update_date) VALUES (1, 'client', 'active', NOW(), NOW());
---INSERT INTO role (id, name, state, creation_date, update_date) VALUES (2, 'owner', 'active', NOW(), NOW());
---INSERT INTO role (id, name, state, creation_date, update_date) VALUES (3, 'admin', 'active', NOW(), NOW());
---INSERT INTO role (id, name, state, creation_date, update_date) VALUES (4, 'ghost', 'active', NOW(), NOW());
