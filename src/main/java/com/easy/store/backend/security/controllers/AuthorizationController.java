@@ -10,6 +10,7 @@ import com.easy.store.backend.security.models.ResetPasswordRequest;
 import com.easy.store.backend.security.service.AuthorizationService;
 import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.messages.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +26,21 @@ public class AuthorizationController {
     private final UserResponseMapper userResponseMapper = new UserResponseMapper();
 
     @PostMapping(value = "login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody LoginRequest request) throws NoResultsException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) throws NoResultsException, InvalidBodyException {
         ApiResponse<AuthResponse> response = new ApiResponse<>();
         response.setData(authService.login(request));
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = "register")
-    public ResponseEntity<ApiResponse<AuthResponse>> register(@RequestBody UserCreateDTO request) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException, DuplicatedException, NonExistenceException {
+    public ResponseEntity<ApiResponse<AuthResponse>> register(@Valid @RequestBody UserCreateDTO request) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException, DuplicatedException, NonExistenceException {
         ApiResponse<AuthResponse> response = new ApiResponse<>();
         response.setData(authService.register(userCreateMapper.dtoToModel(request)));
         return ResponseEntity.ok(response);
     }
 
     @PutMapping(value = "reset-password")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> register(@RequestBody ResetPasswordRequest request) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException, NonExistenceException {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> register(@Valid @RequestBody ResetPasswordRequest request) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException, NonExistenceException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
         response.setData(userResponseMapper.modelToDto(authService.resetPassword(request)));
         return ResponseEntity.ok(response);

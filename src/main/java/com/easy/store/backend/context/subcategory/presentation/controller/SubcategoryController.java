@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/subcategory")
@@ -41,7 +42,7 @@ public class SubcategoryController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> create(@RequestBody SubcategoryCreateDTO subcategory, @RequestHeader("Create-By") Long createBy) throws NoResultsException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> create(@Valid @RequestBody SubcategoryCreateDTO subcategory, @RequestHeader("Create-By") Long createBy) throws NoResultsException, InvalidBodyException {
         ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
         subcategory.setCreateBy(createBy);
         response.setData(subcategoryResponseMapper.modelToDto(createSubcategoryUseCase.create(subcategoryCreateMapper.dtoToModel(subcategory))));
@@ -49,7 +50,7 @@ public class SubcategoryController {
     }
 
     @PutMapping()
-    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> update(@RequestBody SubcategoryUpdateDTO subcategory, @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<SubcategoryResponseDTO>> update(@Valid @RequestBody SubcategoryUpdateDTO subcategory, @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<SubcategoryResponseDTO> response = new ApiResponse<>();
         subcategory.setUpdateBy(updateBy);
         response.setData(subcategoryResponseMapper.modelToDto(updateSubcategoryUseCase.update(subcategoryUpdateMapper.dtoToModel(subcategory))));

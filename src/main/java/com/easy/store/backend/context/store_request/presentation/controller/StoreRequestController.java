@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/store-request")
@@ -30,7 +31,7 @@ public class StoreRequestController {
     private final StoreRequestResponseMapper storeRequestResponseMapper = new StoreRequestResponseMapper();
 
     @PostMapping
-    public ResponseEntity<ApiResponse<StoreRequestResponseDTO>> create(@RequestBody StoreRequestCreateDTO body,
+    public ResponseEntity<ApiResponse<StoreRequestResponseDTO>> create(@Valid @RequestBody StoreRequestCreateDTO body,
                                                         @RequestHeader("Create-By") Long createBy)
             throws InvalidBodyException, NoResultsException, InvalidActionException {
         ApiResponse<StoreRequestResponseDTO> response = new ApiResponse<>();

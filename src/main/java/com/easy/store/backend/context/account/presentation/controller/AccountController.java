@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -50,7 +51,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AccountDto>> create(@RequestBody AccountCreateDto dto) throws InvalidBodyException {
+    public ResponseEntity<ApiResponse<AccountDto>> create(@Valid @RequestBody AccountCreateDto dto) throws InvalidBodyException {
         ApiResponse<AccountDto> response = new ApiResponse<>();
         Account account = createAccountUseCase.create(accountCreateMapper.dtoToModel(dto));
         response.setData(accountMapper.modelToDto(account));
@@ -58,7 +59,7 @@ public class AccountController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<AccountDto>> update(@RequestBody AccountUpdateDto dto) throws NoIdReceivedException, InvalidBodyException, NoChangesException, NonExistenceException {
+    public ResponseEntity<ApiResponse<AccountDto>> update(@Valid @RequestBody AccountUpdateDto dto) throws NoIdReceivedException, InvalidBodyException, NoChangesException, NonExistenceException {
         ApiResponse<AccountDto> response = new ApiResponse<>();
         Account account = updateAccountUseCase.update(accountUpdateMapper.dtoToModel(dto));
         response.setData(accountMapper.modelToDto(account));

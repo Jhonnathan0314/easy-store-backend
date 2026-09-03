@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/payment-type")
@@ -59,7 +60,7 @@ public class PaymentTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PaymentTypeResponseDTO>> create(@RequestBody PaymentTypeCreateDTO paymentType, @RequestHeader("Create-By") Long createBy) throws NoIdReceivedException, InvalidBodyException, NonExistenceException {
+    public ResponseEntity<ApiResponse<PaymentTypeResponseDTO>> create(@Valid @RequestBody PaymentTypeCreateDTO paymentType, @RequestHeader("Create-By") Long createBy) throws NoIdReceivedException, InvalidBodyException, NonExistenceException {
         ApiResponse<PaymentTypeResponseDTO> response = new ApiResponse<>();
         paymentType.setCreateBy(createBy);
         response.setData(paymentTypeResponseMapper.modelToDto(createPaymentTypeUseCase.create(paymentTypeCreateMapper.dtoToModel(paymentType))));
@@ -67,7 +68,7 @@ public class PaymentTypeController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<PaymentTypeResponseDTO>> update(@RequestBody PaymentTypeUpdateDTO paymentType, @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<PaymentTypeResponseDTO>> update(@Valid @RequestBody PaymentTypeUpdateDTO paymentType, @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<PaymentTypeResponseDTO> response = new ApiResponse<>();
         paymentType.setUpdateBy(updateBy);
         response.setData(paymentTypeResponseMapper.modelToDto(updatePaymentTypeUseCase.update(paymentTypeUpdateMapper.dtoToModel(paymentType))));

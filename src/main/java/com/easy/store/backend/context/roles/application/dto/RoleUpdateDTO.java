@@ -1,5 +1,7 @@
 package com.easy.store.backend.context.roles.application.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleUpdateDTO {
+
+    @NotNull(message = "el id es obligatorio")
     private Long id;
+
+    @NotBlank(message = "el nombre es obligatorio")
     private String name;
+
     private String state;
 }

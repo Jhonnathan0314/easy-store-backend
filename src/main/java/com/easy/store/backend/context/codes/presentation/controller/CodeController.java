@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/code")
@@ -41,7 +42,7 @@ public class CodeController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<ApiResponse<Boolean>> create(@RequestBody Code code) throws InvalidBodyException {
+    public ResponseEntity<ApiResponse<Boolean>> create(@Valid @RequestBody Code code) throws InvalidBodyException {
         ApiResponse<Boolean> response = new ApiResponse<>();
         createCodeUseCase.create(code);
         response.setData(Boolean.TRUE);

@@ -1,5 +1,6 @@
 package com.easy.store.backend.context.roles.application.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,5 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleCreateDTO {
+
+    @NotBlank(message = "el nombre es obligatorio")
     private String name;
 }

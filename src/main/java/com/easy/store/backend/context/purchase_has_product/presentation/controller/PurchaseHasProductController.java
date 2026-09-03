@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/purchase-has-product")
@@ -36,7 +37,7 @@ public class PurchaseHasProductController {
     private final PurchaseHasProductResponseMapper purchaseHasProductResponseMapper = new PurchaseHasProductResponseMapper();
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@RequestBody PurchaseHasProductAddDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NonExistenceException, ForbiddenActionException {
+    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@Valid @RequestBody PurchaseHasProductAddDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NonExistenceException, ForbiddenActionException {
         if (purchaseHasProduct.getId() != null) {
             purchaseAuthorizationService.authorizePurchaseAccess(purchaseHasProduct.getId().getPurchaseId(), ErrorMessages.NO_PURCHASE_RESULTS);
         }
@@ -46,7 +47,7 @@ public class PurchaseHasProductController {
     }
 
     @PatchMapping("/add/all")
-    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> addAll(@RequestBody List<PurchaseHasProductAddDTO> purchaseHasProducts) throws NoResultsException, InvalidBodyException, ForbiddenActionException {
+    public ResponseEntity<ApiResponse<List<PurchaseHasProductResponseDTO>>> addAll(@Valid @RequestBody List<PurchaseHasProductAddDTO> purchaseHasProducts) throws NoResultsException, InvalidBodyException, ForbiddenActionException {
         purchaseAuthorizationService.authorizePurchaseHasProductIds(
                 purchaseHasProducts.stream().map(PurchaseHasProductAddDTO::getId).toList()
         );
@@ -56,7 +57,7 @@ public class PurchaseHasProductController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> update(@RequestBody PurchaseHasProductUpdateDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException, ForbiddenActionException {
+    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> update(@Valid @RequestBody PurchaseHasProductUpdateDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException, ForbiddenActionException {
         if (purchaseHasProduct.getId() != null) {
             purchaseAuthorizationService.authorizePurchaseAccess(purchaseHasProduct.getId().getPurchaseId(), ErrorMessages.NO_PURCHASE_RESULTS);
         }
@@ -78,7 +79,7 @@ public class PurchaseHasProductController {
     }
 
     @PatchMapping("/remove/all")
-    public ResponseEntity<ApiResponse<Object>> deleteByPurchaseIdAndProductId(@RequestBody List<PurchaseHasProductId> ids) throws NoIdReceivedException, NoResultsException, ForbiddenActionException {
+    public ResponseEntity<ApiResponse<Object>> deleteByPurchaseIdAndProductId(@Valid @RequestBody List<PurchaseHasProductId> ids) throws NoIdReceivedException, NoResultsException, ForbiddenActionException {
         purchaseAuthorizationService.authorizePurchaseHasProductIds(ids);
         ApiResponse<Object> response = new ApiResponse<>();
         removeAllPurchaseHasProductUseCase.removeAll(ids);

@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -72,7 +73,7 @@ public class AccountHasUserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> create(@RequestBody AccountHasUserCreateDto dto) throws InvalidBodyException, DuplicatedException, NonExistenceException {
+    public ResponseEntity<ApiResponse<AccountHasUserResponseDto>> create(@Valid @RequestBody AccountHasUserCreateDto dto) throws InvalidBodyException, DuplicatedException, NonExistenceException {
         ApiResponse<AccountHasUserResponseDto> response = new ApiResponse<>();
         AccountHasUser model = createAccountHasUserUseCase.create(accountHasUserCreateMapper.dtoToModel(dto));
         response.setData(accountHasUserResponseMapper.modelToDto(model));

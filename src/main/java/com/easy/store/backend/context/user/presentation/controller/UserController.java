@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -59,14 +60,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> create(@RequestBody UserCreateDTO user) throws InvalidBodyException, DuplicatedException {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> create(@Valid @RequestBody UserCreateDTO user) throws InvalidBodyException, DuplicatedException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
         response.setData(userResponseMapper.modelToDto(createUserUseCase.create(userCreateMapper.dtoToModel(user))));
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> update(@RequestBody UserUpdateDTO user) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<UserResponseDTO>> update(@Valid @RequestBody UserUpdateDTO user) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<UserResponseDTO> response = new ApiResponse<>();
         response.setData(userResponseMapper.modelToDto(updateUserUseCase.update(userUpdateMapper.dtoToModel(user))));
         return ResponseEntity.ok(response);

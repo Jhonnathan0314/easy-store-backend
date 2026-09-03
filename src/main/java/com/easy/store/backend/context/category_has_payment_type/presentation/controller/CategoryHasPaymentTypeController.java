@@ -14,6 +14,7 @@ import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/category-has-payment-type")
@@ -30,7 +31,7 @@ public class CategoryHasPaymentTypeController {
     private final CategoryHasPaymentTypeUpdateMapper updateMapper = new CategoryHasPaymentTypeUpdateMapper();
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> create(@RequestBody CategoryHasPaymentTypeCreateDto createDto) throws NoResultsException, NoIdReceivedException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> create(@Valid @RequestBody CategoryHasPaymentTypeCreateDto createDto) throws NoResultsException, NoIdReceivedException, InvalidBodyException {
         ApiResponse<CategoryHasPaymentTypeResponseDto> response = new ApiResponse<>();
         CategoryHasPaymentType model = createMapper.dtoToModel(createDto);
         CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(createCategoryHasPaymentTypeUseCase.create(model));
@@ -39,7 +40,7 @@ public class CategoryHasPaymentTypeController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> update(@RequestBody CategoryHasPaymentTypeUpdateDto updateDto) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException {
+    public ResponseEntity<ApiResponse<CategoryHasPaymentTypeResponseDto>> update(@Valid @RequestBody CategoryHasPaymentTypeUpdateDto updateDto) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException {
         ApiResponse<CategoryHasPaymentTypeResponseDto> response = new ApiResponse<>();
         CategoryHasPaymentType model = updateMapper.dtoToModel(updateDto);
         CategoryHasPaymentTypeResponseDto dto = responseMapper.modelToDto(updateCategoryHasPaymentTypeUseCase.update(model));

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -73,7 +74,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(
-            @RequestBody CategoryCreateDTO category,
+            @Valid @RequestBody CategoryCreateDTO category,
             @RequestHeader("Create-By") Long createBy
     ) throws NoIdReceivedException, InvalidBodyException, DuplicatedException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
@@ -85,7 +86,7 @@ public class CategoryController {
 
     @PutMapping
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> update(
-            @RequestBody CategoryUpdateDTO category,
+            @Valid @RequestBody CategoryUpdateDTO category,
             @RequestHeader("Update-By") Long updateBy
     ) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();

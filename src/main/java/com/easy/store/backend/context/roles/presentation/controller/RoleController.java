@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/role")
@@ -50,14 +51,14 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<RoleResponseDTO>> create(@RequestBody RoleCreateDTO role) throws InvalidBodyException, DuplicatedException {
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> create(@Valid @RequestBody RoleCreateDTO role) throws InvalidBodyException, DuplicatedException {
         ApiResponse<RoleResponseDTO> response = new ApiResponse<>();
         response.setData(roleResponseMapper.modelToDto(createRoleUseCase.create(roleCreateMapper.dtoToModel(role))));
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<RoleResponseDTO>> update(@RequestBody RoleUpdateDTO role) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> update(@Valid @RequestBody RoleUpdateDTO role) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<RoleResponseDTO> response = new ApiResponse<>();
         response.setData(roleResponseMapper.modelToDto(updateRoleUseCase.update(roleUpdateMapper.dtoToModel(role))));
         return ResponseEntity.ok(response);

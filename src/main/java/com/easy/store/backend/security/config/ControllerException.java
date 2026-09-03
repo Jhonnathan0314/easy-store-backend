@@ -6,8 +6,12 @@ import com.easy.store.backend.utils.messages.ApiResponse;
 import com.easy.store.backend.utils.messages.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ControllerException {
@@ -21,6 +25,22 @@ public class ControllerException {
     })
     public ResponseEntity<ApiResponse<ErrorMessage>> handleBadRequestExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    /**
+     * Se lanza cuando falla una anotacion de Bean Validation (@Valid) en el body de un
+     * @RequestBody. Antes de esto, cada DTO solo se validaba manualmente dentro de cada caso de
+     * uso (isValid()), asi que un body con campos faltantes o vacios llegaba hasta el caso de uso
+     * antes de rechazarse, y el mensaje de error era siempre el mismo INVALID_BODY generico sin
+     * indicar que campo fallo.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleValidationExceptions(final MethodArgumentNotValidException ex) {
+        String detail = ex.getBindingResult().getFieldErrors().stream()
+                .map(this::formatFieldError)
+                .collect(Collectors.joining(" "));
+        if (detail.isBlank()) detail = ErrorMessages.INVALID_BODY;
+        return generateApiResponse(HttpStatus.BAD_REQUEST, detail);
     }
 
     @ExceptionHandler({
@@ -44,6 +64,10 @@ public class ControllerException {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleUnexpectedException(final Exception ex) {
         return generateApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.GENERIC_ERROR);
+    }
+
+    private String formatFieldError(FieldError fieldError) {
+        return fieldError.getField() + ": " + fieldError.getDefaultMessage() + ".";
     }
 
     private ResponseEntity<ApiResponse<ErrorMessage>> generateApiResponse(HttpStatus status, String message) {

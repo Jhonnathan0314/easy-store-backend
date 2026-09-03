@@ -1,6 +1,7 @@
 package com.easy.store.backend.context.subcategory.application.dto;
 
-import com.easy.store.backend.context.category.application.dto.CategoryUpdateDTO;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +12,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubcategoryUpdateDTO {
+
+    @NotNull(message = "el id es obligatorio")
     private Long id;
+
+    @NotBlank(message = "el nombre es obligatorio")
     private String name;
+
+    @NotNull(message = "el categoryId es obligatorio")
     private Long categoryId;
+
     private Long updateBy;
 }

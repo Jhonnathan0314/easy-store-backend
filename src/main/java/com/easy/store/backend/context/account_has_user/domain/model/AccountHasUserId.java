@@ -1,6 +1,7 @@
 package com.easy.store.backend.context.account_has_user.domain.model;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,10 @@ import java.util.Objects;
 @Embeddable
 public class AccountHasUserId implements Serializable {
 
+    @NotNull(message = "el userId es obligatorio")
     private Long userId;
+
+    @NotNull(message = "el accountId es obligatorio")
     private Long accountId;
 
     public boolean isValid() {

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -77,7 +78,7 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<ApiResponse<ProductResponseDTO>> create(
-            @RequestBody ProductCreateDTO product,
+            @Valid @RequestBody ProductCreateDTO product,
             @RequestHeader("Create-By") Long createBy
     ) throws NoResultsException, InvalidBodyException {
         ApiResponse<ProductResponseDTO> response = new ApiResponse<>();
@@ -89,7 +90,7 @@ public class ProductController {
 
     @PutMapping()
     public ResponseEntity<ApiResponse<ProductResponseDTO>> update(
-            @RequestBody ProductUpdateDTO product,
+            @Valid @RequestBody ProductUpdateDTO product,
             @RequestHeader("Update-By") Long updateBy
     ) throws NoResultsException, NoIdReceivedException, NoChangesException, InvalidBodyException {
         ApiResponse<ProductResponseDTO> response = new ApiResponse<>();

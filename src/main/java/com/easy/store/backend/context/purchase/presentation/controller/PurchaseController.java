@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/purchase")
@@ -84,7 +85,7 @@ public class PurchaseController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> generate(@RequestBody PurchaseGenerateDTO purchase,
+    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> generate(@Valid @RequestBody PurchaseGenerateDTO purchase,
                                                                      @RequestHeader("Create-By") Long createBy) throws NoResultsException, InvalidBodyException, ForbiddenActionException {
         purchaseAuthorizationService.authorizeGenerate(purchase.getUserId());
         ApiResponse<PurchaseResponseDTO> response = new ApiResponse<>();
@@ -94,7 +95,7 @@ public class PurchaseController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> update(@RequestBody PurchaseUpdateDTO purchase,
+    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> update(@Valid @RequestBody PurchaseUpdateDTO purchase,
                                                                      @RequestHeader("Update-By") Long updateBy) throws NoResultsException, NoIdReceivedException, InvalidBodyException, NoChangesException, NonExistenceException {
         ApiResponse<PurchaseResponseDTO> response = new ApiResponse<>();
         purchase.setUpdateBy(updateBy);

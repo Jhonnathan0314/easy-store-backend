@@ -6,6 +6,7 @@ import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/email")
@@ -15,7 +16,7 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<ApiResponse<Boolean>> sendConfirmationCode(@RequestBody UserDTO user) throws Exception {
+    public ResponseEntity<ApiResponse<Boolean>> sendConfirmationCode(@Valid @RequestBody UserDTO user) throws Exception {
         ApiResponse<Boolean> response = new ApiResponse<>();
         emailService.sendEmail(user.getUsername());
         response.setData(Boolean.TRUE);
