@@ -33,3 +33,5 @@ build/
 .vscode/
 
 htmlReport/
+### Docker / secrets ###
+.env
