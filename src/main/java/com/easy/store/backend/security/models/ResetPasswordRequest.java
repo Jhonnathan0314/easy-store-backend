@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -19,9 +20,14 @@ public class ResetPasswordRequest {
     @NotNull(message = "el codigo es obligatorio")
     Long code;
 
+    // @ToString.Exclude evita que la contraseña quede expuesta en texto
+    // claro si en algun momento se logea el objeto completo (lombok @Data
+    // genera toString() con todos los campos por defecto).
+    @ToString.Exclude
     @NotBlank(message = "la contraseña es obligatoria")
     String password;
 
+    @ToString.Exclude
     @NotBlank(message = "la confirmación de contraseña es obligatoria")
     String confirmPassword;
 

@@ -59,7 +59,7 @@ public class UserEntity {
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", password='" + password + '\'' +
+                ", password='************'" +
                 ", creationDate=" + creationDate +
                 ", updateDate=" + updateDate +
                 ", state='" + state + '\'' +

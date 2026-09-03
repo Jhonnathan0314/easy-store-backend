@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -22,6 +23,10 @@ public class UserCreateDTO {
     @NotBlank(message = "el apellido es obligatorio")
     private String lastName;
 
+    // @ToString.Exclude evita que la contraseña quede expuesta en texto
+    // claro si en algun momento se logea el objeto completo (lombok @Data
+    // genera toString() con todos los campos por defecto).
+    @ToString.Exclude
     @NotBlank(message = "la contraseña es obligatoria")
     private String password;
 

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -27,5 +28,9 @@ public class UserUpdateDTO {
 
     // Sin @NotBlank a proposito: UpdateUserUseCase permite password=null para
     // no cambiar la contraseña actual del usuario.
+    // @ToString.Exclude evita que la contraseña quede expuesta en texto
+    // claro si en algun momento se logea el objeto completo (lombok @Data
+    // genera toString() con todos los campos por defecto).
+    @ToString.Exclude
     private String password;
 }

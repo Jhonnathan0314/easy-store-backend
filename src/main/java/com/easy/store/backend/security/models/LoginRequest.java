@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -20,6 +21,10 @@ public class LoginRequest {
     // ese valor por la contraseña real ANTES de la validacion de negocio
     // (isValidRequest). Si se exige aqui que no este en blanco, el login del
     // ghost se rechazaria con 400 antes de llegar al servicio.
+    // @ToString.Exclude evita que este campo quede expuesto en texto claro
+    // si en algun momento se logea el objeto completo (lombok @Data genera
+    // toString() con todos los campos por defecto).
+    @ToString.Exclude
     String password;
 
     public boolean isValidRequest(LoginRequest request) {
