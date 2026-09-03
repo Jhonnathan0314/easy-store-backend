@@ -21,6 +21,8 @@ public class ErrorMessages {
     public static final String NO_VALID_CODE = "Código inválido para el proceso.";
     public static final String LIMIT_ERROR = "No puede superar el límite establecido.";
 
+    public static final String FORBIDDEN_ACTION = "No tienes permisos para acceder a este recurso.";
+
     public static final String FILE_ERROR = "Ha ocurrido un error al leer el archivo consultado.";
 
     public static final String GENERIC_ERROR = "Ha ocurrido un error, por favor intentelo de nuevo más tarde.";

@@ -36,6 +36,11 @@ public class ControllerException {
         return generateApiResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler(value = ForbiddenActionException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleForbiddenExceptions(final Exception ex) {
+        return generateApiResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleUnexpectedException(final Exception ex) {
         return generateApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.GENERIC_ERROR);

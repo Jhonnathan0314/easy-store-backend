@@ -3,11 +3,13 @@ package com.easy.store.backend.context.purchase.presentation.controller;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseGenerateDTO;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseResponseDTO;
 import com.easy.store.backend.context.purchase.application.dto.PurchaseUpdateDTO;
+import com.easy.store.backend.context.purchase.application.service.PurchaseAuthorizationService;
 import com.easy.store.backend.context.purchase.application.usecase.*;
 import com.easy.store.backend.context.purchase.domain.model.Purchase;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseGenerateMapper;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseResponseMapper;
 import com.easy.store.backend.context.purchase.infrastructure.mappers.PurchaseUpdateMapper;
+import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +33,15 @@ public class PurchaseController {
     private final GeneratePurchaseUseCase generatePurchaseUseCase;
     private final UpdatePurchaseUseCase updatePurchaseUseCase;
     private final DeleteByIdPurchaseUseCase deleteByIdPurchaseUseCase;
+    private final PurchaseAuthorizationService purchaseAuthorizationService;
 
     private final PurchaseGenerateMapper purchaseGenerateMapper = new PurchaseGenerateMapper();
     private final PurchaseUpdateMapper purchaseUpdateMapper = new PurchaseUpdateMapper();
     private final PurchaseResponseMapper purchaseResponseMapper = new PurchaseResponseMapper();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findAll() throws NoResultsException {
+    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findAll() throws NoResultsException, ForbiddenActionException {
+        purchaseAuthorizationService.authorizeFindAll();
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findAllPurchaseUseCase.findAll());
         response.setData(purchases);
@@ -45,7 +49,8 @@ public class PurchaseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> findById(@PathVariable Long id) throws NoResultsException {
+    public ResponseEntity<ApiResponse<PurchaseResponseDTO>> findById(@PathVariable Long id) throws NoResultsException, ForbiddenActionException {
+        purchaseAuthorizationService.authorizePurchaseAccess(id, ErrorMessages.NO_RESULTS);
         ApiResponse<PurchaseResponseDTO> response = new ApiResponse<>();
         Purchase purchase = findByIdPurchaseUseCase.findById(id);
         response.setData(purchaseResponseMapper.modelToDto(purchase));
@@ -53,7 +58,8 @@ public class PurchaseController {
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByAccountId(@PathVariable Long accountId) throws NoResultsException {
+    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByAccountId(@PathVariable Long accountId) throws NoResultsException, ForbiddenActionException {
+        purchaseAuthorizationService.authorizeFindByAccountId(accountId);
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByAccountIdPurchaseUseCase.findByAccountId(accountId));
         response.setData(purchases);
@@ -61,7 +67,8 @@ public class PurchaseController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByCategoryId(@PathVariable Long categoryId) throws NoResultsException {
+    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByCategoryId(@PathVariable Long categoryId) throws NoResultsException, ForbiddenActionException {
+        purchaseAuthorizationService.authorizeFindByCategoryId(categoryId);
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByCategoryIdPurchaseUseCase.findByCategoryId(categoryId));
         response.setData(purchases);
@@ -69,7 +76,8 @@ public class PurchaseController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByUserId(@PathVariable Long userId) throws NoResultsException {
+    public ResponseEntity<ApiResponse<List<PurchaseResponseDTO>>> findByUserId(@PathVariable Long userId) throws NoResultsException, ForbiddenActionException {
+        purchaseAuthorizationService.authorizeFindByUserId(userId);
         ApiResponse<List<PurchaseResponseDTO>> response = new ApiResponse<>();
         List<PurchaseResponseDTO> purchases = purchaseResponseMapper.modelsToDtos(findByUserIdPurchaseUseCase.findByUserId(userId));
         response.setData(purchases);
@@ -78,7 +86,8 @@ public class PurchaseController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<PurchaseResponseDTO>> generate(@RequestBody PurchaseGenerateDTO purchase,
-                                                                     @RequestHeader("Create-By") Long createBy) throws NoResultsException, InvalidBodyException {
+                                                                     @RequestHeader("Create-By") Long createBy) throws NoResultsException, InvalidBodyException, ForbiddenActionException {
+        purchaseAuthorizationService.authorizeGenerate(purchase.getUserId());
         ApiResponse<PurchaseResponseDTO> response = new ApiResponse<>();
         purchase.setCreateBy(createBy);
         response.setData(purchaseResponseMapper.modelToDto(generatePurchaseUseCase.generate(purchaseGenerateMapper.dtoToModel(purchase))));
