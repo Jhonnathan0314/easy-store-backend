@@ -2,6 +2,7 @@ package com.easy.store.backend.context.store_request.presentation.controller;
 
 import com.easy.store.backend.context.store_request.application.dto.StoreRequestCreateDTO;
 import com.easy.store.backend.context.store_request.application.dto.StoreRequestResponseDTO;
+import com.easy.store.backend.context.store_request.application.service.StoreRequestAuthorizationService;
 import com.easy.store.backend.context.store_request.application.usecase.*;
 import com.easy.store.backend.context.store_request.domain.model.StoreRequest;
 import com.easy.store.backend.context.store_request.infrastructure.mappers.StoreRequestResponseMapper;
@@ -24,6 +25,7 @@ public class StoreRequestController {
     private final FindByUserIdStoreRequestUseCase findByUserIdStoreRequestUseCase;
     private final ApproveStoreRequestUseCase approveStoreRequestUseCase;
     private final RejectStoreRequestUseCase rejectStoreRequestUseCase;
+    private final StoreRequestAuthorizationService storeRequestAuthorizationService;
 
     private final StoreRequestResponseMapper storeRequestResponseMapper = new StoreRequestResponseMapper();
 
@@ -48,12 +50,9 @@ public class StoreRequestController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: autorización fina pendiente - hoy cualquier usuario autenticado puede consultar las
-    // solicitudes de CUALQUIER userId (solo se exige estar autenticado, ver SecurityConfig).
-    // Falta validar que el userId solicitado sea el del propio usuario autenticado o que quien
-    // consulta sea ADMIN, siguiendo el patrón de PurchaseAuthorizationService.
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<List<StoreRequestResponseDTO>>> findByUserId(@PathVariable Long userId) throws NoResultsException {
+    public ResponseEntity<ApiResponse<List<StoreRequestResponseDTO>>> findByUserId(@PathVariable Long userId) throws NoResultsException, ForbiddenActionException {
+        storeRequestAuthorizationService.authorizeFindByUserId(userId);
         ApiResponse<List<StoreRequestResponseDTO>> response = new ApiResponse<>();
         response.setData(storeRequestResponseMapper.modelsToDtos(findByUserIdStoreRequestUseCase.findByUserId(userId)));
         return ResponseEntity.ok(response);
