@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/subcategory")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class SubcategoryController {
 
     private final FindByAccountIdSubcategoryUseCase findByAccountIdSubcategoryUseCase;

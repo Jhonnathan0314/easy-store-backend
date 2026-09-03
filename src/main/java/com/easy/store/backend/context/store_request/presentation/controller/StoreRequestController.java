@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/store-request")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class StoreRequestController {
 
     private final CreateStoreRequestUseCase createStoreRequestUseCase;

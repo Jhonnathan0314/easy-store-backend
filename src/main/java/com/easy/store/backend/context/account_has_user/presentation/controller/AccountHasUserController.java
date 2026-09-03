@@ -22,7 +22,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/account_has_user")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class AccountHasUserController {
 

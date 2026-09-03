@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/category-has-payment-type")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class CategoryHasPaymentTypeController {
 

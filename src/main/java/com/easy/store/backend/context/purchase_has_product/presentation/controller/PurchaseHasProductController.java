@@ -22,7 +22,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/purchase-has-product")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class PurchaseHasProductController {
 
     private final AddPurchaseHasProductUseCase addPurchaseHasProductUseCase;

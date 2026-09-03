@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/code")
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class CodeController {
 
     private final FindAllCodeUseCase findAllCodeUseCase;
