@@ -67,6 +67,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/user/**").hasAnyAuthority("ADMIN", "OWNER")
                         //Role
                         .requestMatchers("/api/v1/role/**").hasAuthority("ADMIN")
+                        //Store request
+                        .requestMatchers(HttpMethod.GET, "/api/v1/store-request/pending").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/store-request/*/approve").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/store-request/*/reject").hasAuthority("ADMIN")
                         //Account
                         .requestMatchers("/api/v1/code/**").hasAuthority("ADMIN")
                         //Open

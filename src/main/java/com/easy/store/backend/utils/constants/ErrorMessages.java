@@ -15,6 +15,12 @@ public class ErrorMessages {
     public static final String NO_PAYMENT_TYPE_RESULTS = "No se encontró el tipo de pago que será asignado.";
     public static final String NO_PURCHASE_RESULTS = "No se encontró la fáctura recibida.";
     public static final String NO_PRODUCT_RESULTS = "No se encontró el producto que será asignado.";
+    public static final String NO_ROLE_RESULTS = "No se encontró el rol que será asignado.";
+    public static final String NO_ACCOUNT_RESULTS = "No se encontró la cuenta que será asignada.";
+
+    public static final String STORE_REQUEST_ALREADY_PENDING = "Ya tienes una solicitud de tienda pendiente de revisión.";
+    public static final String STORE_REQUEST_NOT_CLIENT = "Solo un usuario con rol client puede solicitar convertirse en vendedor.";
+    public static final String STORE_REQUEST_NOT_PENDING = "Esta solicitud ya fue revisada y no se puede modificar.";
 
     public static final String NO_STOCK = "No hay stock suficiente.";
 
