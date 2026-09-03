@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -85,6 +86,7 @@ public class AuthorizationService {
                 .build();
     }
 
+    @Transactional
     public AuthResponse register(User request) throws InvalidBodyException, DuplicatedException, NonExistenceException, NoResultsException, NoIdReceivedException, NoChangesException {
 
         log.info("ACCION REGISTER -> request: {}", request.getUsername());
