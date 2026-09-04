@@ -58,12 +58,17 @@ public class UpdateProductUseCase {
         return productRepository.update(product);
     }
 
+    // Se usa Objects.equals() en vez de .equals() directo para code e imageName: ambos son
+    // campos opcionales en ProductCreateDTO/ProductUpdateDTO (sin @NotBlank), asi que pueden
+    // llegar como null tanto en el producto guardado en base como en el producto recibido en el
+    // update. Antes, si alguno de los dos era null, esto lanzaba un NullPointerException que
+    // terminaba en un 500 generico.
     private boolean areNoChanges(Product productDb, Product product) {
         return Objects.equals(productDb.getSubcategory().getId(), product.getSubcategory().getId()) &&
-                productDb.getCode().equals(product.getCode()) &&
+                Objects.equals(productDb.getCode(), product.getCode()) &&
                 productDb.getName().equals(product.getName()) &&
                 productDb.getDescription().equals(product.getDescription()) &&
-                productDb.getImageName().equals(product.getImageName()) &&
+                Objects.equals(productDb.getImageName(), product.getImageName()) &&
                 Objects.equals(productDb.getImageNumber(), product.getImageNumber()) &&
                 productDb.getPrice().compareTo(product.getPrice()) == 0 &&
                 Objects.equals(productDb.getQuantity(), product.getQuantity()) &&
