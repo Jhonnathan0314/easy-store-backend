@@ -6,6 +6,7 @@ import com.easy.store.backend.utils.messages.ApiResponse;
 import com.easy.store.backend.utils.messages.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -77,6 +78,21 @@ public class ControllerException {
     @ExceptionHandler(value = TooManyRequestsException.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleTooManyRequestsExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
+    }
+
+    /**
+     * AuthorizationService.login llama a authenticationManager.authenticate(...) directamente
+     * dentro de un metodo de servicio normal (no dentro de un filtro de Spring Security), asi que
+     * cuando las credenciales son invalidas la AuthenticationException (ej. BadCredentialsException)
+     * se propaga como una excepcion Java comun hacia el controller, en vez de ser interceptada por
+     * AuthenticationError (ese AuthenticationEntryPoint solo se dispara cuando Spring Security
+     * rechaza la peticion en el filtro chain, antes de llegar al controller). Sin este handler,
+     * un login con password incorrecta caia en el handler generico de Exception y devolvia 500 en
+     * vez de 401.
+     */
+    @ExceptionHandler(value = AuthenticationException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleAuthenticationExceptions(final AuthenticationException ex) {
+        return generateApiResponse(HttpStatus.UNAUTHORIZED, ErrorMessages.INVALID_CREDENTIALS);
     }
 
     @ExceptionHandler(Exception.class)

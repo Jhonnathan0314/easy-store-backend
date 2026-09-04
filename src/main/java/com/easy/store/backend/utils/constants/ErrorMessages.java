@@ -34,4 +34,6 @@ public class ErrorMessages {
     public static final String GENERIC_ERROR = "Ha ocurrido un error, por favor intentelo de nuevo más tarde.";
 
     public static final String TOO_MANY_REQUESTS = "Demasiados intentos, por favor intentelo de nuevo más tarde.";
+
+    public static final String INVALID_CREDENTIALS = "Usuario o contraseña incorrectos.";
 }
