@@ -37,7 +37,7 @@ public class PurchaseHasProductController {
     private final PurchaseHasProductResponseMapper purchaseHasProductResponseMapper = new PurchaseHasProductResponseMapper();
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@Valid @RequestBody PurchaseHasProductAddDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NonExistenceException, ForbiddenActionException {
+    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> add(@Valid @RequestBody PurchaseHasProductAddDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, InsufficientStockException, ForbiddenActionException {
         if (purchaseHasProduct.getId() != null) {
             purchaseAuthorizationService.authorizePurchaseAccess(purchaseHasProduct.getId().getPurchaseId(), ErrorMessages.NO_PURCHASE_RESULTS);
         }
@@ -57,7 +57,7 @@ public class PurchaseHasProductController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> update(@Valid @RequestBody PurchaseHasProductUpdateDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException, ForbiddenActionException {
+    public ResponseEntity<ApiResponse<PurchaseHasProductResponseDTO>> update(@Valid @RequestBody PurchaseHasProductUpdateDTO purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, InsufficientStockException, ForbiddenActionException {
         if (purchaseHasProduct.getId() != null) {
             purchaseAuthorizationService.authorizePurchaseAccess(purchaseHasProduct.getId().getPurchaseId(), ErrorMessages.NO_PURCHASE_RESULTS);
         }

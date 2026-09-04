@@ -20,8 +20,7 @@ public class ControllerException {
             DuplicatedException.class,
             InvalidBodyException.class,
             NoChangesException.class,
-            NoIdReceivedException.class,
-            NonExistenceException.class
+            NoIdReceivedException.class
     })
     public ResponseEntity<ApiResponse<ErrorMessage>> handleBadRequestExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -45,13 +44,27 @@ public class ControllerException {
 
     @ExceptionHandler({
             InvalidActionException.class,
-            FileException.class
+            FileException.class,
+            InsufficientStockException.class
     })
     public ResponseEntity<ApiResponse<ErrorMessage>> handleConflictExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    @ExceptionHandler(value = NoResultsException.class)
+    /**
+     * NonExistenceException representa unicamente el caso de "el recurso solicitado no existe"
+     * (por ejemplo, actualizar/eliminar/cambiar estado de un id que no esta en base de datos).
+     * Antes se mapeaba junto a las excepciones de BAD_REQUEST (400), lo que era inconsistente con
+     * el resto de la API: NoResultsException (bajo el mismo significado de "no encontrado" en
+     * flujos de lectura) ya mapea a 404. Los otros dos significados que antes compartia esta
+     * misma excepcion (sin stock suficiente, codigo de recuperacion invalido) se movieron a
+     * InsufficientStockException (409) e InvalidBodyException (400) respectivamente, porque no
+     * son casos de "recurso no encontrado".
+     */
+    @ExceptionHandler({
+            NoResultsException.class,
+            NonExistenceException.class
+    })
     public ResponseEntity<ApiResponse<ErrorMessage>> handleNotFoundExceptions(final Exception ex) {
         return generateApiResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }

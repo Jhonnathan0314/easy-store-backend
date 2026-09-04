@@ -134,6 +134,10 @@ public class AuthorizationService {
                 .build();
     }
 
+    // NonExistenceException (404) se deja solo para el caso "no existe ningun codigo de
+    // recuperacion activo para este usuario" (findByUserIdCodeUseCase.findByUserId). El caso de
+    // que el codigo enviado por el cliente no coincide con el esperado se mapea a
+    // InvalidBodyException (400): es un dato de entrada invalido, no un recurso ausente.
     public User resetPassword(ResetPasswordRequest request) throws InvalidBodyException, NoResultsException,
             NoIdReceivedException, NoChangesException, NonExistenceException {
         if(!request.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
@@ -142,8 +146,7 @@ public class AuthorizationService {
         if (userDb == null) throw new NoResultsException(ErrorMessages.NO_RESULTS);
 
         Code codeDb = findByUserIdCodeUseCase.findByUserId(userDb.getId());
-        if(codeDb == null) throw new NonExistenceException(ErrorMessages.NO_VALID_CODE);
-        if(!Objects.equals(codeDb.getCode(), request.getCode())) throw new NonExistenceException(ErrorMessages.NO_VALID_CODE);
+        if(!Objects.equals(codeDb.getCode(), request.getCode())) throw new InvalidBodyException(ErrorMessages.NO_VALID_CODE);
 
         deleteByUserIdCodeUseCase.deleteByUserId(userDb.getId());
 

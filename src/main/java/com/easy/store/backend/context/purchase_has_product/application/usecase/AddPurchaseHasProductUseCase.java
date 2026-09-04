@@ -8,9 +8,9 @@ import com.easy.store.backend.context.purchase_has_product.domain.model.Purchase
 import com.easy.store.backend.context.purchase_has_product.domain.model.PurchaseHasProductId;
 import com.easy.store.backend.context.purchase_has_product.domain.port.PurchaseHasProductRepository;
 import com.easy.store.backend.utils.constants.ErrorMessages;
+import com.easy.store.backend.utils.exceptions.InsufficientStockException;
 import com.easy.store.backend.utils.exceptions.InvalidBodyException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
-import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class AddPurchaseHasProductUseCase {
     private final PurchaseRepository purchaseRepository;
     private final ProductRepository productRepository;
 
-    public PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NonExistenceException {
+    public PurchaseHasProduct add(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, InsufficientStockException {
 
         log.info("ACCION ADD PURCHASE_HAS_PRODUCT -> Iniciando proceso con body: {}", purchaseHasProduct.toString());
 
@@ -59,7 +59,10 @@ public class AddPurchaseHasProductUseCase {
 
         purchaseHasProduct.setSubtotal(optProduct.get().getPrice().multiply(BigDecimal.valueOf(purchaseHasProduct.getQuantity())));
 
-        if(purchaseHasProduct.getQuantity() > optProduct.get().getQuantity()) throw new NonExistenceException(ErrorMessages.NO_STOCK);
+        // Se usa InsufficientStockException (409) en vez de NonExistenceException (404): el
+        // producto si existe, la operacion falla por una regla de negocio (no hay stock
+        // suficiente), no por ausencia del recurso.
+        if(purchaseHasProduct.getQuantity() > optProduct.get().getQuantity()) throw new InsufficientStockException(ErrorMessages.NO_STOCK);
 
         log.info("ACCION ADD PURCHASE_HAS_PRODUCT -> Agregando producto a la compra");
 

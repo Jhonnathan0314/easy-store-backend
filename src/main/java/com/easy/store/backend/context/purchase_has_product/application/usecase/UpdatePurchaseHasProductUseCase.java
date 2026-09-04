@@ -26,7 +26,7 @@ public class UpdatePurchaseHasProductUseCase {
     private final PurchaseRepository purchaseRepository;
     private final ProductRepository productRepository;
 
-    public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, NonExistenceException {
+    public PurchaseHasProduct update(PurchaseHasProduct purchaseHasProduct) throws NoResultsException, InvalidBodyException, NoChangesException, InsufficientStockException {
 
         log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Inicia el proceso con body: {}", purchaseHasProduct.toString());
 
@@ -53,7 +53,10 @@ public class UpdatePurchaseHasProductUseCase {
         if(!areDifferences(optPurchaseHasProduct.get(), purchaseHasProduct)) throw new NoChangesException(ErrorMessages.NO_CHANGES);
         log.info("ACCION UDPATE PURCHASE_HAS_PRODUCT -> Validé que hayan cambios a aplicar");
 
-        if(optProduct.get().getQuantity() < purchaseHasProduct.getQuantity()) throw new NonExistenceException(ErrorMessages.NO_STOCK);
+        // Se usa InsufficientStockException (409) en vez de NonExistenceException (404): el
+        // producto si existe, la operacion falla por una regla de negocio (no hay stock
+        // suficiente), no por ausencia del recurso.
+        if(optProduct.get().getQuantity() < purchaseHasProduct.getQuantity()) throw new InsufficientStockException(ErrorMessages.NO_STOCK);
 
         purchaseHasProduct.setPurchase(optPurchase.get());
         purchaseHasProduct.setProduct(optProduct.get());
