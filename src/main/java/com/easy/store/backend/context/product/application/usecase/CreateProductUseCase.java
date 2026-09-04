@@ -35,7 +35,11 @@ public class CreateProductUseCase {
         if(!product.isValid()) throw new InvalidBodyException(ErrorMessages.INVALID_BODY);
         log.info("ACCION CREATE PRODUCT -> Validé cuerpo de la petición");
 
-        if(product.getImageName().isEmpty()) product.setImageName("product.png");
+        // Se valida null antes de isEmpty(): imageName es un campo opcional en ProductCreateDTO
+        // (no tiene @NotBlank ni se valida en Product.isValid()), asi que un cliente que no lo
+        // envie llega aqui con imageName == null y no con cadena vacia. Antes esto lanzaba un
+        // NullPointerException que terminaba en un 500 generico.
+        if(product.getImageName() == null || product.getImageName().isEmpty()) product.setImageName("product.png");
         if(product.getImageNumber() == null) product.setImageNumber(0);
 
         log.info("ACCION CREATE PRODUCT -> Creando producto");
