@@ -32,4 +32,6 @@ public class ErrorMessages {
     public static final String FILE_ERROR = "Ha ocurrido un error al leer el archivo consultado.";
 
     public static final String GENERIC_ERROR = "Ha ocurrido un error, por favor intentelo de nuevo más tarde.";
+
+    public static final String TOO_MANY_REQUESTS = "Demasiados intentos, por favor intentelo de nuevo más tarde.";
 }

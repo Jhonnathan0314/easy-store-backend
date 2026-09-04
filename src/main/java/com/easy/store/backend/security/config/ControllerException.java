@@ -74,6 +74,11 @@ public class ControllerException {
         return generateApiResponse(HttpStatus.FORBIDDEN, ex.getMessage());
     }
 
+    @ExceptionHandler(value = TooManyRequestsException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleTooManyRequestsExceptions(final Exception ex) {
+        return generateApiResponse(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleUnexpectedException(final Exception ex) {
         return generateApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.GENERIC_ERROR);
