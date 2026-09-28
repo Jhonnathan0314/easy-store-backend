@@ -2,7 +2,7 @@ package com.easy.store.backend.security.config;
 
 import com.easy.store.backend.utils.messages.ApiResponse;
 import com.easy.store.backend.utils.messages.ErrorMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
