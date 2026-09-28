@@ -1,6 +1,5 @@
 package com.easy.store.backend.context.product.application.dto;
 
-import com.easy.store.backend.context.s3.model.S3File;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +16,7 @@ public class ProductResponseDTO {
     private String name;
     private String description;
     private String imageName;
-    private List<S3File> images;
+    private List<String> imageUrls;
     private Integer imageNumber;
     private Integer imageLastNumber;
     private BigDecimal price;

@@ -2,13 +2,13 @@ package com.easy.store.backend.context.product.application.usecase;
 
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.domain.port.CategoryRepository;
-import com.easy.store.backend.context.product.application.util.ProductUtils;
 import com.easy.store.backend.context.product.domain.model.Product;
 import com.easy.store.backend.context.product.domain.port.ProductRepository;
 import com.easy.store.backend.context.s3.model.S3File;
 import com.easy.store.backend.context.s3.service.S3Service;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.constants.FileConstants;
+import com.easy.store.backend.utils.exceptions.FileException;
 import com.easy.store.backend.utils.exceptions.InvalidActionException;
 import com.easy.store.backend.utils.exceptions.NoResultsException;
 import com.easy.store.backend.utils.exceptions.NonExistenceException;
@@ -27,10 +27,9 @@ public class AddImageProductUseCase {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ProductUtils productUtils;
     private final S3Service s3Service;
 
-    public Product addImages(Long productId, List<S3File> images, Long userId) throws NonExistenceException, InvalidActionException, NoResultsException {
+    public Product addImages(Long productId, List<S3File> images, Long userId) throws NonExistenceException, InvalidActionException, NoResultsException, FileException {
         Optional<Product> productOpt = productRepository.findById(productId);
         if(productOpt.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
 
@@ -53,12 +52,10 @@ public class AddImageProductUseCase {
         Product updatedProduct = productRepository.update(product);
         updatedProduct.getSubcategory().setCategory(category);
 
-        productUtils.findAllImages(updatedProduct);
-
         return updatedProduct;
     }
 
-    private String uploadAndGetNewImageNames(List<S3File> images, Product product) {
+    private String uploadAndGetNewImageNames(List<S3File> images, Product product) throws FileException {
         Long accountId = product.getSubcategory().getCategory().getAccount().getId();
         List<String> imageNames = product.getImageName().equals(FileConstants.DEFAULT_PRODUCT_IMG) ?
                 new ArrayList<>() :
@@ -66,16 +63,18 @@ public class AddImageProductUseCase {
 
         for (S3File image : images) {
             if(product.getImageNumber() >= 5) break;
-            try {
-                String newImageName = product.getId() + "-" + (product.getImageLastNumber() + 1) + ".png";
-                image.setName(newImageName);
-                image.setContext(FileConstants.PRODUCT_CONTEXT);
-                image.setAccountId(accountId);
-                s3Service.putObject(image);
-                product.setImageNumber(product.getImageNumber() + 1);
-                product.setImageLastNumber(product.getImageLastNumber() + 1);
-                imageNames.add(newImageName);
-            } catch (Exception ignored) {}
+
+            String newImageName = product.getId() + "-" + (product.getImageLastNumber() + 1) + ".png";
+            image.setName(newImageName);
+            image.setContext(FileConstants.PRODUCT_CONTEXT);
+            image.setAccountId(accountId);
+
+            boolean uploaded = s3Service.putObject(image);
+            if(!uploaded) throw new FileException(ErrorMessages.FILE_ERROR);
+
+            product.setImageNumber(product.getImageNumber() + 1);
+            product.setImageLastNumber(product.getImageLastNumber() + 1);
+            imageNames.add(newImageName);
         }
 
         return String.join(",", imageNames);

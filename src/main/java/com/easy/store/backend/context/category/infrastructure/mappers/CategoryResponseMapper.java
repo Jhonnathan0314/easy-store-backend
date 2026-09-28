@@ -8,6 +8,7 @@ import com.easy.store.backend.context.category.infrastructure.persistence.Catego
 import com.easy.store.backend.context.category_has_payment_type.infrastructure.mapper.CategoryHasPaymentTypeResponseMapper;
 import com.easy.store.backend.context.user.domain.model.User;
 import com.easy.store.backend.context.user.infrastructure.persistence.UserEntity;
+import com.easy.store.backend.utils.constants.FileConstants;
 import com.easy.store.backend.utils.mappers.BaseMapper;
 
 import java.util.ArrayList;
@@ -57,23 +58,33 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
 
     @Override
     public CategoryResponseDTO modelToDto(Category model) {
-        CategoryResponseDTO dto = CategoryResponseDTO.builder()
+        return CategoryResponseDTO.builder()
                 .id(model.getId())
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
+                .imageUrl(buildImageUrl(model))
                 .userId(model.getUser().getId())
                 .accountId(model.getAccount().getId())
                 .paymentTypes(new ArrayList<>())
                 .paymentTypes(categoryHasPaymentTypeResponseMapper.modelsToDtos(model.getPaymentTypes()))
                 .build();
-        if(model.getImage() != null) dto.setImage(model.getImage());
-        return dto;
+    }
+
+    /**
+     * La imagen ya no viaja embebida (base64) en el listado: se sirve por su propia URL de
+     * recurso (GetCategoryImageUseCase / CategoryController), lo que habilita cache HTTP real del
+     * navegador y evita una llamada a S3 por categoria dentro de cada request de listado.
+     */
+    private String buildImageUrl(Category model) {
+        String imageName = model.getImageName();
+        if (imageName == null || imageName.equals(FileConstants.DEFAULT_CATEGORY_IMG)) return null;
+        return "/api/v1/category/" + model.getId() + "/image/" + imageName;
     }
 
     @Override
     public Category dtoToModel(CategoryResponseDTO dto) {
-        Category model = Category.builder()
+        return Category.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -88,8 +99,6 @@ public class CategoryResponseMapper extends BaseMapper<CategoryEntity, Category,
                 )
                 .paymentTypes(categoryHasPaymentTypeResponseMapper.dtosToModels(dto.getPaymentTypes()))
                 .build();
-        if(dto.getImage() != null) model.setImage(dto.getImage());
-        return model;
     }
 
 }

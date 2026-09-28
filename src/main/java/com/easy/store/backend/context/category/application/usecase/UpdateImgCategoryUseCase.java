@@ -6,6 +6,7 @@ import com.easy.store.backend.context.s3.model.S3File;
 import com.easy.store.backend.context.s3.service.S3Service;
 import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.constants.FileConstants;
+import com.easy.store.backend.utils.exceptions.FileException;
 import com.easy.store.backend.utils.exceptions.NoChangesException;
 import com.easy.store.backend.utils.exceptions.NonExistenceException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class UpdateImgCategoryUseCase {
     private final CategoryRepository categoryRepository;
     private final S3Service s3Service;
 
-    public Category updateCategoryImg(Long categoryId, S3File img, Long updateBy) throws NoChangesException, NonExistenceException {
+    public Category updateCategoryImg(Long categoryId, S3File img, Long updateBy) throws NoChangesException, NonExistenceException, FileException {
         Optional<Category> categoryOpt = categoryRepository.findById(categoryId);
         if(categoryOpt.isEmpty()) throw new NonExistenceException(ErrorMessages.NON_EXISTENT_DATA);
         Category category = categoryOpt.get();
@@ -41,7 +42,7 @@ public class UpdateImgCategoryUseCase {
         return applyImageChanges(category, deleteImg, createImg, img);
     }
 
-    private Category applyImageChanges(Category category, boolean deleteImg, boolean createImg, S3File img) {
+    private Category applyImageChanges(Category category, boolean deleteImg, boolean createImg, S3File img) throws FileException {
         Long accountId = category.getAccount().getId();
         if(deleteImg) {
             s3Service.deleteObject(accountId, FileConstants.CATEGORY_CONTEXT, category.getImageName());
@@ -51,13 +52,13 @@ public class UpdateImgCategoryUseCase {
             img.setName(category.getId() + ".png");
             img.setAccountId(accountId);
             img.setContext(FileConstants.CATEGORY_CONTEXT);
-            s3Service.putObject(img);
+
+            boolean uploaded = s3Service.putObject(img);
+            if(!uploaded) throw new FileException(ErrorMessages.FILE_ERROR);
+
             category.setImageName(img.getName());
-            category.setImage(img);
         }
-        Category categoryUpdated = categoryRepository.update(category);
-        categoryUpdated.setImage(img);
-        return categoryUpdated;
+        return categoryRepository.update(category);
     }
 
     private boolean isEmptyImg(S3File img) {

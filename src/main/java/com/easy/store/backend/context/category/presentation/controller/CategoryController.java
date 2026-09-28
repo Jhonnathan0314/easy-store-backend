@@ -9,14 +9,20 @@ import com.easy.store.backend.context.category.infrastructure.mappers.CategoryCr
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryResponseMapper;
 import com.easy.store.backend.context.category.infrastructure.mappers.CategoryUpdateMapper;
 import com.easy.store.backend.context.s3.model.S3File;
+import com.easy.store.backend.context.s3.model.S3ObjectContent;
 import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,6 +33,7 @@ public class CategoryController {
     private final FindAllCategoryUseCase findAllCategory;
     private final FindByIdCategoryUseCase findByIdCategory;
     private final FindByAccountIdCategoryUseCase findByAccountIdCategory;
+    private final GetCategoryImageUseCase getCategoryImageUseCase;
     private final CreateCategoryUseCase createCategory;
     private final UpdateCategoryUseCase updateCategory;
     private final UpdateImgCategoryUseCase updateImgCategory;
@@ -38,38 +45,58 @@ public class CategoryController {
     private final CategoryResponseMapper categoryResponseMapper = new CategoryResponseMapper();
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findAll(
-            @RequestParam(required = false) Boolean image
-    ) throws NoResultsException, FileException {
+    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findAll() throws NoResultsException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        boolean loadImage = Boolean.TRUE.equals(image);
-        List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategory.findAll(loadImage));
+        List<CategoryResponseDTO> categories = categoryResponseMapper.modelsToDtos(findAllCategory.findAll());
         response.setData(categories);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponseDTO>> findById(
-            @PathVariable Long id,
-            @RequestParam(required = false) Boolean image
-    ) throws NoResultsException, FileException {
+            @PathVariable Long id
+    ) throws NoResultsException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
-        boolean loadImage = Boolean.TRUE.equals(image);
-        Category category = findByIdCategory.findById(id, loadImage);
+        Category category = findByIdCategory.findById(id);
         response.setData(categoryResponseMapper.modelToDto(category));
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/account/{accountId}")
     public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> findByAccountId(
-            @PathVariable Long accountId,
-            @RequestParam(required = false) Boolean image
-    ) throws NoResultsException, FileException {
+            @PathVariable Long accountId
+    ) throws NoResultsException {
         ApiResponse<List<CategoryResponseDTO>> response = new ApiResponse<>();
-        boolean loadImage = Boolean.TRUE.equals(image);
-        List<Category> categories = findByAccountIdCategory.findByAccountId(accountId, loadImage);
+        List<Category> categories = findByAccountIdCategory.findByAccountId(accountId);
         response.setData(categoryResponseMapper.modelsToDtos(categories));
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Sirve la imagen como recurso HTTP propio (Content-Type + Cache-Control + ETag) en vez de
+     * embeberla en el JSON del listado: evita una llamada a S3 por categoria en cada request de
+     * listado, y habilita cache real del navegador. Una imagen inexistente/ilegible responde 404
+     * (no 500) para no romper la vista que la muestra.
+     */
+    @GetMapping("/{categoryId}/image/{imageName}")
+    public ResponseEntity<byte[]> getImage(
+            @PathVariable Long categoryId,
+            @PathVariable String imageName,
+            @RequestHeader(value = HttpHeaders.IF_NONE_MATCH, required = false) String ifNoneMatch
+    ) {
+        Optional<S3ObjectContent> imageOpt = getCategoryImageUseCase.getImage(categoryId, imageName);
+        if (imageOpt.isEmpty()) return ResponseEntity.notFound().build();
+
+        S3ObjectContent image = imageOpt.get();
+        if (ifNoneMatch != null && ifNoneMatch.equals(image.getEtag())) {
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).eTag(image.getEtag()).build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(image.getContentType()))
+                .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic())
+                .eTag(image.getEtag())
+                .body(image.getBytes());
     }
 
     @PostMapping
@@ -101,7 +128,7 @@ public class CategoryController {
             @PathVariable Long id,
             @RequestBody S3File img,
             @RequestHeader("Update-By") Long updateBy
-    ) throws NoChangesException, NonExistenceException {
+    ) throws NoChangesException, NonExistenceException, FileException {
         ApiResponse<CategoryResponseDTO> response = new ApiResponse<>();
         Category categoryModel = updateImgCategory.updateCategoryImg(id, img, updateBy);
         response.setData(categoryResponseMapper.modelToDto(categoryModel));

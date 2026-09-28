@@ -76,6 +76,13 @@ public class SecurityConfig {
                         //Open
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/v1/email/forgot-password").permitAll()
+                        // Las imagenes de producto/categoria se sirven como recurso HTTP propio
+                        // (ver GetProductImageUseCase/GetCategoryImageUseCase) y las carga el
+                        // navegador directo con <img src="...">, que no puede mandar el header
+                        // Authorization. Sin este permitAll, anyRequest().authenticated() las
+                        // bloqueaba con 401 y siempre se veia la imagen por defecto.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/product/*/image/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/category/*/image/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
@@ -95,6 +102,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://127.0.0.1:4200",
                 "http://localhost:4000", "http://127.0.0.1:4000",
+                "http://localhost:4400", "http://127.0.0.1:4400",
                 "http://localhost:5173", "http://127.0.0.1:5173",
                 "https://easy-store-frontend-production.up.railway.app",
                 "https://easy-store-frontend.railway.internal",

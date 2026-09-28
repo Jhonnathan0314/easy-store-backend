@@ -2,7 +2,6 @@ package com.easy.store.backend.context.product.application.usecase;
 
 import com.easy.store.backend.context.category.domain.model.Category;
 import com.easy.store.backend.context.category.domain.port.CategoryRepository;
-import com.easy.store.backend.context.product.application.util.ProductUtils;
 import com.easy.store.backend.context.product.domain.model.Product;
 import com.easy.store.backend.context.product.domain.port.ProductRepository;
 import com.easy.store.backend.context.s3.model.S3File;
@@ -26,7 +25,6 @@ public class DeleteImageProductUseCase {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ProductUtils productUtils;
     private final S3Service s3Service;
 
     public Product deleteImages(Long productId, List<S3File> images, Long userId) throws NonExistenceException, NoResultsException {
@@ -51,8 +49,6 @@ public class DeleteImageProductUseCase {
         Product updatedProduct = productRepository.update(product);
         updatedProduct.getSubcategory().setCategory(category);
 
-        productUtils.findAllImages(updatedProduct);
-
         return updatedProduct;
     }
 
@@ -64,11 +60,9 @@ public class DeleteImageProductUseCase {
 
         for (S3File image : images) {
             if(imageNames.contains(image.getName())) {
-                try {
-                    s3Service.deleteObject(accountId, FileConstants.PRODUCT_CONTEXT, image.getName());
-                    imageNames.remove(image.getName());
-                    product.setImageNumber(product.getImageNumber() - 1);
-                } catch (Exception ignored) {}
+                s3Service.deleteObject(accountId, FileConstants.PRODUCT_CONTEXT, image.getName());
+                imageNames.remove(image.getName());
+                product.setImageNumber(product.getImageNumber() - 1);
             }
         }
 

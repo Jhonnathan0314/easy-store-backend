@@ -5,7 +5,10 @@ import com.easy.store.backend.context.product.domain.model.Product;
 import com.easy.store.backend.context.product.infrastructure.persistence.ProductEntity;
 import com.easy.store.backend.context.subcategory.domain.model.Subcategory;
 import com.easy.store.backend.context.subcategory.infrastructure.persistence.SubcategoryEntity;
+import com.easy.store.backend.utils.constants.FileConstants;
 import com.easy.store.backend.utils.mappers.BaseMapper;
+
+import java.util.List;
 
 public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, ProductResponseDTO> {
 
@@ -54,12 +57,13 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
 
     @Override
     public ProductResponseDTO modelToDto(Product model) {
-        ProductResponseDTO dto = ProductResponseDTO.builder()
+        return ProductResponseDTO.builder()
                 .id(model.getId())
                 .code(model.getCode())
                 .name(model.getName())
                 .description(model.getDescription())
                 .imageName(model.getImageName())
+                .imageUrls(buildImageUrls(model))
                 .imageNumber(model.getImageNumber())
                 .imageLastNumber(model.getImageLastNumber())
                 .price(model.getPrice())
@@ -68,13 +72,25 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
                 .subcategoryId(model.getSubcategory().getId())
                 .categoryId(model.getCategoryId())
                 .build();
-        if(model.getImages() != null) dto.setImages(model.getImages());
-        return dto;
+    }
+
+    /**
+     * Las imagenes ya no viajan embebidas (base64) en el listado: cada una se sirve por su propia
+     * URL de recurso (GetProductImageUseCase / ProductController), lo que habilita cache HTTP real
+     * del navegador y evita hacer una llamada a S3 por imagen dentro de cada request de listado.
+     */
+    private List<String> buildImageUrls(Product model) {
+        String imageName = model.getImageName();
+        if (imageName == null || imageName.equals(FileConstants.DEFAULT_PRODUCT_IMG)) return List.of();
+
+        return List.of(imageName.split(",")).stream()
+                .map(name -> "/api/v1/product/" + model.getId() + "/image/" + name)
+                .toList();
     }
 
     @Override
     public Product dtoToModel(ProductResponseDTO dto) {
-        Product model = Product.builder()
+        return Product.builder()
                 .id(dto.getId())
                 .code(dto.getCode())
                 .name(dto.getName())
@@ -91,8 +107,6 @@ public class ProductResponseMapper extends BaseMapper<ProductEntity, Product, Pr
                 )
                 .categoryId(dto.getCategoryId())
                 .build();
-        if(dto.getImages() != null) model.setImages(dto.getImages());
-        return model;
     }
 
 }

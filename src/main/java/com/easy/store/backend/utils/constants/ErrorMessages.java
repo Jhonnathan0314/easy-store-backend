@@ -30,6 +30,9 @@ public class ErrorMessages {
     public static final String FORBIDDEN_ACTION = "No tienes permisos para acceder a este recurso.";
 
     public static final String FILE_ERROR = "Ha ocurrido un error al leer el archivo consultado.";
+    public static final String EMPTY_FILE = "El archivo enviado está vacío.";
+    public static final String INVALID_FILE = "El archivo enviado no es válido.";
+    public static final String FILE_TOO_LARGE = "El archivo supera el tamaño máximo permitido (5MB).";
 
     public static final String GENERIC_ERROR = "Ha ocurrido un error, por favor intentelo de nuevo más tarde.";
 

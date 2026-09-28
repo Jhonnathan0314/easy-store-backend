@@ -1,6 +1,5 @@
 package com.easy.store.backend.context.product.domain.model;
 
-import com.easy.store.backend.context.s3.model.S3File;
 import com.easy.store.backend.context.subcategory.domain.model.Subcategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Data
 @Builder
@@ -19,7 +17,6 @@ public class Product {
     private String name;
     private String description;
     private String imageName;
-    private List<S3File> images;
     private Integer imageNumber;
     private Integer imageLastNumber;
     private BigDecimal price;
