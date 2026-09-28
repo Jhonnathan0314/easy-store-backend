@@ -19,8 +19,11 @@ public class Role {
     private Timestamp updateDate;
     private String state;
 
+    // Antes esta condicion estaba invertida (return name.isEmpty()), lo que hacia que un nombre
+    // vacio se considerara valido (isValid()==true) y un nombre con contenido se rechazara
+    // (isValid()==false). Esto afectaba tanto CreateRoleUseCase como UpdateRoleUseCase.
     public boolean isValid() {
         if(name == null) return false;
-        return name.isEmpty();
+        return !name.isEmpty();
     }
 }
