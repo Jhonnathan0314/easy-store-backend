@@ -4,6 +4,7 @@ import com.easy.store.backend.utils.constants.ErrorMessages;
 import com.easy.store.backend.utils.exceptions.*;
 import com.easy.store.backend.utils.messages.ApiResponse;
 import com.easy.store.backend.utils.messages.ErrorMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -11,9 +12,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class ControllerException {
 
@@ -95,8 +98,20 @@ public class ControllerException {
         return generateApiResponse(HttpStatus.UNAUTHORIZED, ErrorMessages.INVALID_CREDENTIALS);
     }
 
+    /**
+     * Spring lanza esta excepcion cuando ninguna ruta matchea la URL solicitada (por ejemplo, un
+     * endpoint que todavia no existe). Sin este handler explicito, caia en el catch-all de
+     * Exception.class de abajo y se devolvia 500 en vez de 404, ademas de quedar indistinguible
+     * de un error real porque ese catch-all no loggea nada.
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleNoResourceFoundException(final NoResourceFoundException ex) {
+        return generateApiResponse(HttpStatus.NOT_FOUND, ErrorMessages.NO_RESULTS);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleUnexpectedException(final Exception ex) {
+        log.error("Excepcion no controlada", ex);
         return generateApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessages.GENERIC_ERROR);
     }
 
