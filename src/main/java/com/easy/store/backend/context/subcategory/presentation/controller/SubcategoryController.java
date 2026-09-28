@@ -23,6 +23,7 @@ import jakarta.validation.Valid;
 @RequiredArgsConstructor
 public class SubcategoryController {
 
+    private final FindAllSubcategoryUseCase findAllSubcategoryUseCase;
     private final FindByAccountIdSubcategoryUseCase findByAccountIdSubcategoryUseCase;
     private final CreateSubcategoryUseCase createSubcategoryUseCase;
     private final UpdateSubcategoryUseCase updateSubcategoryUseCase;
@@ -32,6 +33,14 @@ public class SubcategoryController {
     private final SubcategoryCreateMapper subcategoryCreateMapper = new SubcategoryCreateMapper();
     private final SubcategoryUpdateMapper subcategoryUpdateMapper = new SubcategoryUpdateMapper();
     private final SubcategoryResponseMapper subcategoryResponseMapper = new SubcategoryResponseMapper();
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findAll() throws NoResultsException {
+        ApiResponse<List<SubcategoryResponseDTO>> response = new ApiResponse<>();
+        List<SubcategoryResponseDTO> subcategories = subcategoryResponseMapper.modelsToDtos(findAllSubcategoryUseCase.findAll());
+        response.setData(subcategories);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/account/{idAccount}")
     public ResponseEntity<ApiResponse<List<SubcategoryResponseDTO>>> findByAccountId(@PathVariable Long idAccount) throws NoResultsException {
