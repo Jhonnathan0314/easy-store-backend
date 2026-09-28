@@ -9,7 +9,7 @@ services:
       MYSQL_PASSWORD: ${EASY_STORE_DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${EASY_STORE_DB_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
+      - "4450:3306"
     volumes:
       - easy-store-db-data:/var/lib/mysql
     healthcheck:
@@ -29,7 +29,7 @@ services:
       DEFAULT_REGION: us-east-1
       EASY_STORE_AWS_S3_EASY_STORE: ${EASY_STORE_AWS_S3_EASY_STORE}
     ports:
-      - "4566:4566"
+      - "4460:4566"
     volumes:
       - easy-store-localstack-data:/var/lib/localstack
       - ./docker/localstack/init-s3.sh:/etc/localstack/init/ready.d/init-s3.sh
@@ -72,7 +72,20 @@ services:
       EMAIL_APP_USERNAME: ${EMAIL_APP_USERNAME}
       EMAIL_APP_PASSWORD: ${EMAIL_APP_PASSWORD}
     ports:
-      - "8081:8080"
+      - "8400:8080"
+    networks:
+      - easy-store-net
+
+  frontend:
+    build:
+      context: ../easy-store-frontend
+      dockerfile: Dockerfile
+    container_name: easy-store-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4400:80"
     networks:
       - easy-store-net
 
