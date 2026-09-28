@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -51,10 +52,15 @@ public class UpdateCategoryUseCase {
         return categoryRepository.update(category);
     }
 
+    // Se usa Objects.equals() para imageName: es un campo opcional en CategoryUpdateDTO (sin
+    // @NotBlank) y solo se le asigna un valor por defecto en el flujo de creacion
+    // (CreateCategoryUseCase), no en el de actualizacion. Un cliente que actualizara una
+    // categoria sin enviar imageName llegaba aqui con category.getImageName() == null mientras
+    // categoryDb.getImageName() nunca es null, lo que provocaba un NullPointerException.
     private boolean areDifferences(Category categoryDb, Category category) {
         return !categoryDb.getName().equals(category.getName()) ||
                 !categoryDb.getDescription().equals(category.getDescription()) ||
-                !categoryDb.getImageName().equals(category.getImageName()) ||
+                !Objects.equals(categoryDb.getImageName(), category.getImageName()) ||
                 !categoryDb.getUser().getId().equals(category.getUser().getId()) ||
                 !categoryDb.getAccount().getId().equals(category.getAccount().getId());
     }

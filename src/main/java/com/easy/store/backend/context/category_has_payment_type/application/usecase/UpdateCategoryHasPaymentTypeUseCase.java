@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -60,12 +61,17 @@ public class UpdateCategoryHasPaymentTypeUseCase {
         return categoryHasPaymentTypeRepository.update(categoryHasPaymentType);
     }
 
+    // Se usa Objects.equals() en vez de .equals() directo: phone, email, accountNumber,
+    // accountType y accountBank son todos campos opcionales en CategoryHasPaymentTypeUpdateDto
+    // (sin @NotNull/@NotBlank) y en CategoryHasPaymentType.isValid() (que solo valida el id). Un
+    // cliente que actualizara solo alguno de estos campos, dejando los demas en null, provocaba
+    // un NullPointerException que terminaba en un 500 generico.
     private boolean areDifferences(CategoryHasPaymentType categoryHasPaymentTypeDb, CategoryHasPaymentType categoryHasPaymentType) {
-        return !categoryHasPaymentTypeDb.getPhone().equals(categoryHasPaymentType.getPhone()) ||
-                !categoryHasPaymentTypeDb.getEmail().equals(categoryHasPaymentType.getEmail()) ||
-                !categoryHasPaymentTypeDb.getAccountNumber().equals(categoryHasPaymentType.getAccountNumber()) ||
-                !categoryHasPaymentTypeDb.getAccountType().equals(categoryHasPaymentType.getAccountType()) ||
-                !categoryHasPaymentTypeDb.getAccountBank().equals(categoryHasPaymentType.getAccountBank());
+        return !Objects.equals(categoryHasPaymentTypeDb.getPhone(), categoryHasPaymentType.getPhone()) ||
+                !Objects.equals(categoryHasPaymentTypeDb.getEmail(), categoryHasPaymentType.getEmail()) ||
+                !Objects.equals(categoryHasPaymentTypeDb.getAccountNumber(), categoryHasPaymentType.getAccountNumber()) ||
+                !Objects.equals(categoryHasPaymentTypeDb.getAccountType(), categoryHasPaymentType.getAccountType()) ||
+                !Objects.equals(categoryHasPaymentTypeDb.getAccountBank(), categoryHasPaymentType.getAccountBank());
     }
 
 }
