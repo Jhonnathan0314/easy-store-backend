@@ -64,7 +64,8 @@ public class AddImageProductUseCase {
         for (S3File image : images) {
             if(product.getImageNumber() >= 5) break;
 
-            String newImageName = product.getId() + "-" + (product.getImageLastNumber() + 1) + ".png";
+            String extension = S3Service.getExtension(image.getName());
+            String newImageName = product.getId() + "-" + (product.getImageLastNumber() + 1) + "." + extension;
             image.setName(newImageName);
             image.setContext(FileConstants.PRODUCT_CONTEXT);
             image.setAccountId(accountId);

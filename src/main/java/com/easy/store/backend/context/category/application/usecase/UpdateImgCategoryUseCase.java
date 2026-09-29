@@ -49,7 +49,7 @@ public class UpdateImgCategoryUseCase {
             category.setImageName(FileConstants.DEFAULT_CATEGORY_IMG);
         }
         if(createImg) {
-            img.setName(category.getId() + ".png");
+            img.setName(category.getId() + "." + S3Service.getExtension(img.getName()));
             img.setAccountId(accountId);
             img.setContext(FileConstants.CATEGORY_CONTEXT);
 

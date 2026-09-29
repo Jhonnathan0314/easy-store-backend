@@ -121,7 +121,12 @@ public class S3Service {
         return true;
     }
 
-    private String getExtension(String fileName) {
+    // Publico y estatico: lo usan tambien los casos de uso que arman el nombre
+    // final del archivo en S3 (AddImageProductUseCase, UpdateImgCategoryUseCase)
+    // para conservar la extension real del archivo subido en vez de forzar
+    // ".png" sin importar el formato real (ver resolveContentType: el
+    // Content-Type que el navegador recibe sale de esta misma extension).
+    public static String getExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         return (lastDotIndex != -1) ? fileName.substring(lastDotIndex + 1) : "unknown";
     }
