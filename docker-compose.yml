@@ -62,9 +62,15 @@ services:
       EASY_STORE_AWS_S3_ACCESS_KEY: ${EASY_STORE_AWS_S3_ACCESS_KEY}
       EASY_STORE_AWS_S3_SECRET_ACCESS_KEY: ${EASY_STORE_AWS_S3_SECRET_ACCESS_KEY}
       EASY_STORE_AWS_S3_EASY_STORE: ${EASY_STORE_AWS_S3_EASY_STORE}
-      # Endpoint del emulador de S3 (LocalStack). En un despliegue real contra
-      # AWS, simplemente no definas esta variable en tu .env y quedará vacía.
-      EASY_STORE_AWS_S3_ENDPOINT: ${EASY_STORE_AWS_S3_ENDPOINT:-http://localstack:4566}
+      # Endpoint del emulador de S3 (LocalStack). Se usa `-` en vez de `:-`:
+      # con `:-` el default aplica tanto si la variable no existe COMO si
+      # existe pero vacia, así que un .env con
+      # EASY_STORE_AWS_S3_ENDPOINT= (vacío, para forzar AWS real) quedaba
+      # igual pisado por el default de LocalStack. Con `-` el default solo
+      # aplica si la variable no está definida en absoluto en el .env: para
+      # usar AWS real, agrega la línea EASY_STORE_AWS_S3_ENDPOINT= (vacía) a
+      # tu .env; para LocalStack, no la definas (o bórrala del .env).
+      EASY_STORE_AWS_S3_ENDPOINT: ${EASY_STORE_AWS_S3_ENDPOINT-http://localstack:4566}
       EASY_STORE_GHOST_USER: ${EASY_STORE_GHOST_USER}
       EASY_STORE_GHOST_PASSWORD: ${EASY_STORE_GHOST_PASSWORD}
       EASY_STORE_ADMIN_USER: ${EASY_STORE_ADMIN_USER:-}
